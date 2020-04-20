@@ -9,8 +9,8 @@ from news2.items import News2Item
 
 class SportSpider(CrawlSpider):
     name = 'sport'
-    allowed_domains = ['gazzetta.gr','sport24.gr','sportdog.gr','amna.gr']
-    start_urls = ['http://www.gazzetta.gr/','https://www.sport24.gr','https://www.sportdog.gr','https://www.amna.gr/sport/']
+    allowed_domains = ['gazzetta.gr','sport24.gr','cnn.gr']
+    start_urls = ['http://www.gazzetta.gr/','https://www.sport24.gr','https://www.cnn.gr']
     #base_url = 'http://www.gazzetta.gr/'
 
 
@@ -19,7 +19,7 @@ class SportSpider(CrawlSpider):
     #        Rule(LinkExtractor(allow=('football/','/sports/','/Basket/'), deny=('gazzetta')),callback='parseItemSport24', follow=True), )
         #Rule(LinkExtractor(allow=('football/','/basketball/','/other-sports/','/voleyball/','/tennis/'), deny=('power-rankings/'), allow_domains=('gazzetta.gr/') ),callback='parseItemGazzetta', follow=True), )
     rules = (Rule(LinkExtractor(allow=('gazzetta.gr/football/','gazzetta.gr/basketball/','gazzetta.gr/other-sports/','gazzetta.gr/volleyball/','gazzetta.gr/tennis/'), 
-            deny=('power-rankings/')),callback='parseItemGazzetta', follow=True),    
+            deny=('power-rankings/','vid')),callback='parseItemGazzetta', follow=True),    
             Rule(LinkExtractor(allow=('sport24.gr/football/','sport24.gr/sports/','sport24.gr/Basket/'), 
             deny=()),callback='parseItemSport24', follow=True),
             Rule(LinkExtractor(allow=('cnn.gr/news/sports')),callback='parseItemCnn', follow=True),
@@ -77,32 +77,26 @@ class SportSpider(CrawlSpider):
                 "website": website,
                 "title": title,
                 "date": response.xpath('//div[@class="article_date"]/text()').get(),
-                "author": author, #response.xpath('//span[@itemprop="name"]/text()').get
-                "text": response.xpath('//div[@itemprop="articleBody"]/p/text()').getall(),
+                "author": author,
+                "text": response.xpath('//div[@itemprop="articleBody"]//p/text()|//p/a/text()|//p/strong/text()').getall() ,#|//div[@itemprop="articleBody"]//p/a/text()|div[@itemprop="articleBody"]//p/strong/text()').getall(),
                 "url": url
             }
 
     def parseItemCnn(self,response):
         title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        title = re.sub( r'\n|\t',"",title)
         text = response.xpath('//p/text()').getall()
         text = " ".join(" ".join(text))
         text = re.sub( "  ", "space",text)
         text = re.sub( " ", "",text)
         text = re.sub( "space", " ",text)
-        text = re.sub(r'\n|\t',"",text)
         url = response.url
-        date = response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()
-        date = re.sub( r'\n|\t',"",date)
-        author = response.xpath('//div[@class="story-author"]/text()').get()
-        author = re.sub(r'\n|\t',"",author)
         if title is not None:
             yield {
                 "subtopic": "sports",
                 "website": url.split('/')[2],
                 "title": title,
-                "date": date,#response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get(),
-                "author": author ,#response.xpath('//div[@class="story-author"]/text()').get(),
+                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
                 "text": re.sub( r'\n',"",text),
                 "url": url,                
             }
