@@ -9,29 +9,79 @@ from news2.items import News2Item
 class DogSpider(CrawlSpider):
     name = 'culture'
     allowed_domains = ['cnn.gr']
-    start_urls = ['https://www.cnn.gr/style/politismos/']
+    start_urls = ['https://www.cnn.gr/style/politismos','https://www.cnn.gr/style/psyxagogia']
 
-    rules = (Rule(LinkExtractor(allow=(r'./politismos.'), deny=(),unique=False), callback='parseItemCnn', follow=True), )
+    rules = (
+        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True),
+        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True),
+    )
+
+
+#next three functions for cnn infinite scroll for culture
+    def parseInfiniteCnn(self,response):
+        pages =  180
+        for page in range(0, pages ,9):
+            url = 'https://www.cnn.gr/style/politismos?start={}'.format(page)
+            yield Request(url, callback = self.parseItemCnn) 
 
     def parseItemCnn(self,response):
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        #title = re.sub( r'\n|\t',"",title)
+        links = response.xpath('//h3[@class="item-title"]/a/@href').getall()
+        for link in links:
+            url = response.urljoin(link)
+            yield Request(url,callback=self.parseItem) #"url": response.urljoin(link),
+
+            
+    def parseItem(self,response):
         text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
+        title = response.xpath('//h1[@class="story-title"]/text()').get()
         text = " ".join(" ".join(text))
         text = re.sub( "  ", "space",text)
         text = re.sub( " ", "",text)
         text = re.sub( "space", " ",text)
-        text = re.sub( "\xa0","",text)
         url = response.url
-        if title is not None and len(text)>10:
-            yield {
+        article_type = url.split('/')[5]
+        contains_photos = re.search('Photos',text)
+        if article_type == "story" and contains_photos is None:
+            yield{ 
                 "subtopic": "culture",
                 "website": url.split('/')[2],
                 "title": title,
                 "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
                 "text": re.sub( r'\n|\t',"",text),
-                "url": url,                
+                "url": url,     
             }
+#next three functions for cnn infinite scroll for entertainment
+    def parseInfiniteCnnPS(self,response):
+        pages =  180
+        for page in range(0, pages ,9):
+            url = 'https://www.cnn.gr/style/psyxagogia?start={}'.format(page)
+            yield Request(url, callback = self.parseItemCnnPS) 
 
+    def parseItemCnnPS(self,response):
+        links = response.xpath('//h3[@class="item-title"]/a/@href').getall()
+        for link in links:
+            url = response.urljoin(link)
+            yield Request(url,callback=self.parseItemPS) #"url": response.urljoin(link),
 
+            
+    def parseItemPS(self,response):
+        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
+        title = response.xpath('//h1[@class="story-title"]/text()').get()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        url = response.url
+        article_type = url.split('/')[5]
+        contains_photos = re.search('Photos',text)
+        if article_type == "story" and contains_photos is None:
+            yield{ 
+                "subtopic": "entertainment",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
+                "text": re.sub( r'\n|\t',"",text),
+                "url": url,     
+            }
