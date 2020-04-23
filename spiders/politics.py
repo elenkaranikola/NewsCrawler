@@ -13,7 +13,7 @@ class DogSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/')), callback='parseItemCnn', follow=True),
-        Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('')), callback='parseItemReader', follow=True), 
+        Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parseItemReader', follow=True), 
     )
 
     def parseItemCnn(self,response):
@@ -38,24 +38,28 @@ class DogSpider(CrawlSpider):
             }
 
     def parseItemReader(self,response):
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        #title = re.sub( r'\n|\t',"",title)
-        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
+        title = response.xpath('//h1/text()').get() 
+        text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
         text = " ".join(" ".join(text))
         text = re.sub( "  ", "space",text)
         text = re.sub( " ", "",text)
         text = re.sub( "space", " ",text)
         text = re.sub( "\xa0","",text)
+        author = response.xpath('//p[@class="article-author"]/a/text()').get()
+        if author is not None:
+            author = re.sub("\xa0","",author)
+        else:
+            author = "Unknown"
         url = response.url
-        if title is not None and len(text)>10:
+        if title is not None:
             yield {
-                "subtopic": "world",
+                "subtopic": "politics",
                 "website": url.split('/')[2],
-                "title": title,
-                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
+                "title": re.sub( r'\n|\t',"",title),
+                "date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),
+                "author": author,
                 "text": re.sub( r'\n|\t',"",text),
-                "url": url,                
+                "url": url,              
             }
 
 

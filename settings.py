@@ -14,7 +14,6 @@ BOT_NAME = 'news2'
 SPIDER_MODULES = ['news2.spiders']
 NEWSPIDER_MODULE = 'news2.spiders'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'news2 (+http://www.yourdomain.com)'
 
@@ -58,9 +57,9 @@ TELNETCONSOLE_ENABLED = False
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#   'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+EXTENSIONS = {
+   'scrapy.extensions.telnet.TelnetConsole': None,
+}
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
