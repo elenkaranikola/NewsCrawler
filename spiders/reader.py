@@ -9,9 +9,17 @@ from news2.items import News2Item
 class DogSpider(CrawlSpider):
     name = 'reader'
     allowed_domains = ['reader.gr']
-    start_urls = ['https://www.reader.gr/news/politiki']
+    start_urls = ['https://www.reader.gr/athlitismos']
 
-    rules = (Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parseItemReader', follow=True), )
+    rules = (Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parseReaderCrawl', follow=True), )
+
+    def parseReaderCrawl(self,response):
+        links = response.xpath('//h1[@class="article-title"]/a/@href|//div[@class="row region"]').getall()
+        for link in links:
+            if len(link) < 100:
+                url = response.urljoin(link)
+                yield Request(url,callback=self.parseItemReader)
+
 
     def parseItemReader(self,response):
         title = response.xpath('//h1/text()').get() 
@@ -29,7 +37,7 @@ class DogSpider(CrawlSpider):
         url = response.url
         if title is not None:
             yield {
-                "subtopic": "politics",
+                "subtopic": "sport",
                 "website": url.split('/')[2],
                 "title": re.sub( r'\n|\t',"",title),
                 "date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),

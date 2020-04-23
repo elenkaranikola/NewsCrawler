@@ -12,7 +12,7 @@ class DogSpider(CrawlSpider):
     start_urls = ['https://www.cnn.gr/','https://www.reader.gr']
 
     rules = (
-        Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/')), callback='parseItemCnn', follow=True),
+        Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/','protoselida')), callback='parseItemCnn', follow=True),
         Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parseItemReader', follow=True), 
     )
 
