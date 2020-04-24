@@ -14,14 +14,16 @@ class SportSpider(CrawlSpider):
                         'sport24.gr',
                         'cnn.gr',
                         'reader.gr',
-                        'thetoc.gr'
+                        'thetoc.gr',
+                        'protagon.gr'
                     ]
     start_urls = [
                 'http://www.gazzetta.gr/',
                 'https://www.sport24.gr',
                 'https://www.cnn.gr',
                 'https://www.reader.gr/athlitismos',
-                'https://www.thetoc.gr/'
+                'https://www.thetoc.gr/',
+                'https://www.protagon.gr/epikairotita/',
                 ]
 
     rules = (
@@ -32,6 +34,7 @@ class SportSpider(CrawlSpider):
             Rule(LinkExtractor(allow=('cnn.gr/news/sports')),callback='parseItemCnn', follow=True),
             Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parseReaderCrawl', follow=True),
             Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
+            Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
              )
 
     
@@ -46,10 +49,12 @@ class SportSpider(CrawlSpider):
         text = re.sub( " ", "",text)
         text = re.sub( "space", " ",text)
         text = re.sub(r'\n|\t',"",text)
+        text = re.sub( "\xa0","",text)
+        flag = re.search(r"@",text)
         url = response.url
         subtopic = url.split('/')[3]
         website = url.split('/')[2]
-        if title is not None:
+        if title is not None and flag is None:
             yield {
                 "subtopic": subtopic,
                 "website" : website,
@@ -98,6 +103,7 @@ class SportSpider(CrawlSpider):
         text = re.sub( "  ", "space",text)
         text = re.sub( " ", "",text)
         text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
         url = response.url
         if title is not None:
             yield {
@@ -164,6 +170,38 @@ class SportSpider(CrawlSpider):
                 "text": re.sub( r'\n|\t',"",text),
                 "url": url,                
             }
+
+    def parseItemProtagon(self,response):
+        sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
+        if sub == "Sport":
+            title = response.xpath('//h1[@class="entry-title"]/text()').get() 
+            text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
+            text = " ".join(" ".join(text))
+            text = re.sub( "  ", "space",text)
+            text = re.sub( " ", "",text)
+            text = re.sub( "space", " ",text)
+            text = re.sub( "\xa0","",text)
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",text)
+            url = response.url
+            author = re.findall(r"(\w+).(\w+)",response.xpath('//strong[@class="generalbold uppercase"]/a/text()').get())
+            #from list to tuple to string
+            author = author[0]
+            author = ' '.join(author)
+            date = re.findall(r"(\d+).(\w+).(\d+)",response.xpath('//span[@class="generalight uppercase"]/text()').get())
+            date = date[0]
+            date = ' '.join(date)
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(text)>10 and flag is None:
+                yield {
+                    "subtopic": sub,
+                    "website": url.split('/')[2],
+                    "title": title,
+                    "date": date, 
+                    "author": author,
+                    "text": re.sub( r'\s\s\s',"",text),
+                    "url": url,                
+                }
 
 
 
