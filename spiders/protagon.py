@@ -9,13 +9,13 @@ from news2.items import News2Item
 class DogSpider(CrawlSpider):
     name = 'protagon'
     allowed_domains = ['protagon.gr']
-    start_urls = ['https://www.protagon.gr/epikairotita/']
+    start_urls = ['https://www.protagon.gr/themata/']
 
-    rules = (Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True), )
+    rules = (Rule(LinkExtractor(allow=('protagon.gr/themata/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True), )
 
     def parseItemProtagon(self,response):
         sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
-        if sub == "Περιβάλλον":
+        if sub == "Επιστήμη & Τεχνολογία":
             title = response.xpath('//h1[@class="entry-title"]/text()').get() 
             text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
             text = " ".join(" ".join(text))
