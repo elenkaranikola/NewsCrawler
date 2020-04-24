@@ -9,8 +9,20 @@ from news2.items import News2Item
 
 class SportSpider(CrawlSpider):
     name = 'sport'
-    allowed_domains = ['gazzetta.gr','sport24.gr','cnn.gr','reader.gr']
-    start_urls = ['http://www.gazzetta.gr/','https://www.sport24.gr','https://www.cnn.gr','https://www.reader.gr/athlitismos']
+    allowed_domains = [
+                        'gazzetta.gr',
+                        'sport24.gr',
+                        'cnn.gr',
+                        'reader.gr',
+                        'thetoc.gr'
+                    ]
+    start_urls = [
+                'http://www.gazzetta.gr/',
+                'https://www.sport24.gr',
+                'https://www.cnn.gr',
+                'https://www.reader.gr/athlitismos',
+                'https://www.thetoc.gr/'
+                ]
 
     rules = (
             Rule(LinkExtractor(allow=('gazzetta.gr/football/','gazzetta.gr/basketball/','gazzetta.gr/other-sports/','gazzetta.gr/volleyball/','gazzetta.gr/tennis/'), 
@@ -19,6 +31,7 @@ class SportSpider(CrawlSpider):
             deny=('vid','gallery','pic')),callback='parseItemSport24', follow=True),
             Rule(LinkExtractor(allow=('cnn.gr/news/sports')),callback='parseItemCnn', follow=True),
             Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parseReaderCrawl', follow=True),
+            Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
              )
 
     
@@ -130,6 +143,27 @@ class SportSpider(CrawlSpider):
                 "url": url,              
             }
 
+    def parseItemThetoc(self,response):
+        title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
+        text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        flag = re.search(r"@",text)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "sport",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
+                "text": re.sub( r'\n|\t',"",text),
+                "url": url,                
+            }
 
 
 

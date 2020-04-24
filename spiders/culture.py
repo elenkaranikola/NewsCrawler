@@ -8,12 +8,13 @@ from news2.items import News2Item
 
 class DogSpider(CrawlSpider):
     name = 'culture'
-    allowed_domains = ['cnn.gr']
-    start_urls = ['https://www.cnn.gr/style/politismos','https://www.cnn.gr/style/psyxagogia']
+    allowed_domains = ['cnn.gr','thetoc.gr']
+    start_urls = ['https://www.cnn.gr/style/politismos','https://www.cnn.gr/style/psyxagogia','https://www.thetoc.gr/']
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True),
         Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True),
+        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
     )
 
 
@@ -84,4 +85,26 @@ class DogSpider(CrawlSpider):
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
                 "text": re.sub( r'\n|\t',"",text),
                 "url": url,     
+            }
+
+    def parseItemThetoc(self,response):
+        title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
+        text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        flag = re.search(r"@",text)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "culture",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
+                "text": re.sub( r'\n|\t',"",text),
+                "url": url,                
             }

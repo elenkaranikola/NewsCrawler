@@ -9,9 +9,9 @@ from news2.items import News2Item
 class DogSpider(CrawlSpider):
     name = 'reader'
     allowed_domains = ['reader.gr']
-    start_urls = ['https://www.reader.gr/athlitismos']
+    start_urls = ['https://www.reader.gr/life']
 
-    rules = (Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parseReaderCrawl', follow=True), )
+    rules = (Rule(LinkExtractor(allow=('reader.gr/life'), deny=('vid','vids',)), callback='parseReaderCrawl', follow=True), )
 
     def parseReaderCrawl(self,response):
         links = response.xpath('//h1[@class="article-title"]/a/@href|//div[@class="row region"]').getall()

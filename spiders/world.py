@@ -8,12 +8,13 @@ from news2.items import News2Item
 
 class DogSpider(CrawlSpider):
     name = 'world'
-    allowed_domains = ['cnn.gr','reader.gr']
-    start_urls = ['https://www.cnn.gr/','https://www.reader.gr/news/diethni']
+    allowed_domains = ['cnn.gr','reader.gr','thetoc.gr']
+    start_urls = ['https://www.cnn.gr/','https://www.reader.gr/news/diethni','https://www.thetoc.gr/']
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/news/kosmos'), deny=('cnn.gr/news/kosmos/gallery/','protoselida')), callback='parseItemCnn', follow=True),
-        Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parseItemReader', follow=True), 
+        Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parseItemReader', follow=True),
+        Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True), 
         )
 #function to crawl cnn.gr    
     def parseItemCnn(self,response):
@@ -60,4 +61,22 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\n|\t',"",text),
                 "url": url,              
             }
-
+    def parseItemThetoc(self,response):
+        title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
+        text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        url = response.url
+        if title is not None and len(text)>10:
+            yield {
+                "subtopic": "world",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
+                "text": re.sub( r'\n|\t',"",text),
+                "url": url,                
+            }
