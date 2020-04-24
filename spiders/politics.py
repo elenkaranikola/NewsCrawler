@@ -13,12 +13,14 @@ class DogSpider(CrawlSpider):
         'reader.gr',
         'thetoc.gr',
         'protagon.gr',
+        'periodista.gr',
         ]
     start_urls = [
         'https://www.cnn.gr/',
         'https://www.reader.gr',
         'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/'
+        'https://www.protagon.gr/epikairotita/',
+        'http://www.periodista.gr/',
         ]
 
     rules = (
@@ -26,6 +28,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parseItemReader', follow=True), 
         Rule(LinkExtractor(allow=('thetoc.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
+        Rule(LinkExtractor(allow=('periodista.gr/politiki/'), deny=()), callback='parseInfinitePeriodista', follow=True),
     )
 
     def parseItemCnn(self,response):
@@ -124,5 +127,41 @@ class DogSpider(CrawlSpider):
                     "text": re.sub( r'\s\s\s',"",text),
                     "url": url,                
                 }
+    #next three functions for crawling in periodista.gr 
+    def parseInfinitePeriodista(self,response):
+        pages =  3960
+        for page in range(0 ,pages , 30):
+            url = 'http://www.periodista.gr/politiki?start={}'.format(page)
+            yield Request(url, callback = self.parseItemPeriodista) 
+
+    def parseItemPeriodista(self,response):
+        links = response.xpath('//h2[@itemprop="headline"]/a/@href').getall()
+        for link in links:
+            url = response.urljoin(link)
+            yield Request(url,callback=self.parseItem) 
+
+            
+    def parseItem(self,response):
+        title = response.xpath('//h1[@itemprop="headline"]/text()').get() 
+        text = response.xpath('//div[@class="per-item-page-part per-article-body"]//p/text()|//div[@class="per-item-page-part per-article-body"]//strong/text()|//div[@class="per-item-page-part per-article-body"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        url = response.url
+        #flag to see later on if we have videos
+        flag = re.search(r"binteo|foto",url)
+        #check if we are in an article, and if it doesn't have videos
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "Πολιτική",
+                "website": url.split('/')[2],
+                "title": re.sub( r'\t|\n|\r',"",title),
+                "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
+                "author": "Δημήτρη Μπεκιάρη",
+                "text": re.sub( r'\s\s\s',"",text),
+                "url": url,                
+            }
 
 
