@@ -13,28 +13,29 @@ class DogSpider(CrawlSpider):
         'reader.gr',
         'thetoc.gr',
         'protagon.gr',
-        'periodista.gr'
+        'periodista.gr',
+        'in.gr',
         ]
     start_urls = [
         'https://www.cnn.gr/',
         'https://www.reader.gr/news/oikonomia',
         'https://www.thetoc.gr/',
         'https://www.protagon.gr/epikairotita/',
-        'http://www.periodista.gr/oikonomia'
+        'http://www.periodista.gr/oikonomia',
+        'https://www.in.gr/economy/'
         ]
 
     rules = (
-        #Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=()), callback='parseInfinitePeriodista', follow=True),
+        Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=()), callback='parseInfinitePeriodista', follow=True),
         Rule(LinkExtractor(allow=('cnn.gr/oikonomia'), deny=('cnn.gr/oikonomia/gallery/')), callback='parseItemCnn', follow=True), 
         Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parseItemReader', follow=True),
         Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
-        
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
         )
 
     def parseItemCnn(self,response):
         title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        #title = re.sub( r'\n|\t',"",title)
         text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
         text = " ".join(" ".join(text))
         text = re.sub( "  ", "space",text)
@@ -166,4 +167,25 @@ class DogSpider(CrawlSpider):
                 "url": url,                
             }
 
-
+    def parseItemIn(self,response):
+        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
+        text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",text)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "Οικονομικά",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": response.xpath('//time/text()').get(), 
+                "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
+                "text": re.sub( r'\s\s\s',"",text),
+                "url": url,                
+            }

@@ -12,12 +12,14 @@ class DogSpider(CrawlSpider):
         'cnn.gr',
         'thetoc.gr',
         'protagon.gr',
+        'in.gr',
         ]
     start_urls = [
         'https://www.cnn.gr/style/politismos',
         'https://www.cnn.gr/style/psyxagogia',
         'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/'
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/culture/',
         ]
 
     rules = (
@@ -25,6 +27,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True),
         Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
     )
 
 
@@ -150,3 +153,26 @@ class DogSpider(CrawlSpider):
                     "text": re.sub( r'\s\s\s',"",text),
                     "url": url,                
                 }
+
+    def parseItemIn(self,response):
+        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
+        text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",text)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "culture & entertainment",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": response.xpath('//time/text()').get(), 
+                "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
+                "text": re.sub( r'\s\s\s',"",text),
+                "url": url,                
+            }
