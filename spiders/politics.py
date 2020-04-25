@@ -15,6 +15,7 @@ class DogSpider(CrawlSpider):
         'protagon.gr',
         'periodista.gr',
         'in.gr',
+        'newpost.gr',
         ]
     start_urls = [
         'https://www.cnn.gr/',
@@ -23,6 +24,7 @@ class DogSpider(CrawlSpider):
         'https://www.protagon.gr/epikairotita/',
         'http://www.periodista.gr/',
         'https://www.in.gr/politics/',
+        'http://newpost.gr/',
         ]
 
     rules = (
@@ -32,6 +34,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
         Rule(LinkExtractor(allow=('periodista.gr/politiki/'), deny=()), callback='parseInfinitePeriodista', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/politics/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
+        Rule(LinkExtractor(allow=('newpost.gr/politiki'), deny=()), callback='parseInfiniteNewpost', follow=True),
     )
 
     def parseItemCnn(self,response):
@@ -188,5 +191,41 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",text),
                 "url": url,                
             }
+
+    def parseInfiniteNewpost(self,response):
+        pages =  13145
+        for page in range(1 ,pages):
+            url = 'http://www.newpost.gr/politiki?page={}'.format(page)
+            yield Request(url, callback = self.parseItemNewpost) 
+
+    def parseItemNewpost(self,response):
+        links = response.xpath('//h2[@class="cp-title"]/a/@href').getall()
+        for link in links:
+            url = response.urljoin(link)
+            yield Request(url,callback=self.parseNewpost) 
+
+    #next 3 functions for newpost.gr         
+    def parseNewpost(self,response):
+        title = response.xpath('//h1[@class="article-title"]/text()').get() 
+        text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
+        text = " ".join(" ".join(text))
+        text = re.sub( "  ", "space",text)
+        text = re.sub( " ", "",text)
+        text = re.sub( "space", " ",text)
+        text = re.sub( "\xa0","",text)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",text)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(text)>10 and flag is None:
+            yield {
+                "subtopic": "Πολιτική",
+                "website": url.split('/')[2],
+                "title": title,
+                "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                "author": "Newpost.gr",
+                "text": re.sub( r'\s\s\s',"",text),
+                "url": url,                
+           }
 
 
