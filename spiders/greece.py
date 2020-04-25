@@ -48,7 +48,7 @@ class DogSpider(CrawlSpider):
         if title is not None:
             yield {
                 "subtopic": "Greece",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
@@ -73,7 +73,7 @@ class DogSpider(CrawlSpider):
         if title is not None:
             yield {
                 "subtopic": "Society",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\n|\t',"",title),
                 "date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),
                 "author": author,
@@ -93,7 +93,7 @@ class DogSpider(CrawlSpider):
         if title is not None and len(clearcharacters)>10:
             yield {
                 "subtopic": "Society",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
@@ -125,7 +125,7 @@ class DogSpider(CrawlSpider):
             if title is not None and len(clearcharacters)>10 and flag is None:
                 yield {
                     "subtopic": sub,
-                    "website": url.split('/')[2],
+                    "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
                     "date": date, 
                     "author": author,
@@ -161,7 +161,7 @@ class DogSpider(CrawlSpider):
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
                 "subtopic": "Society",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\t|\n|\r',"",title),
                 "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
                 "author": "Periodista",
@@ -183,7 +183,7 @@ class DogSpider(CrawlSpider):
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
                 "subtopic": "Greece",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": response.xpath('//time/text()').get(), 
                 "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
@@ -219,7 +219,7 @@ class DogSpider(CrawlSpider):
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
                 "subtopic": "Greece",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                 "author": "Newpost.gr",
