@@ -30,7 +30,7 @@ class DogSpider(CrawlSpider):
         if title is not None and len(text)>10 and flag is None:
             yield {
                 "subtopic": "health & life",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": response.xpath('//time/text()').get(), 
                 "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),

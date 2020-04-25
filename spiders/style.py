@@ -42,65 +42,65 @@ class DogSpider(CrawlSpider):
     def parseItem(self,response):
         text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
         title = response.xpath('//h1[@class="story-title"]/text()').get()
-        text = " ".join(" ".join(text))
-        text = re.sub( "  ", "space",text)
-        text = re.sub( " ", "",text)
-        text = re.sub( "space", " ",text)
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
         url = response.url
         article_type = url.split('/')[5]
-        contains_photos = re.search('Photos',text)
+        contains_photos = re.search('Photos',finaltext)
         if article_type == "story" and contains_photos is None:
             yield{ 
                 "subtopic": "moda",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "text": re.sub( r'\n|\t',"",text),
+                "text": re.sub( r'\n|\t',"",finaltext),
                 "url": url,     
             }
 
     def parseItemThetoc(self,response):
         title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
         text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
-        text = " ".join(" ".join(text))
-        text = re.sub( "  ", "space",text)
-        text = re.sub( " ", "",text)
-        text = re.sub( "space", " ",text)
-        text = re.sub( "\xa0","",text)
-        flag = re.search(r"@",text)
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
+        flag = re.search(r"@",clearcharacters)
         url = response.url
         #check if we are in an article, and if it doesn't have images
-        if title is not None and len(text)>10 and flag is None:
+        if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
                 "subtopic": "style",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                "text": re.sub( r'\n|\t',"",text),
+                "text": re.sub( r'\n|\t',"",clearcharacters),
                 "url": url,                
             }
 
     def parseItemIn(self,response):
         title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
         text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-        text = " ".join(" ".join(text))
-        text = re.sub( "  ", "space",text)
-        text = re.sub( " ", "",text)
-        text = re.sub( "space", " ",text)
-        text = re.sub( "\xa0","",text)
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
         #flag to see later on if we have tweets ect
-        flag = re.search(r"@",text)
+        flag = re.search(r"@",clearcharacters)
         url = response.url
         #check if we are in an article, and if it doesn't have images
-        if title is not None and len(text)>10 and flag is None:
+        if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
                 "subtopic": "health & life",
-                "website": url.split('/')[2],
+                "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": response.xpath('//time/text()').get(), 
                 "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                "text": re.sub( r'\s\s\s',"",text),
+                "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
