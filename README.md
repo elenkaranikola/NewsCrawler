@@ -35,6 +35,9 @@ From each article we collect data concerning:
   - text
   - url of the specific article
 ```
-In order to run our spider and save it's extracted data in a csv file run the bellow commands: 
-*scrapy crawl spidername -o out.csv -t csv*
-
+In order to run our spider and save it's extracted data in a csv file do the following:
+```
+1.Clone this project localy
+2.Install it's requirements froms requirements.txt
+3. run the commands: *scrapy crawl spidername -o out.csv -t csv*
+```
