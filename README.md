@@ -39,5 +39,5 @@ In order to run our spider and save it's extracted data in a csv file do the fol
 ```
 1.Clone this project localy
 2.Install it's requirements froms requirements.txt
-3.Run the commands: *scrapy crawl spidername -o out.csv -t csv*
+3.Run the commands: scrapy crawl spidername -o out.csv -t csv
 ```
