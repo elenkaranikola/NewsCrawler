@@ -1,5 +1,6 @@
 # News Crawler
-In this repository we create a crawler using scrapy. Our crawler has 10 different spiders, one spider for every subject given bellow:
+In this repository we create a crawler using scrapy.
+Our crawler has 10 different spiders, one spider for every subject given bellow:
 ```
   1. Greece
   2. World
