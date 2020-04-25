@@ -37,9 +37,9 @@ From each article we collect data concerning:
 ```
 In order to run our spider and save it's extracted data in a csv file do the following:
 ```
-1.Install it's requirements froms requirements.txt
+1.Install it's requirements from requirements.txt
 2.Run -- scrapy startproject news2
-1.Clone this project localy
-3.Run -- scrapy crawl spidername -o out.csv -t csv
+3.Clone this project localy
+4.Run -- scrapy crawl spidername -o out.csv -t csv
 ```
 

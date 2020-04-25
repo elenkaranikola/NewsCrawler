@@ -165,7 +165,7 @@ class DogSpider(CrawlSpider):
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\t|\n|\r',"",title),
                 "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
-                "author": "Δημήτρη Μπεκιάρη",
+                "author": "Periodista",
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
