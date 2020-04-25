@@ -117,11 +117,11 @@ class DogSpider(CrawlSpider):
             url = response.url
             author = re.findall(r"(\w+).(\w+)",response.xpath('//strong[@class="generalbold uppercase"]/a/text()').get())
             #from list to tuple to string
-            author = author[0]
-            author = ' '.join(author)
+            listtotuple = author[0]
+            author = ' '.join(listtotuple)
             date = re.findall(r"(\d+).(\w+).(\d+)",response.xpath('//span[@class="generalight uppercase"]/text()').get())
-            date = date[0]
-            date = ' '.join(date)
+            listtotuple = date[0]
+            date = ' '.join(listtotuple)
             #check if we are in an article, and if it doesn't have images
             if title is not None and len(clearcharacters)>10 and flag is None:
                 yield {
