@@ -8,13 +8,26 @@ from news2.items import News2Item
 
 class DogSpider(CrawlSpider):
     name = 'tech'
-    allowed_domains = ['cnn.gr','protagon.gr','in.gr']
-    start_urls = ['https://www.cnn.gr/','https://www.protagon.gr/themata/','https://www.in.gr/tech/']
+    allowed_domains = [
+        'cnn.gr',
+        'protagon.gr',
+        'in.gr',
+        'newpost.gr',
+        ]
+    url = [
+        'https://www.cnn.gr/',
+        'https://www.protagon.gr/themata/',
+        'https://www.in.gr/tech/',
+        'https://newpost.gr/tech',
+        ]
+    urls = url + ['http://newpost.gr/tech?page={}'.format(x) for x in range(1,1266)]
+    start_urls = urls[:]
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/tech'), deny=('cnn.gr/tech/gallery/')), callback='parseItemCnn', follow=True), 
         Rule(LinkExtractor(allow=('protagon.gr/themata/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/tech/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
+        Rule(LinkExtractor(allow=('newpost.gr/tech'), deny=()), callback='parseNewpost', follow=True), 
         )
 
     def parseItemCnn(self,response):
@@ -92,5 +105,28 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
+
+    def parseNewpost(self,response):
+        title = response.xpath('//h1[@class="article-title"]/text()').get() 
+        text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clearcharacters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(clearcharacters)>10 and flag is None:
+            yield {
+                "subtopic": "Tech",
+                "website": "newpost.gr",
+                "title": title,
+                "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                "author": "Newpost.gr",
+                "text": re.sub( r'\s\s\s',"",clearcharacters),
+                "url": url,                
+        }
 
 

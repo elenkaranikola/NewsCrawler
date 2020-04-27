@@ -17,15 +17,16 @@ class DogSpider(CrawlSpider):
         'in.gr',
         'newpost.gr',
         ]
-    start_urls = [
+    url = [
         'https://www.cnn.gr/',
         'https://www.reader.gr',
         'https://www.thetoc.gr/',
         'https://www.protagon.gr/epikairotita/',
         'http://www.periodista.gr/',
         'https://www.in.gr/politics/',
-        'http://newpost.gr/',
         ]
+    urls = url + ['http://newpost.gr/politiki?page={}'.format(x) for x in range(1,13147)]
+    start_urls = urls[:]
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/','protoselida')), callback='parseItemCnn', follow=True),
@@ -204,7 +205,6 @@ class DogSpider(CrawlSpider):
             url = response.urljoin(link)
             yield Request(url,callback=self.parseNewpost) 
 
-    #next 3 functions for newpost.gr         
     def parseNewpost(self,response):
         title = response.xpath('//h1[@class="article-title"]/text()').get() 
         text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
@@ -217,15 +217,15 @@ class DogSpider(CrawlSpider):
         flag = re.search(r"@",clearcharacters)
         url = response.url
         #check if we are in an article, and if it doesn't have images
-        if title is not None and len(text)>10 and flag is None:
+        if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "Politics",
-                "website": re.search(r"www.+\.gr",url).group(0),
+                "subtopic": "World",
+                "website": "newpost.gr",
                 "title": title,
                 "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                 "author": "Newpost.gr",
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
-           }
+        }
 
 

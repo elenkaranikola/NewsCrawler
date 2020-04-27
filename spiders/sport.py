@@ -10,23 +10,27 @@ from news2.items import News2Item
 class SportSpider(CrawlSpider):
     name = 'sport'
     allowed_domains = [
-                        'gazzetta.gr',
-                        'sport24.gr',
-                        'cnn.gr',
-                        'reader.gr',
-                        'thetoc.gr',
-                        'protagon.gr',
-                        'in.gr',
+                    'gazzetta.gr',
+                    'sport24.gr',
+                    'cnn.gr',
+                    'reader.gr',
+                    'thetoc.gr',
+                    'protagon.gr',
+                    'in.gr',
+                    'newpost.gr',
                     ]
-    start_urls = [
-                'http://www.gazzetta.gr/',
-                'https://www.sport24.gr',
-                'https://www.cnn.gr',
-                'https://www.reader.gr/athlitismos',
-                'https://www.thetoc.gr/',
-                'https://www.protagon.gr/epikairotita/',
-                'https://www.in.gr/sports/',
-                ]
+    url = [
+            'http://www.gazzetta.gr/',
+            'https://www.sport24.gr',
+            'https://www.cnn.gr',
+            'https://www.reader.gr/athlitismos',
+            'https://www.thetoc.gr/',
+            'https://www.protagon.gr/epikairotita/',
+            'https://www.in.gr/sports/',
+            'https://newpost.gr/athlitika',
+            ]
+    urls = url + ['http://newpost.gr/athlitika?page={}'.format(x) for x in range(1,9167)]
+    start_urls = urls[:]
 
     rules = (
             Rule(LinkExtractor(allow=('gazzetta.gr/football/','gazzetta.gr/basketball/','gazzetta.gr/other-sports/','gazzetta.gr/volleyball/','gazzetta.gr/tennis/'), 
@@ -38,6 +42,7 @@ class SportSpider(CrawlSpider):
             Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
             Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
             Rule(LinkExtractor(allow=(r"\.in\.gr.+/sports/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
+            Rule(LinkExtractor(allow=('newpost.gr/athlitika'), deny=()), callback='parseNewpost', follow=True),
             )
 
     
@@ -227,3 +232,25 @@ class SportSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
+    def parseNewpost(self,response):
+        title = response.xpath('//h1[@class="article-title"]/text()').get() 
+        text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clearcharacters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(clearcharacters)>10 and flag is None:
+            yield {
+                "subtopic": "Sport",
+                "website": "newpost.gr",
+                "title": title,
+                "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                "author": "Newpost.gr",
+                "text": re.sub( r'\s\s\s',"",clearcharacters),
+                "url": url,                
+        }

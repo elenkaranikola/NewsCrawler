@@ -13,14 +13,18 @@ class DogSpider(CrawlSpider):
         'thetoc.gr',
         'protagon.gr',
         'in.gr',
+        'newpost.gr',
         ]
-    start_urls = [
+    url = [
         'https://www.cnn.gr/style/politismos',
         'https://www.cnn.gr/style/psyxagogia',
         'https://www.thetoc.gr/',
         'https://www.protagon.gr/epikairotita/',
         'https://www.in.gr/culture/',
+        'https://newpost.gr/entertainment',
         ]
+    urls = url + ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,2981)]
+    start_urls = urls[:]
 
     rules = (
         Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True),
@@ -28,6 +32,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
+        Rule(LinkExtractor(allow=('newpost.gr/entertainment'), deny=()), callback='parseNewpost', follow=True),
     )
 
 
@@ -179,3 +184,26 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
+
+    def parseNewpost(self,response):
+        title = response.xpath('//h1[@class="article-title"]/text()').get() 
+        text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clearcharacters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(clearcharacters)>10 and flag is None:
+            yield {
+                "subtopic": "Art",
+                "website": "newpost.gr",
+                "title": title,
+                "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                "author": "Newpost.gr",
+                "text": re.sub( r'\s\s\s',"",clearcharacters),
+                "url": url,                
+        }

@@ -17,7 +17,7 @@ class DogSpider(CrawlSpider):
         'in.gr',
         'newpost.gr',
         ]
-    start_urls = [
+    url = [
         'https://www.cnn.gr/',
         'https://www.reader.gr/news/oikonomia',
         'https://www.thetoc.gr/',
@@ -26,6 +26,8 @@ class DogSpider(CrawlSpider):
         'https://www.in.gr/economy/',
         'http://newpost.gr/',
         ]
+    urls = url + ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,6666)]
+    start_urls = urls[:]
 
     rules = (
         Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=()), callback='parseInfinitePeriodista', follow=True),
@@ -34,7 +36,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
-        Rule(LinkExtractor(allow=('newpost.gr/oikonomia'), deny=()), callback='parseInfiniteNewpost', follow=True), 
+        Rule(LinkExtractor(allow=('newpost.gr/oikonomia'), deny=()), callback='parseNewpost', follow=True), 
         )
 
     def parseItemCnn(self,response):
@@ -192,19 +194,7 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
-#next 3 functions for newpost.gr 
-    def parseInfiniteNewpost(self,response):
-        pages =  6664
-        for page in range(1 ,pages):
-            url = 'http://www.newpost.gr/oikonomia?page={}'.format(page)
-            yield Request(url, callback = self.parseItemNewpost) 
 
-    def parseItemNewpost(self,response):
-        links = response.xpath('//h2[@class="cp-title"]/a/@href').getall()
-        for link in links:
-            url = response.urljoin(link)
-            yield Request(url,callback=self.parseNewpost) 
-       
     def parseNewpost(self,response):
         title = response.xpath('//h1[@class="article-title"]/text()').get() 
         text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
@@ -219,11 +209,11 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "Economy",
-                "website": re.search(r"www.+\.gr",url).group(0),
+                "subtopic": "Economics",
+                "website": "newpost.gr",
                 "title": title,
                 "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                 "author": "Newpost.gr",
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
-           }
+        }

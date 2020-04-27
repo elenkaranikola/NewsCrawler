@@ -12,17 +12,22 @@ class DogSpider(CrawlSpider):
         'cnn.gr',
         'thetoc.gr',
         'in.gr',
+        'newpost.gr',
         ]
-    start_urls = [
+    url = [
         'https://www.cnn.gr/style/politismos',
         'https://www.thetoc.gr/',
         'https://www.in.gr/'
+        'https://newpost.gr/lifestyle',
         ]
+    urls = url + ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,5757)]
+    start_urls = urls[:]
 
     rules = (
         Rule(LinkExtractor(allow=('/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True), 
         Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True),
+        Rule(LinkExtractor(allow=('newpost.gr/lifestyle'), deny=()), callback='parseNewpost', follow=True), 
         )
 
 #next three functions for cnn infinite scroll for fashion
@@ -104,3 +109,25 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
             }
+    def parseNewpost(self,response):
+        title = response.xpath('//h1[@class="article-title"]/text()').get() 
+        text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
+        listtostring = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",listtostring)
+        uneededspaces = re.sub( " ", "",markspaces)
+        finaltext = re.sub( "space", " ",uneededspaces)
+        clearcharacters = re.sub( "\xa0","",finaltext)
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clearcharacters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(clearcharacters)>10 and flag is None:
+            yield {
+                "subtopic": "Lifestyle",
+                "website": "newpost.gr",
+                "title": title,
+                "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                "author": "Newpost.gr",
+                "text": re.sub( r'\s\s\s',"",clearcharacters),
+                "url": url,                
+        }
