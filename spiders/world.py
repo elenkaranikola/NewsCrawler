@@ -17,13 +17,14 @@ class DogSpider(CrawlSpider):
         'in.gr',
         'newpost.gr',
         ]
-    url = ['https://www.cnn.gr/',
-    'https://www.reader.gr/news/diethni',
-    'https://www.thetoc.gr/',
-    'https://www.protagon.gr/epikairotita/',
-    'http://www.periodista.gr/',
-    'https://www.in.gr/world/',
-    ]
+    url = [
+        'https://www.cnn.gr/',
+        'https://www.reader.gr/news/diethni',
+        'https://www.thetoc.gr/',
+        'https://www.protagon.gr/epikairotita/',
+        'http://www.periodista.gr/',
+        'https://www.in.gr/world/',
+        ]
     urls = url + ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]
     start_urls = urls[:]
 

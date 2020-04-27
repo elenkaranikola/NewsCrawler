@@ -9,18 +9,10 @@ from news2.items import News2Item
 class DogSpider(CrawlSpider):
     name = 'post2'
     allowed_domains = ['newpost.gr']
-    start_urls = [
-    'http://newpost.gr/kosmos'
-    ]
-    #def start_requests(self):
-        #for page in range(1,18713):
-         #   url = 'http://newpost.gr/kosmos?page={}'.format(page)
-          #  yield Request( url, self.parse)ZZZZ
     urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]
     start_urls = urls[:]  
     rules = ( 
         Rule(LinkExtractor(allow=('newpost.gr/kosmos'), deny=()), callback='parseNewpost', follow=True),   
-        #Rule(LinkExtractor(allow=('newpost.gr/kosmos?page={}'.format(page))), callback='parseNewpost', follow=True))
     )
     
     def parseNewpost(self,response):

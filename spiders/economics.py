@@ -50,7 +50,7 @@ class DogSpider(CrawlSpider):
         url = response.url
         if title is not None and len(clearcharacters)>10:
             yield {
-                "subtopic": url.split('/')[4],
+                "subtopic": "Economics",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
@@ -75,7 +75,7 @@ class DogSpider(CrawlSpider):
         url = response.url
         if title is not None:
             yield {
-                "subtopic": "economics",
+                "subtopic": "Economics",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\n|\t',"",title),
                 "date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),
@@ -95,7 +95,7 @@ class DogSpider(CrawlSpider):
         url = response.url
         if title is not None and len(clearcharacters)>10:
             yield {
-                "subtopic": "economics",
+                "subtopic": "Economics",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
@@ -127,7 +127,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article, and if it doesn't have images
             if title is not None and len(clearcharacters)>10 and flag is None:
                 yield {
-                    "subtopic": "Economy",
+                    "subtopic": "Economics",
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
                     "date": date, 
@@ -163,7 +163,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have videos
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "Economy",
+                "subtopic": "Economics",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\t|\n|\r',"",title),
                 "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
@@ -186,7 +186,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "Economy",
+                "subtopic": "Economics",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": response.xpath('//time/text()').get(), 

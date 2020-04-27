@@ -8,23 +8,24 @@ from news2.items import News2Item
 
 class DogSpider(CrawlSpider):
     name = 'greece'
-    allowed_domains = ['cnn.gr',
-                    'reader.gr',
-                    'thetoc.gr',
-                    'protagon.gr',
-                    'periodista.gr',
-                    'in.gr',
-                    'newpost.gr',
-                    ]
+    allowed_domains = [
+        'cnn.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'periodista.gr',
+        'in.gr',
+        'newpost.gr',
+        ]
     url = [
-                'http://www.periodista.gr/',
-                'https://www.cnn.gr/',
-                'https://www.reader.gr/news/koinonia',
-                'https://www.thetoc.gr/',
-                'https://www.protagon.gr/epikairotita/ellada',
-                'https://www.in.gr/greece/',
-                'https://newpost.gr/ellada/',
-                ]
+        'http://www.periodista.gr/',
+        'https://www.cnn.gr/',
+        'https://www.reader.gr/news/koinonia',
+        'https://www.thetoc.gr/',
+        'https://www.protagon.gr/epikairotita/ellada',
+        'https://www.in.gr/greece/',
+        'https://newpost.gr/ellada/',
+        ]
     urls = url + ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,18717)]
     start_urls = urls[:]
 

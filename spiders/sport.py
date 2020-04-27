@@ -10,25 +10,25 @@ from news2.items import News2Item
 class SportSpider(CrawlSpider):
     name = 'sport'
     allowed_domains = [
-                    'gazzetta.gr',
-                    'sport24.gr',
-                    'cnn.gr',
-                    'reader.gr',
-                    'thetoc.gr',
-                    'protagon.gr',
-                    'in.gr',
-                    'newpost.gr',
-                    ]
+        'gazzetta.gr',
+        'sport24.gr',
+        'cnn.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'in.gr',
+        'newpost.gr',
+        ]
     url = [
-            'http://www.gazzetta.gr/',
-            'https://www.sport24.gr',
-            'https://www.cnn.gr',
-            'https://www.reader.gr/athlitismos',
-            'https://www.thetoc.gr/',
-            'https://www.protagon.gr/epikairotita/',
-            'https://www.in.gr/sports/',
-            'https://newpost.gr/athlitika',
-            ]
+        'http://www.gazzetta.gr/',
+        'https://www.sport24.gr',
+        'https://www.cnn.gr',
+        'https://www.reader.gr/athlitismos',
+        'https://www.thetoc.gr/',
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/sports/',
+        'https://newpost.gr/athlitika',
+        ]
     urls = url + ['http://newpost.gr/athlitika?page={}'.format(x) for x in range(1,9167)]
     start_urls = urls[:]
 
