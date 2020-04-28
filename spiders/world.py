@@ -5,6 +5,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
+from news2.settings import PERIODISTA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'world'
@@ -25,12 +26,12 @@ class DogSpider(CrawlSpider):
         'http://www.periodista.gr/',
         'https://www.in.gr/world/',
         ]
-    urls = url + ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]
+    urls = url + ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]+['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],10)]
     start_urls = urls[:]
 
 
     rules = (
-        Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=()), callback='parseInfinitePeriodista', follow=True), 
+        Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=()), callback='parse_periodista', follow=True), 
         Rule(LinkExtractor(allow=('cnn.gr/news/kosmos'), deny=('cnn.gr/news/kosmos/gallery/','protoselida')), callback='parseItemCnn', follow=True),
         Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parseItemReader', follow=True),
         Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True), 
@@ -134,42 +135,28 @@ class DogSpider(CrawlSpider):
                     "text": re.sub( r'\s\s\s',"",clearcharacters),
                     "url": url,                
                 }
-    #next three functions fron periodista
-    def parseInfinitePeriodista(self,response):
-        pages =  1010
-        for page in range(0 ,pages , 10):
-            url = 'http://www.periodista.gr/kosmos?start={}'.format(page)
-            yield Request(url, callback = self.parseItemPeriodista) 
-
-    def parseItemPeriodista(self,response):
-        links = response.xpath('//h2[@itemprop="headline"]/a/@href').getall()
-        for link in links:
-            url = response.urljoin(link)
-            yield Request(url,callback=self.parseItem) 
-
-            
-    def parseItem(self,response):
+    def parse_periodista(self,response):
         title = response.xpath('//h1[@itemprop="headline"]/text()').get() 
         text = response.xpath('//div[@class="per-item-page-part per-article-body"]//p/text()|//div[@class="per-item-page-part per-article-body"]//strong/text()|//div[@class="per-item-page-part per-article-body"]//p/*/text()').getall()
-        listtostring = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",listtostring)
-        uneededspaces = re.sub( " ", "",markspaces)
-        finaltext = re.sub( "space", " ",uneededspaces)
-        clearcharacters = re.sub( "\xa0","",finaltext)
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub( "\xa0","",final_text)
         url = response.url
         #flag to see later on if we have videos
         flag = re.search(r"binteo|foto",url)
         #check if we are in an article, and if it doesn't have videos
-        if title is not None and len(clearcharacters)>10 and flag is None:
+        if title is not None and len(clear_characters)>10 and flag is None:
             yield {
                 "subtopic": "World",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": re.sub( r'\t|\n|\r',"",title),
                 "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
-                "author": "Periodista.gr",
-                "text": re.sub( r'\s\s\s',"",clearcharacters),
+                "author": "periodista.gr",
+                "text": re.sub( r'\s\s\s',"",clear_characters),
                 "url": url,                
-            }
+            }   
 
     def parseItemIn(self,response):
         title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
