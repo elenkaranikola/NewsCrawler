@@ -13,10 +13,10 @@ class DogSpider(CrawlSpider):
     start_urls = ['https://www.tanea.gr']
 
     rules = (
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         )
 
-    def parse_iefimerida(self,response):
+    def parse_tanea(self,response):
 
         title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
         #title = " ".join(" ".join(title))
@@ -40,7 +40,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(final_text)>10 and flag is None:
             yield {
-                "subtopic": "Greece",
+                "subtopic": "Sports",
                 "website": TANEA_VARS['AUTHOR'],
                 "title": final_title,
                 "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
