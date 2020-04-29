@@ -105,3 +105,7 @@ PRESSPROJECT_VARS = {
 IEFIMERIDA_VARS = {
    'AUTHOR': "iefimerida.gr"
 }
+
+TANEA_VARS = {
+   'AUTHOR': "tanea.gr"
+}
