@@ -27,7 +27,7 @@ class DogSpider(CrawlSpider):
         final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
         #final_title = re.sub(r'/s/s/s',)
 
-        text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()').getall()
+        text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
         list_to_string = " ".join(" ".join(text))
         markspaces = re.sub( "  ", "space",list_to_string)
         uneeded_spaces = re.sub( " ", "",markspaces)
