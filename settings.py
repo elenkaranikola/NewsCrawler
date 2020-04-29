@@ -97,3 +97,7 @@ PERIODISTA_VARS = {
    'WORLD_PAGES':1020,
    'SPORT_PAGES':300,
 }
+
+PRESSPROJECT_VARS = {
+   'AUTHOR': "thepressproject.gr"
+}
