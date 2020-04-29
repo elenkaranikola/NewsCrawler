@@ -24,6 +24,9 @@ We use our spiders to extract articles from 20 different greek website. So far w
   - newpost.gr
   - gazzetta.gr
   - sport24.gr
+  - tanea.gr
+  - iefimerida.gr
+  - thepressproject.gr
 ```
 From each article we collect data concerning:
 ```
