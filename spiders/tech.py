@@ -5,6 +5,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
+from news2.settings import IEFIMERIDA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'tech'
@@ -13,17 +14,20 @@ class DogSpider(CrawlSpider):
         'protagon.gr',
         'in.gr',
         'newpost.gr',
+        'iefimerida.gr',
         ]
     url = [
         'https://www.cnn.gr/',
         'https://www.protagon.gr/themata/',
         'https://www.in.gr/tech/',
         'https://newpost.gr/tech',
+        'https://www.iefimerida.gr',
         ]
     urls = url + ['http://newpost.gr/tech?page={}'.format(x) for x in range(1,1266)]
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=('iefimerida.gr/tehnologia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
         Rule(LinkExtractor(allow=('cnn.gr/tech'), deny=('cnn.gr/tech/gallery/')), callback='parseItemCnn', follow=True), 
         Rule(LinkExtractor(allow=('protagon.gr/themata/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/tech/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True), 
@@ -128,5 +132,29 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
         }
+
+    def parse_iefimerida(self,response):
+        title = response.xpath('//h1/span/text()').get() 
+        text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": "Tech",
+                "website": IEFIMERIDA_VARS['AUTHOR'],
+                "title": title,
+                "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                "author": IEFIMERIDA_VARS['AUTHOR'],
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            }
 
 

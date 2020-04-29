@@ -5,6 +5,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
+from news2.settings import IEFIMERIDA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'style'
@@ -13,17 +14,20 @@ class DogSpider(CrawlSpider):
         'thetoc.gr',
         'in.gr',
         'newpost.gr',
+        'iefimerida.gr',
         ]
     url = [
         'https://www.cnn.gr/style/politismos',
         'https://www.thetoc.gr/',
         'https://www.in.gr/'
         'https://newpost.gr/lifestyle',
+        'https://www.iefimerida.gr',
         ]
     urls = url + ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,5757)]
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=('https://www.iefimerida.gr/design|https://www.iefimerida.gr/gynaika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
         Rule(LinkExtractor(allow=('/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True), 
         Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemThetoc', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemIn', follow=True),
@@ -56,7 +60,7 @@ class DogSpider(CrawlSpider):
         contains_photos = re.search('Photos',finaltext)
         if article_type == "story" and contains_photos is None:
             yield{ 
-                "subtopic": "moda",
+                "subtopic": "Moda",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
@@ -78,7 +82,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "style",
+                "subtopic": "Style",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
@@ -101,7 +105,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(clearcharacters)>10 and flag is None:
             yield {
-                "subtopic": "health & life",
+                "subtopic": "Health & Life",
                 "website": re.search(r"www.+\.gr",url).group(0),
                 "title": title,
                 "date": response.xpath('//time/text()').get(), 
@@ -131,3 +135,27 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s',"",clearcharacters),
                 "url": url,                
         }
+
+    def parse_iefimerida(self,response):
+        title = response.xpath('//h1/span/text()').get() 
+        text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": url.split('/')[3],
+                "website": IEFIMERIDA_VARS['AUTHOR'],
+                "title": title,
+                "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                "author": IEFIMERIDA_VARS['AUTHOR'],
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            }
