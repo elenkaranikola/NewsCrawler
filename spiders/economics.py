@@ -6,10 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from news2.settings import TOVIMA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
+        'tovima.gr',
         'tanea.gr',
         'cnn.gr',
         'reader.gr',
@@ -34,9 +36,11 @@ class DogSpider(CrawlSpider):
         'https://www.iefimerida.gr',
         ]
     urls = url + ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,6666)]+['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
-    start_urls = urls[:]
+    to_vima_urls = urls+['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])] 
+    start_urls = to_vima_urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True),
         Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
         Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True), 
@@ -307,6 +311,37 @@ class DogSpider(CrawlSpider):
                 "title": final_title,
                 "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
                 "author": TANEA_VARS['AUTHOR'],
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            }
+
+    def parse_tovima(self,response):
+        title = response.xpath('//h1[@class="entry-title thirty black-c zonabold"]/text()').get() 
+        list_to_string = " ".join(" ".join(title))
+        markspaces = re.sub( "       ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+        text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": 'Economics',
+                "website": TOVIMA_VARS['AUTHOR'],
+                "title": final_title,
+                "date": response.xpath('//time/span/text()').get(), 
+                "author": TOVIMA_VARS['AUTHOR'],
                 "text": re.sub( r'\s\s\s|\n',"",final_text),
                 "url": url,                
             }
