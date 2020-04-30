@@ -107,5 +107,9 @@ IEFIMERIDA_VARS = {
 }
 
 TANEA_VARS = {
-   'AUTHOR': "tanea.gr"
+   'AUTHOR': "tanea.gr",
+   'CINEMA_PAGES':7,
+   'MUSIC_PAGES':8,
+   'CULTURE_PAGES': 12,
+   'FOOD_PAGES':5,
 }

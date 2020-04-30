@@ -10,10 +10,10 @@ from news2.settings import TANEA_VARS
 class DogSpider(CrawlSpider):
     name = 'tanea'
     allowed_domains = ['tanea.gr']
-    start_urls = ['https://www.tanea.gr']
+    start_urls = ['https://www.tanea.gr/category/recipes/page/{}'.format(x) for x in range(1,TANEA_VARS['FOOD_PAGES'])]
 
     rules = (
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+recipes"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         )
 
     def parse_tanea(self,response):
@@ -37,10 +37,11 @@ class DogSpider(CrawlSpider):
         #flag to see later on if we have tweets ect
         flag = re.search(r"@",clear_characters)
         url = response.url
+        
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(final_text)>10 and flag is None:
             yield {
-                "subtopic": "Sports",
+                "subtopic": 'Recipes',
                 "website": TANEA_VARS['AUTHOR'],
                 "title": final_title,
                 "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
