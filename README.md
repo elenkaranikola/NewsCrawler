@@ -27,6 +27,7 @@ We use our spiders to extract articles from 20 different greek website. So far w
   - tanea.gr
   - iefimerida.gr
   - thepressproject.gr
+  - tovima.gr
 ```
 From each article we collect data concerning:
 ```
