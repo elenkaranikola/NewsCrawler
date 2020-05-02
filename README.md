@@ -28,6 +28,7 @@ We use our spiders to extract articles from 20 different greek website. So far w
   - iefimerida.gr
   - thepressproject.gr
   - tovima.gr
+  - kathimerini.gr
 ```
 From each article we collect data concerning:
 ```

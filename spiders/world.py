@@ -6,10 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
+from news2.settings import KATHIMERINI_VARS
 
 class DogSpider(CrawlSpider):
     name = 'world'
     allowed_domains = [
+        'kathimerini.gr',
         'tovima.gr',
         'tanea.gr',
         'cnn.gr',
@@ -33,11 +35,16 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
-    urls = url + ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]+['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],10)]+['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(1,KATHIMERINI_VARS['WORLD_PAGES'])]
+    newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]
+    periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],10)]
+    tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
+    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls
     start_urls = urls[:]
 
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=('iefimerida.gr/kosmos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
@@ -337,6 +344,37 @@ class DogSpider(CrawlSpider):
                 "title": final_title,
                 "date": response.xpath('//time/span/text()').get(), 
                 "author": TOVIMA_VARS['AUTHOR'],
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            }
+
+    def parse_kathimerini(self,response):
+        title = response.xpath('//h2[@class="item-title"]/text()').get() 
+        list_to_string = " ".join(" ".join(title))
+        markspaces = re.sub( "       ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+        text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": 'World',
+                "website": KATHIMERINI_VARS['AUTHOR'],
+                "title": final_title,
+                "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                "author": KATHIMERINI_VARS['AUTHOR'],
                 "text": re.sub( r'\s\s\s|\n',"",final_text),
                 "url": url,                
             }

@@ -6,10 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS, PRESSPROJECT_VARS, IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
+from news2.settings import KATHIMERINI_VARS
 
 class DogSpider(CrawlSpider):
     name = 'politics'
     allowed_domains = [
+        'kathimerini.gr',
         'cnn.gr',
         'tovima.gr',
         'reader.gr',
@@ -34,11 +36,15 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
-    urls = url + ['http://www.periodista.gr/politiki?start={}'.format(x) for x in range(1,PERIODISTA_VARS['POLITICS_PAGES'],30)]+['http://newpost.gr/politiki?page={}'.format(x) for x in range(1,13147)] 
-    tovima_urls = urls + ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
-    start_urls = tovima_urls[:]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b2_1885015423_1161990931&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['POLITICS_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/politiki?start={}'.format(x) for x in range(1,PERIODISTA_VARS['POLITICS_PAGES'],30)]
+    newpost_urls = ['http://newpost.gr/politiki?page={}'.format(x) for x in range(1,13147)] 
+    tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
+    urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls
+    start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=('iefimerida.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
@@ -346,6 +352,40 @@ class DogSpider(CrawlSpider):
                 "url": url,                
             }
 
+    def parse_kathimerini(self,response):
+        title = response.xpath('//h2[@class="item-title"]/text()').get() 
+        list_to_string = " ".join(" ".join(title))
+        markspaces = re.sub( "       ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+        text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        
+        author = response.xpath('//span[@class="item-author"]/a/text()').get()
+        if author == "Κύριο Αρθρο" :
+            author = KATHIMERINI_VARS['AUTHOR']
+
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": 'Politics',
+                "website": KATHIMERINI_VARS['AUTHOR'],
+                "title": final_title,
+                "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                "author": author,
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            }
 
 
 
