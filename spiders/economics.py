@@ -6,11 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
-from news2.settings import TOVIMA_VARS
+from news2.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS
 
 class DogSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
+        'naftemporiki.gr',
         'tovima.gr',
         'tanea.gr',
         'cnn.gr',
@@ -24,6 +25,7 @@ class DogSpider(CrawlSpider):
         'iefimerida.gr',
         ]
     url = [
+        'https://www.naftemporiki.gr/finance/economy',
         'https://www.tanea.gr',
         'https://www.cnn.gr/',
         'https://www.reader.gr/news/oikonomia',
@@ -40,6 +42,7 @@ class DogSpider(CrawlSpider):
     start_urls = to_vima_urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True),
         Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
@@ -345,3 +348,34 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s|\n',"",final_text),
                 "url": url,                
             }
+
+    def parse_naftemporiki(self,response):
+        title = response.xpath('//h1[@id="sTitle"]/text()').get() 
+        list_to_string = " ".join(" ".join(title))
+        markspaces = re.sub( "       ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+        text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
+        list_to_string = " ".join(" ".join(text))
+        markspaces = re.sub( "  ", "space",list_to_string)
+        uneeded_spaces = re.sub( " ", "",markspaces)
+        final_text = re.sub( "space", " ",uneeded_spaces)
+        clear_characters = re.sub("\xa0","",final_text)
+
+        #flag to see later on if we have tweets ect
+        flag = re.search(r"@",clear_characters)
+        url = response.url
+        
+        #check if we are in an article, and if it doesn't have images
+        if title is not None and len(final_text)>10 and flag is None:
+            yield {
+                "subtopic": 'Economics',
+                "website": NAFTEMPORIKI_VARS['AUTHOR'],
+                "title": final_title,
+                "date": response.xpath('//div[@class="Date"]/text()').get(), 
+                "author": NAFTEMPORIKI_VARS['AUTHOR'],
+                "text": re.sub( r'\s\s\s|\n',"",final_text),
+                "url": url,                
+            } 
