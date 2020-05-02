@@ -35,7 +35,7 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
-    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(1,KATHIMERINI_VARS['WORLD_PAGES'])]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['WORLD_PAGES'])]
     newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,18713)]
     periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],10)]
     tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
@@ -367,6 +367,10 @@ class DogSpider(CrawlSpider):
         flag = re.search(r"@",clear_characters)
         url = response.url
         
+        author = response.xpath('//span[@class="item-author"]/a/text()').get()
+        if author == "Κύριο Αρθρο" :
+            author = KATHIMERINI_VARS['AUTHOR']
+
         #check if we are in an article, and if it doesn't have images
         if title is not None and len(final_text)>10 and flag is None:
             yield {
@@ -374,7 +378,7 @@ class DogSpider(CrawlSpider):
                 "website": KATHIMERINI_VARS['AUTHOR'],
                 "title": final_title,
                 "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
-                "author": KATHIMERINI_VARS['AUTHOR'],
+                "author": author,
                 "text": re.sub( r'\s\s\s|\n',"",final_text),
                 "url": url,                
             }
