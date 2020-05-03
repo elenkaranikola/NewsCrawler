@@ -6,11 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
-from news2.settings import KATHIMERINI_VARS
+from news2.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 
 class DogSpider(CrawlSpider):
     name = 'tech'
     allowed_domains = [
+        'naftemporiki.gr',
         'kathimerini.gr',
         'tovima.gr',
         'tanea.gr',
@@ -21,6 +22,7 @@ class DogSpider(CrawlSpider):
         'iefimerida.gr',
         ]
     url = [
+        'https://www.naftemporiki.gr/techscience',
         'https://www.cnn.gr/',
         'https://www.protagon.gr/themata/',
         'https://www.in.gr/tech/',
@@ -35,6 +37,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/episthmh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini_episthmh', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+/texnologia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini_tech', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+science"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
@@ -300,3 +303,35 @@ class DogSpider(CrawlSpider):
                 "url": url,                
             }
 
+    def parse_naftemporiki(self,response):
+        subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
+        if subtopic == "ΤΕΧΝΟΛΟΓΙΑ-ΕΠΙΣΤΗΜΗ" :
+            title = response.xpath('//h2[@id="sTitle"]/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
+                    "website": NAFTEMPORIKI_VARS['AUTHOR'],
+                    "title": final_title,
+                    "date": response.xpath('//div[@class="Date"]/text()').get(), 
+                    "author": NAFTEMPORIKI_VARS['AUTHOR'],
+                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "url": url,                
+                }

@@ -10,7 +10,7 @@ from news2.settings import NAFTEMPORIKI_VARS
 class DogSpider(CrawlSpider):
     name = 'naftemporiki'
     allowed_domains = ['naftemporiki.gr']
-    start_urls = ['https://www.naftemporiki.gr/sports']
+    start_urls = ['https://www.naftemporiki.gr/techscience']
 
     rules = (
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
@@ -18,7 +18,7 @@ class DogSpider(CrawlSpider):
 
     def parse_naftemporiki(self,response):
         subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
-        if subtopic == "ΑΘΛΗΤΙΚΑ" :
+        if subtopic == "ΤΕΧΝΟΛΟΓΙΑ-ΕΠΙΣΤΗΜΗ" :
             title = response.xpath('//h2[@id="sTitle"]/text()').get() 
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)

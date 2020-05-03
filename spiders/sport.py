@@ -6,7 +6,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
-from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS
+from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 
 class SportSpider(CrawlSpider):
     name = 'sport'
