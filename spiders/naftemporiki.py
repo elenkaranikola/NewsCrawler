@@ -10,7 +10,7 @@ from news2.settings import NAFTEMPORIKI_VARS
 class DogSpider(CrawlSpider):
     name = 'naftemporiki'
     allowed_domains = ['naftemporiki.gr']
-    start_urls = ['https://www.naftemporiki.gr/politics']
+    start_urls = ['https://www.naftemporiki.gr/sports']
 
     rules = (
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
@@ -18,7 +18,7 @@ class DogSpider(CrawlSpider):
 
     def parse_naftemporiki(self,response):
         subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
-        if subtopic == "ΠΟΛΙΤΙΚΗ" :
+        if subtopic == "ΑΘΛΗΤΙΚΑ" :
             title = response.xpath('//h2[@id="sTitle"]/text()').get() 
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
@@ -40,7 +40,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article, and if it doesn't have images
             if title is not None and len(final_text)>10 and flag is None:
                 yield {
-                    "subtopic": 'Politics',
+                    "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                     "website": NAFTEMPORIKI_VARS['AUTHOR'],
                     "title": final_title,
                     "date": response.xpath('//div[@class="Date"]/text()').get(), 
