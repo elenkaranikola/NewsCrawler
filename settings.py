@@ -83,7 +83,7 @@ EXTENSIONS = {
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 #HTTPCACHE_ENABLED = True
-#HTTPCACHE_EXPIRATION_SECS = 5
+#HTTPCACHE_EXPIRATION_SECS = 10
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
@@ -144,4 +144,14 @@ KATHIMERINI_VARS = {
 
 NAFTEMPORIKI_VARS = {
    'AUTHOR': "naftemporiki.gr"
+}
+
+LIFO_VARS = {
+   'AUTHOR': "lifo.gr",
+   'ENVIRONMENT_PAGES': 50,
+   'POLITICS_PAGES': 1338,
+   'CULTURE_PAGES': 434,
+   'WORLD_PAGES': 3057,
+   'TECH_PAGES': 472,
+   'PEOPLE_PAGES': 363,
 }
