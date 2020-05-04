@@ -155,3 +155,7 @@ LIFO_VARS = {
    'TECH_PAGES': 472,
    'PEOPLE_PAGES': 363,
 }
+
+INSOMNIA_VARS = {
+   'WEBSITE': "insomnia.gr"
+}
