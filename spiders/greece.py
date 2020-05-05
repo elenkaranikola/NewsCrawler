@@ -7,11 +7,12 @@ from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import LIFO_VARS
+from news2.settings import LIFO_VARS,EFSYN_VARS
 
 class DogSpider(CrawlSpider):
     name = 'greece'
     allowed_domains = [
+        'efsyn.gr',
         'lifo.gr',
         'cnn.gr',
         'reader.gr',
@@ -41,14 +42,16 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.tanea.gr',
         ]
+    efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
     tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
     newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,18717)]
     periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
-    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls 
+    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
@@ -460,3 +463,42 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                 "url": url,                
             }
+
+    def parse_efsyn(self,response):
+        subtopic = response.xpath('//article/a/@href').get()
+        category = subtopic.split('/')[1]
+        if category == "ellada":
+            title = response.xpath('//h1[1]/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            author = response.xpath('//div[@class="article__author"]//a/text()').get()
+            if author == None:
+                author = response.xpath('//div[@class="article__author"]/span/text()').get()
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": EFSYN_VARS['GREECE'],
+                    "website": EFSYN_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": response.xpath('//time/text()').get(), 
+                    "author": author,
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }

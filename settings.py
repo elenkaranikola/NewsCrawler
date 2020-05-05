@@ -159,3 +159,17 @@ LIFO_VARS = {
 INSOMNIA_VARS = {
    'WEBSITE': "insomnia.gr"
 }
+
+EFSYN_VARS = {
+   'WEBSITE': "efsyn.gr",
+   'POLITICS': "Politics",
+   'ECONOMICS': "Economics",
+   'GREECE': "Greece",
+   'WORLD': "World",
+   'ART': "Culture",
+   'POLITICS_PAGES': 3200,
+   'ECONOMICS_PAGES': 2000,
+   'GREECE_PAGES': 2000,
+   'WORLD_PAGES': 2100,
+   'ART_PAGES': 1200,
+}

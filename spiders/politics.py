@@ -6,11 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS, PRESSPROJECT_VARS, IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
-from news2.settings import KATHIMERINI_VARS, NAFTEMPORIKI_VARS,LIFO_VARS
+from news2.settings import KATHIMERINI_VARS, NAFTEMPORIKI_VARS,LIFO_VARS,EFSYN_VARS
 
 class DogSpider(CrawlSpider):
     name = 'politics'
     allowed_domains = [
+        'efsyn.gr',
         'lifo.gr',
         'naftemporiki.gr',
         'kathimerini.gr',
@@ -39,15 +40,17 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
+    efsyn_urls = ['https://www.efsyn.gr/politiki?page={}'.format(x) for x in range(1,EFSYN_VARS['POLITICS_PAGES'])]
     lifo_urls = ['https://www.lifo.gr/now/politics/page:{}'.format(x) for x in range(1,LIFO_VARS['POLITICS_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b2_1885015423_1161990931&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['POLITICS_PAGES'])]
     periodista_urls = ['http://www.periodista.gr/politiki?start={}'.format(x) for x in range(1,PERIODISTA_VARS['POLITICS_PAGES'],30)]
     newpost_urls = ['http://newpost.gr/politiki?page={}'.format(x) for x in range(1,13147)] 
     tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
-    urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls
+    urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls + efsyn_urls
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+politics/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
@@ -460,6 +463,45 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                 "url": url,                
             }
+
+    def parse_efsyn(self,response):
+        subtopic = response.xpath('//article/a/@href').get()
+        category = subtopic.split('/')[1]
+        if category == "politiki":
+            title = response.xpath('//h1[1]/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            author = response.xpath('//div[@class="article__author"]//a/text()').get()
+            if author == None:
+                author = response.xpath('//div[@class="article__author"]/span/text()').get()
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": EFSYN_VARS['POLITICS'],
+                    "website": EFSYN_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": response.xpath('//time/text()').get(), 
+                    "author": author,
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
 
 
 

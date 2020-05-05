@@ -6,11 +6,12 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
-from news2.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS
+from news2.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS,EFSYN_VARS
 
 class DogSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
+        'efsyn.gr',
         'naftemporiki.gr',
         'tovima.gr',
         'tanea.gr',
@@ -37,11 +38,15 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
-    urls = url + ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,6666)]+['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
-    to_vima_urls = urls+['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])] 
-    start_urls = to_vima_urls[:]
+    efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
+    to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
+    newpost_urls = ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,6666)]
+    periodista_urls = ['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
+    urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls
+    start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True),
@@ -379,3 +384,42 @@ class DogSpider(CrawlSpider):
                 "text": re.sub( r'\s\s\s|\n',"",final_text),
                 "url": url,                
             } 
+
+    def parse_efsyn(self,response):
+        subtopic = response.xpath('//article/a/@href').get()
+        category = subtopic.split('/')[1]
+        if category == "oikonomia":
+            title = response.xpath('//h1[1]/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            author = response.xpath('//div[@class="article__author"]//a/text()').get()
+            if author == None:
+                author = response.xpath('//div[@class="article__author"]/span/text()').get()
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": EFSYN_VARS['ECONOMICS'],
+                    "website": EFSYN_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": response.xpath('//time/text()').get(), 
+                    "author": author,
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
