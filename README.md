@@ -1,7 +1,10 @@
 # News Crawler
+
 In this repository we create a crawler using scrapy.
 Our crawler has 10 different spiders, one spider for every subject given bellow:
-```
+
+``` bash
+
   1. Greece
   2. World
   3. Economics
@@ -13,8 +16,11 @@ Our crawler has 10 different spiders, one spider for every subject given bellow:
   9. Style
   10. Food
 ```
+
 We use our spiders to extract articles from 20 different greek website. So far we have extracted articles from here:
-```
+
+``` bash
+
   - cnn.gr
   - reader.gr
   - thetoc.gr
@@ -32,8 +38,11 @@ We use our spiders to extract articles from 20 different greek website. So far w
   - naftemporiki.gr
   - lifo.gr
 ```
+
 From each article we collect data concerning:
-```
+
+``` bash
+
   - subtopic
   - extracted website
   - title
@@ -42,7 +51,9 @@ From each article we collect data concerning:
   - text
   - url of the specific article
 ```
+
 In order to run our spider and save it's extracted data in a csv file do the following:
+
 ```
   1. $ pip install scrapy
   2. $ scrapy startproject news2
@@ -52,6 +63,6 @@ In order to run our spider and save it's extracted data in a csv file do the fol
   6. $ scrapy crawl "spidername" -o out.csv -t csv
     - where spidername belongs in {world, environment, economics, politics, greece, sport, style, tech, culture, food}
 ```
-*In case you want to run the spider without the outpout printed in the terminal run for eachspider the command:* <br />
-$ scrapy crawl world -o out.csv -t csv --nolog
 
+*In case you want to run the spider without the outpout printed in the terminal run for eachspider the command:* __
+$ scrapy crawl world -o out.csv -t csv --nolog
