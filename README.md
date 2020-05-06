@@ -54,7 +54,7 @@ From each article we collect data concerning:
 
 In order to run our spider and save it's extracted data in a csv file do the following:
 
-```
+``` bash
   1. $ pip install scrapy
   2. $ scrapy startproject news2
   3. $ cd news2
