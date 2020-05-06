@@ -49,7 +49,7 @@ In order to run our spider and save it's extracted data in a csv file do the fol
   3. $ cd news2
   4. $ rm -r news2
   5. $ git clone https://github.com/elenisproject/NewsCrawler news2
-  6. $ scrapy crawl spidername -o out.csv -t csv
+  6. $ scrapy crawl "spidername" -o out.csv -t csv
   where spidername belongs in {world, politics, greece, sport, style, tech, culture, food}
 ```
 
