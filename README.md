@@ -65,5 +65,4 @@ In order to run our spider and save it's extracted data in a csv file do the fol
 ```
 
 *In case you want to run the spider without the outpout printed in the terminal run for eachspider the command:*
-
 $ scrapy crawl world -o out.csv -t csv --nolog
