@@ -173,3 +173,20 @@ EFSYN_VARS = {
    'WORLD_PAGES': 2100,
    'ART_PAGES': 1200,
 }
+
+POPAGANDA_VARS = {
+   'WEBSITE': "popaganda.gr",
+   'GREECE': "Greece",
+   'WORLD': "World",
+   'CULTURE': "Culture",
+   'ENVIRONMENT': "Environment",
+   'SPORT': "Sport",
+   'TECH': "Tech",
+   'FOOD': "Food",
+   'CATEGORY_GREECE': "ΕΛΛΑΔΑ",
+   'CATEGORY_WORLD': "ΚΟΣΜΟΣ",
+   'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΜΟΣ",
+   'CATEGORY_ENVIRONMENT': "ΕΠΙΣΤΗΜΗ & ΠΕΡΙΒΑΛΛΟΝ",
+   'CATEGORY_SPORT': "ΑΘΛΗΤΙΣΜΟΣ",
+   'CATEGORY_TECH': "TECHNEWS",
+}

@@ -7,11 +7,12 @@ from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import LIFO_VARS,EFSYN_VARS
+from news2.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'greece'
     allowed_domains = [
+        'popaganda.gr',
         'efsyn.gr',
         'lifo.gr',
         'cnn.gr',
@@ -29,6 +30,7 @@ class DogSpider(CrawlSpider):
         'naftemporiki.gr',
         ]
     url = [
+        'https://popaganda.gr/newstrack/greece-newstrack/',
         'https://www.lifo.gr/now/greece',
         'https://www.naftemporiki.gr/society',
         'https://www.iefimerida.gr',
@@ -51,6 +53,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
@@ -499,6 +502,44 @@ class DogSpider(CrawlSpider):
                     "title": final_title,
                     "date": response.xpath('//time/text()').get(), 
                     "author": author,
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
+
+    def parse_popaganda(self,response):
+        category = response.xpath('//div[@class="category"]/a/text()').get()
+
+        if category == POPAGANDA_VARS['CATEGORY_GREECE'] :
+            title = response.xpath('//h1/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
+            if author == None:
+                author = POPAGANDA_VARS['WEBSITE']
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": POPAGANDA_VARS['GREECE'],
+                    "website": POPAGANDA_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
+                    "author": POPAGANDA_VARS['WEBSITE'],
                     "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
