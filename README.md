@@ -52,6 +52,6 @@ In order to run our spider and save it's extracted data in a csv file do the fol
   6. $ scrapy crawl "spidername" -o out.csv -t csv
   where spidername belongs in {world, environment, economics, politics, greece, sport, style, tech, culture, food}
 ```
-*In case you want to run spider without the outpout printed in the terminal run for eachspider the command:* <br />
+*In case you want to run the spider without the outpout printed in the terminal run for eachspider the command:* <br />
 $ scrapy crawl world -o out.csv -t csv --nolog
 
