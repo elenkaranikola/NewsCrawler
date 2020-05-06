@@ -44,13 +44,13 @@ From each article we collect data concerning:
 ```
 In order to run our spider and save it's extracted data in a csv file do the following:
 ```
-1.Run $ pip install scrapy
-2.Run $ scrapy startproject news2
-3.Run $ cd news2
-4.Run $ rm -r news2
-5.Clone this project inside news2 folder
-6.Run $ mv ./NewsCrawler ./news2
-7.Run $ scrapy crawl spidername -o out.csv -t csv
-where spidername belongs in \{world, politics, greece, sport, style, tech\}
+  1.Run $ pip install scrapy
+  2.Run $ scrapy startproject news2
+  3.Run $ cd news2
+  4.Run $ rm -r news2
+  5.Clone this project inside news2 folder
+  6.Run $ mv ./NewsCrawler ./news2
+  7.Run $ scrapy crawl spidername -o out.csv -t csv
+  where spidername belongs in \{world, politics, greece, sport, style, tech\}
 ```
 
