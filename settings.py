@@ -241,6 +241,7 @@ PROTAGON_VARS = {
 }
 
 NEWPOST_VARS = {
+   'CULTURE_PAGES': 2981,
    'WEBSITE': "newpost.gr"
 }
 

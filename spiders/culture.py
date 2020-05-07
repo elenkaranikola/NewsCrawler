@@ -51,7 +51,7 @@ class DogSpider(CrawlSpider):
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
     tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
     tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
-    newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,2981)]
+    newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
     urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls
     start_urls = urls[:]
 
