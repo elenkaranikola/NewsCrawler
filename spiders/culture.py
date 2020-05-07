@@ -8,10 +8,12 @@ from news2.items import News2Item
 from news2.settings import PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from news2.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS
+from news2.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES
 
 class DogSpider(CrawlSpider):
     name = 'culture'
     allowed_domains = [
+        'topontiki.gr',
         'popaganda.gr',
         'efsyn.gr',
         'lifo.gr',
@@ -42,6 +44,7 @@ class DogSpider(CrawlSpider):
         'https://www.thepressproject.gr/',
         'https://www.iefimerida.gr',
         ]
+    topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
     efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
     lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
@@ -52,6 +55,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
@@ -549,6 +553,38 @@ class DogSpider(CrawlSpider):
                     "title": final_title,
                     "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
                     "author": POPAGANDA_VARS['WEBSITE'],
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
+    def parse_topontiki(self,response):
+        sub = response.xpath('//h2/a[1]/text()').get()
+        if sub == TOPONTIKI_VARS['CATEGORY_CULTURE']:
+            title = response.xpath('//h1/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = final_text.replace("\xa0","")
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['CULTURE'],
+                    "website": TOPONTIKI_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": response.xpath('//span[@class="date"]/text()').get(), 
+                    "author": response.xpath('//a[@class="author"]/text()').get(),
                     "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }

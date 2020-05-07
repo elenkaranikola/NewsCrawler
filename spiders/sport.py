@@ -7,11 +7,12 @@ from scrapy import Request
 from news2.items import News2Item
 from news2.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import POPAGANDA_VARS
+from news2.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
 
 class SportSpider(CrawlSpider):
     name = 'sport'
     allowed_domains = [
+        'topontiki.gr',
         'popaganda.gr',
         'naftemporiki.gr',
         'kathimerini.gr',
@@ -41,16 +42,17 @@ class SportSpider(CrawlSpider):
         'https://www.protagon.gr/epikairotita/',
         'https://www.in.gr/sports/',
         'https://newpost.gr/athlitika',
-        'http://www.periodista.gr/athlhtika-paraskhnia?start=0'
         ]
+    topontiki_urls = ['http://www.topontiki.gr/category/athlitika?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['SPORT_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_371795634&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['SPORT_PAGES'])] 
     newpost_urls = ['http://newpost.gr/athlitika?page={}'.format(x) for x in range(1,9167)]
-    periodista_urls = ['http://www.periodista.gr/athlhtika-paraskhnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['SPORT_PAGES'],30)]
+    periodista_urls = ['http://www.periodista.gr/athlhtika-paraskhnia?start={}'.format(x) for x in range(0,PERIODISTA_VARS['SPORT_PAGES'],30)]
     tovima_urls = ['https://www.tovima.gr/category/sports/page/{}'.format(x) for x in range(1,TOVIMA_VARS['SPORT_PAGES'])]
-    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls
+    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + topontiki_urls
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/a8lhtismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
@@ -496,6 +498,39 @@ class SportSpider(CrawlSpider):
                     "title": final_title,
                     "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
                     "author": POPAGANDA_VARS['WEBSITE'],
+                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
+
+    def parse_topontiki(self,response):
+        sub = response.xpath('//h2/a/text()').get()
+        if sub == TOPONTIKI_VARS['CATEGORY_SPORT']:
+            title = response.xpath('//h1/text()').get() 
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = final_text.replace("\xa0","")
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+            
+            #check if we are in an article, and if it doesn't have images
+            if title is not None and len(clear_characters)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['SPORT'],
+                    "website": TOPONTIKI_VARS['WEBSITE'],
+                    "title": final_title,
+                    "date": response.xpath('//span[@class="date"]/text()').get(), 
+                    "author": TOPONTIKI_VARS['WEBSITE'],
                     "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }

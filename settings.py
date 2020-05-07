@@ -190,3 +190,33 @@ POPAGANDA_VARS = {
    'CATEGORY_SPORT': "ΑΘΛΗΤΙΣΜΟΣ",
    'CATEGORY_TECH': "TECHNEWS",
 }
+
+TOPONTIKI_VARS = {
+   'POLITICS_PAGES': 952,
+   'ECONOMICS_PAGES': 356,
+   'ENVIRONMENT_PAGES': 15,
+   'SPORT_PAGES': 205,
+   'WORLD_PAGES': 1576,
+   'CULTURE_PAGES': 25,
+   'WEBSITE': "topontiki.gr",
+   'CATEGORY_ECONOMICS': "ΟΙΚΟΝΟΜΙΑ",
+   'CATEGORY_ENVIRONMENT': "ΠΕΡΙΒAΛΛΟΝ",
+   'CATEGORY_GREECE': "ΕΛΛAΔΑ",
+   'CATEGORY_POLITICS': "ΠΟΛΙΤΙΚΗ",
+   'CATEGORY_SPORT': "ΑΘΛΗΤΙΚA",
+   'CATEGORY_WORLD': "ΚΟΣΜΟΣ",
+   'CATEGORY_CULTURE':'"Π" ART',
+}
+
+GENERAL_CATEGORIES = {
+   'ECONOMICS': "Economics",
+   'POLITICS': "Politics",
+   'GREECE': "Greece",
+   'WORLD': "World",
+   'CULTURE': "Culture",
+   'ENVIRONMENT': "Environment",
+   'SPORT': "Sport",
+   'TECH': "Tech",
+   'FOOD': "Food",
+   'STYLE': "Style",
+}
