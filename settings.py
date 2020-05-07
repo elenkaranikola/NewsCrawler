@@ -100,6 +100,7 @@ PERIODISTA_VARS = {
 }
 
 PRESSPROJECT_VARS = {
+   'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_GREECE': "Ελλάδα",
    'CATEGORY_CULTURE': "Πολιτισμός",
    'CATEGORY_ECONOMICS': "Οικονομία",
@@ -150,6 +151,7 @@ KATHIMERINI_VARS = {
 
 NAFTEMPORIKI_VARS = {
    'AUTHOR': "naftemporiki.gr",
+   'CATEGORY_POLITICS': "ΠΟΛΙΤΙΚΗ" ,
    'CATEGORY_ENVIRONMENT': "ΠΕΡΙΒΑΛΛΟΝ",
    'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
    'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΤΙΚΑ",
@@ -171,6 +173,7 @@ INSOMNIA_VARS = {
 
 EFSYN_VARS = {
    'WEBSITE': "efsyn.gr",
+   'CATEGORY_POLITICS': "politiki",
    'CATEGORY_GREECE': "ellada",
    'CATEGORY_CULTURE': "tehnes",
    'CATEGORY_ECONOMICS': "oikonomia",
@@ -239,6 +242,7 @@ READER_VARS = {
 }
 
 PROTAGON_VARS = {
+   'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_ENVIRONMENT': "Περιβάλλον",
    'CATEGORY_ECONOMICS': "Οικονομία",
    'CATEGORY_GREECE': "Greece",
