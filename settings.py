@@ -102,6 +102,7 @@ PERIODISTA_VARS = {
 PRESSPROJECT_VARS = {
    'CATEGORY_GREECE': "Ελλάδα",
    'CATEGORY_CULTURE': "Πολιτισμός",
+   'CATEGORY_ECONOMICS': "Οικονομία",
    'AUTHOR': "thepressproject.gr"
 }
 
@@ -171,6 +172,7 @@ EFSYN_VARS = {
    'WEBSITE': "efsyn.gr",
    'CATEGORY_GREECE': "ellada",
    'CATEGORY_CULTURE': "tehnes",
+   'CATEGORY_ECONOMICS': "oikonomia",
    'POLITICS': "Politics",
    'ECONOMICS': "Economics",
    'GREECE': "Greece",
@@ -232,15 +234,17 @@ GENERAL_CATEGORIES = {
 }
 
 READER_VARS = {
-   'AUTHOR': "Reader"
+   'AUTHOR': "reader.gr"
 }
 
 PROTAGON_VARS = {
+   'CATEGORY_ECONOMICS': "Οικονομία",
    'CATEGORY_GREECE': "Greece",
    'CATEGORY_CULTURE': "Πολιτισμός",
 }
 
 NEWPOST_VARS = {
+   'ECONOMICS_PAGES': 6666,
    'CULTURE_PAGES': 2981,
    'WEBSITE': "newpost.gr"
 }
