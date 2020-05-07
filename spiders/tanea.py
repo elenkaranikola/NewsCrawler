@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
+from datetime import datetime
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
@@ -11,15 +12,12 @@ class DogSpider(CrawlSpider):
     name = 'tanea'
     allowed_domains = ['tanea.gr']
     start_urls = ['https://www.tanea.gr',]
-
     rules = (
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('english-edition','binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=('greece','politics','economy','world','culture','cinema','lifestyle','music','recipes','science-technology','woman'), deny=('english-edition','binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         )
-
     def parse_tanea(self,response):
         title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        #check if we are in an articles url
-        if title is not None :
+        if title is not None: 
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
@@ -36,10 +34,26 @@ class DogSpider(CrawlSpider):
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
+            category = url.split('/')[6]
+            if re.search('greece',category) is not None:
+                subtopic = GENERAL_CATEGORIES['GREECE']
+            elif re.search('politics',category) is not None:
+                subtopic = GENERAL_CATEGORIES['WORLD'] 
+            elif re.search('economy',category) is not None:
+                subtopic = GENERAL_CATEGORIES['ECONOMICS']
+            elif re.search('recipes',url) is not None:
+                subtopic = GENERAL_CATEGORIES['FOOD']
+            elif re.search('lifearts',category) is not None:
+                subtopic = url.split('/')[7]
+            elif re.search('science-technology',category) is not None:
+                subtopic = GENERAL_CATEGORIES['TECH']
+            elif re.search('woman',category) is not None:
+                subtopic = GENERAL_CATEGORIES['STYLE']
+            
             #check if we are in an article and that this article doesn't have any images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
-                    "subtopic": GENERAL_CATEGORIES['GREECE'],
+                    "subtopic": subtopic,
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
                     "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
@@ -47,3 +61,8 @@ class DogSpider(CrawlSpider):
                     "text": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
+
+
+
+    
+

@@ -101,6 +101,7 @@ PERIODISTA_VARS = {
 
 PRESSPROJECT_VARS = {
    'CATEGORY_GREECE': "Ελλάδα",
+   'CATEGORY_CULTURE': "Πολιτισμός",
    'AUTHOR': "thepressproject.gr"
 }
 
@@ -116,6 +117,7 @@ TANEA_VARS = {
    'FOOD_PAGES': 5,
    'WOMEN_PAGES': 3,
    'SCIENCE_PAGES': 14,
+   'CATEGORY_CULTURE': "culture",
 }
 
 TOVIMA_VARS = {
@@ -142,11 +144,13 @@ KATHIMERINI_VARS = {
    'FOOD_PAGES': 30,
    'CULTURE_PAGES': 274,
    'ECONOMY_PAGES': 1400,
+   'CATEGORY_AUTHOR': "Κύριο Αρθρο",
 }
 
 NAFTEMPORIKI_VARS = {
    'AUTHOR': "naftemporiki.gr",
    'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
+   'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΤΙΚΑ",
 }
 
 LIFO_VARS = {
@@ -166,6 +170,7 @@ INSOMNIA_VARS = {
 EFSYN_VARS = {
    'WEBSITE': "efsyn.gr",
    'CATEGORY_GREECE': "ellada",
+   'CATEGORY_CULTURE': "tehnes",
    'POLITICS': "Politics",
    'ECONOMICS': "Economics",
    'GREECE': "Greece",
@@ -231,9 +236,20 @@ READER_VARS = {
 }
 
 PROTAGON_VARS = {
-   'CATEGORY_GREECE': "Greece"
+   'CATEGORY_GREECE': "Greece",
+   'CATEGORY_CULTURE': "Πολιτισμός",
 }
 
 NEWPOST_VARS = {
    'WEBSITE': "newpost.gr"
+}
+
+CNN_VARS = {
+   'ARTICLE_TYPE': "story",
+   'CNN_CULTURE_PAGES': 180,
+   'WEBSITE': "cnn.gr",
+}
+
+IN_VARS = {
+   'CULTURE_SUBTOPIC': "Culture & Entertainment",
 }
