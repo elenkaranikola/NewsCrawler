@@ -188,7 +188,7 @@ class DogSpider(CrawlSpider):
             #check if we are in the correct category
             sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
             if sub == PROTAGON_VARS['CATEGORY_CULTURE']:
-
+                #get the article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
                 list_to_string = " ".join(" ".join(text))
                 markspaces = re.sub( "  ", "space",list_to_string)

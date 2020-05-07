@@ -6,7 +6,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from news2.items import News2Item
 from news2.settings import IEFIMERIDA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import LIFO_VARS,POPAGANDA_VARS
+from news2.settings import LIFO_VARS,POPAGANDA_VARS,PROTAGON_VARS
 from news2.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES
 
 class DogSpider(CrawlSpider):
@@ -42,133 +42,115 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/perivallon/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         Rule(LinkExtractor(allow=('https://www.iefimerida.gr/green'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
-        Rule(LinkExtractor(allow=('cnn.gr/news/perivallon')), callback='parseItemCnn', follow=True),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parseItemProtagon', follow=True), 
+        Rule(LinkExtractor(allow=('cnn.gr/news/perivallon')), callback='parse_cnn', follow=True),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True), 
         )
 
-    def parseItemCnn(self,response):
+    def parse_cnn(self,response):
+        #check if we are in an articles url
         title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-        listtostring = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",listtostring)
-        uneededspaces = re.sub( " ", "",markspaces)
-        finaltext = re.sub( "space", " ",uneededspaces)
-        clearcharacters = re.sub( "\xa0","",finaltext)
-        url = response.url
-        if title is not None and len(clearcharacters)>10:
-            yield {
-                "subtopic": "Environment",
-                "website": re.search(r"www.+\.gr",url).group(0),
-                "title": title,
-                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "text": re.sub( r'\n|\t',"",clearcharacters),
-                "url": url,                
-            }
+        if title is not None:
+            #get the article's text
+            text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneede_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneede_spaces)
+            clear_characters = re.sub( "\xa0","",final_text)
 
-    def parseItemProtagon(self,response):
-        sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
-        if sub == "Περιβάλλον":
-            title = response.xpath('//h1[@class="entry-title"]/text()').get() 
-            text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-            listtostring = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",listtostring)
-            uneededspaces = re.sub( " ", "",markspaces)
-            finaltext = re.sub( "space", " ",uneededspaces)
-            clearcharacters = re.sub( "\xa0","",finaltext)
-            #flag to see later on if we have tweets ect
-            flag = re.search(r"@",clearcharacters)
             url = response.url
-            author = re.findall(r"(\w+).(\w+)",response.xpath('//strong[@class="generalbold uppercase"]/a/text()').get())
-            #from list to tuple to string
-            listtotuple = author[0]
-            author = ' '.join(listtotuple)
-            date = re.findall(r"(\d+).(\w+).(\d+)",response.xpath('//span[@class="generalight uppercase"]/text()').get())
-            listtotuple = date[0]
-            date = ' '.join(listtotuple)
-            #check if we are in an article, and if it doesn't have images
-            if title is not None and len(clearcharacters)>10 and flag is None:
+
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 yield {
-                    "subtopic": "Environment",
+                    "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
-                    "date": date, 
-                    "author": author,
-                    "text": re.sub( r'\s\s\s',"",clearcharacters),
+                    "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                    "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
+                    "text": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
                 }
 
+    def parse_protagon(self,response):
+        #check if we are in an articles url
+        title = response.xpath('//h1[@class="entry-title"]/text()').get()
+        if title is not None :
+            #check if we are in the correct category
+            sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
+            if sub == PROTAGON_VARS['ENVIRONMENT']:
+                #get the article's text
+                text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
+                list_to_string = " ".join(" ".join(text))
+                markspaces = re.sub( "  ", "space",list_to_string)
+                uneede_spaces = re.sub( " ", "",markspaces)
+                final_text = re.sub( "space", " ",uneede_spaces)
+                clear_characters = re.sub( "\xa0","",final_text)
+
+                #flag to see later on if we have tweets ect
+                flag = re.search(r"@",clear_characters)
+                url = response.url
+
+                author = re.findall(r"(\w+).(\w+)",response.xpath('//strong[@class="generalbold uppercase"]/a/text()').get())
+                list_to_tuple = author[0]
+                author = ' '.join(list_to_tuple)
+                
+                date = re.findall(r"(\d+).(\w+).(\d+)",response.xpath('//span[@class="generalight uppercase"]/text()').get())
+                list_to_tuple = date[0]
+                date = ' '.join(list_to_tuple)
+
+                #check if we are in an article and that it doesn't have images
+                if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                    yield {
+                        "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
+                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "title": title,
+                        "date": date, 
+                        "author": author,
+                        "text": re.sub( r'\s\s\s',"",clear_characters),
+                        "url": url,                
+                    }
+
 
     def parse_iefimerida(self,response):
+        #check if we are in an articles url
         title = response.xpath('//h1/span/text()').get() 
-        text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
-        clear_characters = re.sub("\xa0","",final_text)
+        if title is not None:
+            #get the article's text
+            text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
 
-        #flag to see later on if we have tweets ect
-        flag = re.search(r"@",clear_characters)
-        url = response.url
-        #check if we are in an article, and if it doesn't have images
-        if title is not None and len(final_text)>10 and flag is None:
-            yield {
-                "subtopic": "Environment",
-                "website": IEFIMERIDA_VARS['AUTHOR'],
-                "title": title,
-                "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
-                "author": IEFIMERIDA_VARS['AUTHOR'],
-                "text": re.sub( r'\s\s\s|\n',"",final_text),
-                "url": url,                
-            }
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article and that it doesn't have images
+            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
+                    "website": IEFIMERIDA_VARS['AUTHOR'],
+                    "title": title,
+                    "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "author": IEFIMERIDA_VARS['AUTHOR'],
+                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "url": url,                
+                }
 
     def parse_kathimerini(self,response):
+        #check if we are in an articles url
         title = response.xpath('//h2[@class="item-title"]/text()').get() 
-        list_to_string = " ".join(" ".join(title))
-        markspaces = re.sub( "       ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
-
-        text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
-        clear_characters = re.sub("\xa0","",final_text)
-
-        #flag to see later on if we have tweets ect
-        flag = re.search(r"@",clear_characters)
-        url = response.url
-        
-        author = response.xpath('//span[@class="item-author"]/a/text()').get()
-        if author == "Κύριο Αρθρο" :
-            author = KATHIMERINI_VARS['AUTHOR']
-
-        #check if we are in an article, and if it doesn't have images
-        if title is not None and len(final_text)>10 and flag is None:
-            yield {
-                "subtopic": 'Environment',
-                "website": KATHIMERINI_VARS['AUTHOR'],
-                "title": final_title,
-                "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
-                "author": author,
-                "text": re.sub( r'\s\s\s|\n',"",final_text),
-                "url": url,                
-            }
-
-    def parse_naftemporiki(self,response):
-        subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
-        if subtopic == "ΠΕΡΙΒΑΛΛΟΝ" :
-            title = response.xpath('//h2[@id="sTitle"]/text()').get() 
+        if title is not None:
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
             put_spaces_back = re.sub( "space", " ",uneeded_spaces)
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
-            text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
+            #get the article's text
+            text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
             list_to_string = " ".join(" ".join(text))
             markspaces = re.sub( "  ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
@@ -179,65 +161,74 @@ class DogSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
             
-            #check if we are in an article, and if it doesn't have images
-            if title is not None and len(final_text)>10 and flag is None:
+            author = response.xpath('//span[@class="item-author"]/a/text()').get()
+            if author == KATHIMERINI_VARS['CATEGORY_AUTHOR'] :
+                author = KATHIMERINI_VARS['AUTHOR']
+
+            #check if we are in an article and that it doesn't have images
+            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
-                    "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
-                    "website": NAFTEMPORIKI_VARS['AUTHOR'],
+                    "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
+                    "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//div[@class="Date"]/text()').get(), 
-                    "author": NAFTEMPORIKI_VARS['AUTHOR'],
+                    "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                    "author": author,
                     "text": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
+    def parse_naftemporiki(self,response):
+        #check if we are in an articles url
+        title = response.xpath('//h2[@id="sTitle"]/text()').get()
+        if title is not None:
+            #check if we are in the correct category
+            subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
+            if subtopic == NAFTEMPORIKI_VARS['CATEGORY_ENVIRONMENT'] :
+                #fix the title's format
+                list_to_string = " ".join(" ".join(title))
+                markspaces = re.sub( "       ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+                #get the article's text
+                text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
+                list_to_string = " ".join(" ".join(text))
+                markspaces = re.sub( "  ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                final_text = re.sub( "space", " ",uneeded_spaces)
+                clear_characters = re.sub("\xa0","",final_text)
+
+                #flag to see later on if we have tweets ect
+                flag = re.search(r"@",clear_characters)
+                url = response.url
+                
+                #check if we are in an article and that it doesn't have images
+                if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                    yield {
+                        "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
+                        "website": NAFTEMPORIKI_VARS['AUTHOR'],
+                        "title": final_title,
+                        "date": response.xpath('//div[@class="Date"]/text()').get(), 
+                        "author": NAFTEMPORIKI_VARS['AUTHOR'],
+                        "text": re.sub( r'\s\s\s|\n',"",final_text),
+                        "url": url,                
+                    }
+
 
     def parse_lifo(self,response):
+        #check if we are in an articles url
         title = response.xpath('//h1[@itemprop="headline"]/text()|//meta[@itemprop="headline"]/text()|//h1/*/text()').get() 
-        list_to_string = " ".join(" ".join(title))
-        markspaces = re.sub( "       ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-        final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
-
-        text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
-        clear_characters = re.sub("\xa0","",final_text)
-
-        author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
-        if author == None:
-            author = LIFO_VARS['AUTHOR']
-
-        #flag to see later on if we have tweets ect
-        flag = re.search(r"@",clear_characters)
-        url = response.url
-        
-        #check if we are in an article, and if it doesn't have images
-        if title is not None and len(clear_characters)>10 and flag is None:
-            yield {
-                "subtopic": "Environment",
-                "website": LIFO_VARS['AUTHOR'],
-                "title": final_title,
-                "date": response.xpath('//time/text()').get(), 
-                "author": author,
-                "text": re.sub( r'\s\s\s|\n',"",clear_characters),
-                "url": url,                
-            }
-
-    def parse_popaganda(self,response):
-        category = response.xpath('//div[@class="category"]/a/text()').get()
-        if category == POPAGANDA_VARS['CATEGORY_ENVIRONMENT']:
-            title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            #fix the title's format
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
             put_spaces_back = re.sub( "space", " ",uneeded_spaces)
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
-            text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
+            #get the article's text
+            text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
             list_to_string = " ".join(" ".join(text))
             markspaces = re.sub( "  ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
@@ -246,53 +237,100 @@ class DogSpider(CrawlSpider):
 
             author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
             if author == None:
-                author = POPAGANDA_VARS['WEBSITE']
-
-            #flag to see later on if we have tweets ect
-            flag = re.search(r"@",clear_characters)
-            url = response.url
-
-            #check if we are in an article, and if it doesn't have images
-            if title is not None and len(clear_characters)>10 and flag is None:
-                yield {
-                    "subtopic": POPAGANDA_VARS['ENVIRONMENT'],
-                    "website": POPAGANDA_VARS['WEBSITE'],
-                    "title": final_title,
-                    "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
-                    "author": POPAGANDA_VARS['WEBSITE'],
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
-                    "url": url,                
-                }
-
-    def parse_topontiki(self,response):
-        sub = response.xpath('//h2/a/text()').get()
-        if sub == TOPONTIKI_VARS['CATEGORY_ENVIRONMENT']:
-            title = response.xpath('//h1/text()').get() 
-            list_to_string = " ".join(" ".join(title))
-            markspaces = re.sub( "       ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
-
-            text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = final_text.replace("\xa0","")
+                author = LIFO_VARS['AUTHOR']
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
             
-            #check if we are in an article, and if it doesn't have images
-            if title is not None and len(clear_characters)>10 and flag is None:
+            #check if we are in an article and that it doesn't have images
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
-                    "website": TOPONTIKI_VARS['WEBSITE'],
+                    "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//span[@class="date"]/text()').get(), 
-                    "author": TOPONTIKI_VARS['WEBSITE'],
+                    "date": response.xpath('//time/text()').get(), 
+                    "author": author,
                     "text": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
+
+    def parse_popaganda(self,response):
+        #check if we are in an articles url
+        title = response.xpath('//h1/text()').get()
+        if title is not None :
+            #check if we are in the correct category
+            category = response.xpath('//div[@class="category"]/a/text()').get()
+            if category == POPAGANDA_VARS['CATEGORY_ENVIRONMENT']:
+                #fix the title's format
+                list_to_string = " ".join(" ".join(title))
+                markspaces = re.sub( "       ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+                #get the article's text
+                text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
+                list_to_string = " ".join(" ".join(text))
+                markspaces = re.sub( "  ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                final_text = re.sub( "space", " ",uneeded_spaces)
+                clear_characters = re.sub("\xa0","",final_text)
+
+                author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
+                if author == None:
+                    author = POPAGANDA_VARS['WEBSITE']
+
+                #flag to see later on if we have tweets ect
+                flag = re.search(r"@",clear_characters)
+                url = response.url
+
+                #check if we are in an article and that it doesn't have images
+                if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                    yield {
+                        "subtopic": POPAGANDA_VARS['ENVIRONMENT'],
+                        "website": POPAGANDA_VARS['WEBSITE'],
+                        "title": final_title,
+                        "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
+                        "author": POPAGANDA_VARS['WEBSITE'],
+                        "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "url": url,                
+                    }
+
+    def parse_topontiki(self,response):
+        #check if we are in an articles url
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            #check if we are in the correct category
+            sub = response.xpath('//h2/a/text()').get()
+            if sub == TOPONTIKI_VARS['CATEGORY_ENVIRONMENT']:
+                #fix the title's format
+                list_to_string = " ".join(" ".join(title))
+                markspaces = re.sub( "       ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+                #get the article's text
+                text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
+                list_to_string = " ".join(" ".join(text))
+                markspaces = re.sub( "  ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                final_text = re.sub( "space", " ",uneeded_spaces)
+                clear_characters = final_text.replace("\xa0","")
+
+                #flag to see later on if we have tweets ect
+                flag = re.search(r"@",clear_characters)
+                url = response.url
+                
+                #check if we are in an article and that it doesn't have images
+                if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                    yield {
+                        "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
+                        "website": TOPONTIKI_VARS['WEBSITE'],
+                        "title": final_title,
+                        "date": response.xpath('//span[@class="date"]/text()').get(), 
+                        "author": TOPONTIKI_VARS['WEBSITE'],
+                        "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "url": url,                
+                    }

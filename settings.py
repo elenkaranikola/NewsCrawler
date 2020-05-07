@@ -150,6 +150,7 @@ KATHIMERINI_VARS = {
 
 NAFTEMPORIKI_VARS = {
    'AUTHOR': "naftemporiki.gr",
+   'CATEGORY_ENVIRONMENT': "ΠΕΡΙΒΑΛΛΟΝ",
    'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
    'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΤΙΚΑ",
 }
@@ -238,6 +239,7 @@ READER_VARS = {
 }
 
 PROTAGON_VARS = {
+   'CATEGORY_ENVIRONMENT': "Περιβάλλον",
    'CATEGORY_ECONOMICS': "Οικονομία",
    'CATEGORY_GREECE': "Greece",
    'CATEGORY_CULTURE': "Πολιτισμός",
