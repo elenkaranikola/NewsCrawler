@@ -91,6 +91,7 @@ EXTENSIONS = {
 
 #APPLICATION SETTINGS
 PERIODISTA_VARS = {
+   'WEBSITE': "peridista.gr",
 	'ECONOMY_PAGES':630,
 	'GREECE_PAGES':480,
 	'POLITICS_PAGES':3930,
@@ -99,6 +100,7 @@ PERIODISTA_VARS = {
 }
 
 PRESSPROJECT_VARS = {
+   'CATEGORY_GREECE': "Ελλάδα",
    'AUTHOR': "thepressproject.gr"
 }
 
@@ -143,7 +145,8 @@ KATHIMERINI_VARS = {
 }
 
 NAFTEMPORIKI_VARS = {
-   'AUTHOR': "naftemporiki.gr"
+   'AUTHOR': "naftemporiki.gr",
+   'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
 }
 
 LIFO_VARS = {
@@ -162,6 +165,7 @@ INSOMNIA_VARS = {
 
 EFSYN_VARS = {
    'WEBSITE': "efsyn.gr",
+   'CATEGORY_GREECE': "ellada",
    'POLITICS': "Politics",
    'ECONOMICS': "Economics",
    'GREECE': "Greece",
@@ -209,9 +213,10 @@ TOPONTIKI_VARS = {
 }
 
 GENERAL_CATEGORIES = {
+   'ALLOWED_LENGTH': 10,
    'ECONOMICS': "Economics",
    'POLITICS': "Politics",
-   'GREECE': "Greece",
+   'GREECE': "Society",
    'WORLD': "World",
    'CULTURE': "Culture",
    'ENVIRONMENT': "Environment",
@@ -219,4 +224,16 @@ GENERAL_CATEGORIES = {
    'TECH': "Tech",
    'FOOD': "Food",
    'STYLE': "Style",
+}
+
+READER_VARS = {
+   'AUTHOR': "Reader"
+}
+
+PROTAGON_VARS = {
+   'CATEGORY_GREECE': "Greece"
+}
+
+NEWPOST_VARS = {
+   'WEBSITE': "newpost.gr"
 }
