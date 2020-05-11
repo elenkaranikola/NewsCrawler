@@ -99,6 +99,14 @@ PERIODISTA_VARS = {
    'SPORT_PAGES':300,
 }
 
+SPORT24_VARS = {
+   'WEBSITE': "sport24.gr"
+}
+
+GAZZEETTA_VARS = {
+   'WEBSITE': "gazzetta.gr"
+}
+
 PRESSPROJECT_VARS = {
    'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_GREECE': "Ελλάδα",
@@ -113,6 +121,7 @@ IEFIMERIDA_VARS = {
 
 TANEA_VARS = {
    'AUTHOR': "tanea.gr",
+   'SUBTOPIC_LENGTH_ALLOWED': 15,
    'CINEMA_PAGES':7,
    'MUSIC_PAGES':8,
    'CULTURE_PAGES': 12,
@@ -120,6 +129,7 @@ TANEA_VARS = {
    'WOMEN_PAGES': 3,
    'SCIENCE_PAGES': 14,
    'CATEGORY_CULTURE': "culture",
+   'CATEGORY_STYLE': "Woman",
 }
 
 TOVIMA_VARS = {
@@ -155,6 +165,7 @@ NAFTEMPORIKI_VARS = {
    'CATEGORY_ENVIRONMENT': "ΠΕΡΙΒΑΛΛΟΝ",
    'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
    'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΤΙΚΑ",
+   'CATEGORY_SPORT': "ΑΘΛΗΤΙΚΑ",
 }
 
 LIFO_VARS = {
@@ -238,10 +249,12 @@ GENERAL_CATEGORIES = {
 }
 
 READER_VARS = {
-   'AUTHOR': "reader.gr"
+   'AUTHOR': "reader.gr",
+   'MAX_LINKS': 100,
 }
 
 PROTAGON_VARS = {
+   'WEBSITE': "protagon.gr",
    'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_ENVIRONMENT': "Περιβάλλον",
    'CATEGORY_ECONOMICS': "Οικονομία",
@@ -250,18 +263,25 @@ PROTAGON_VARS = {
 }
 
 NEWPOST_VARS = {
+   'STYLE_PAGES': 5757,
+   'SPORT_PAGES': 9167,
    'ECONOMICS_PAGES': 6666,
    'CULTURE_PAGES': 2981,
    'FOOD_PAGES': 1227,
-   'WEBSITE': "newpost.gr"
+   'WEBSITE': "newpost.gr",
+   'STYLE_SUBTOPIC': "Lifestyle",
 }
 
 CNN_VARS = {
    'ARTICLE_TYPE': "story",
    'CNN_CULTURE_PAGES': 180,
+   'CNN_STYLE_PAGES': 180,
    'WEBSITE': "cnn.gr",
 }
 
 IN_VARS = {
+   'WEBSITE': "in.gr",
+   'STYLE_SUBTOPIC': "Health & Life",
    'CULTURE_SUBTOPIC': "Culture & Entertainment",
 }
+
