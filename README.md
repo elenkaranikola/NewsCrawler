@@ -47,9 +47,9 @@ From each article we collect data concerning:
 In order to run our spider and save it's extracted data in a csv file do the following:
 
 ```bash
-  1. $ pip install requirements.txt
-  2. $ git clone https://github.com/elenisproject/NewsCrawler news2
-  3. $ cd news2
+  1. $ pip install -r requirements.txt
+  2. $ git clone https://github.com/elenisproject/NewsCrawler 
+  3. $ cd NewsCrawler
   4. $ scrapy crawl "spidername" -o out.csv -t csv
 ```
 
