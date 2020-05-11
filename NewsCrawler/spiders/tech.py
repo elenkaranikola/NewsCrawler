@@ -4,10 +4,10 @@ import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
-from news2.items import News2Item
-from news2.settings import IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
-from news2.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS
+from NewsCrawler.items import NewsCrawlerItem
+from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
+from NewsCrawler.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS
+from NewsCrawler.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS
 
 class DogSpider(CrawlSpider):
     name = 'tech'

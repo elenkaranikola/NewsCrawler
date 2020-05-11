@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for news2 project
+# Scrapy settings for NewsCrawler project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,10 +9,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'news2'
+BOT_NAME = 'NewsCrawler'
 
-SPIDER_MODULES = ['news2.spiders']
-NEWSPIDER_MODULE = 'news2.spiders'
+SPIDER_MODULES = ['NewsCrawler.spiders']
+NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
@@ -46,13 +46,13 @@ TELNETCONSOLE_ENABLED = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'news2.middlewares.News2SpiderMiddleware': 543,
+#    'NewsCrawler.middlewares.NewsCrawlerSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'news2.middlewares.News2DownloaderMiddleware': 543,
+#    'NewsCrawler.middlewares.NewsCrawlerDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,7 +64,7 @@ EXTENSIONS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html 
 #ITEM_PIPELINES = {
-#    'news2.pipelines.News2Pipeline': 50,
+#    'NewsCrawler.pipelines.NewsCrawlerPipeline': 50,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

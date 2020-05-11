@@ -4,12 +4,12 @@ import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
-from news2.items import News2Item
-from news2.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
-from news2.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
-from news2.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
-from news2.settings import NEWPOST_VARS,SPORT24_VARS,GAZZEETTA_VARS,CNN_VARS
-from news2.settings import NEWPOST_VARS,READER_VARS,IN_VARS
+from NewsCrawler.items import NewsCrawlerItem
+from NewsCrawler.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
+from NewsCrawler.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
+from NewsCrawler.settings import NEWPOST_VARS,SPORT24_VARS,GAZZEETTA_VARS,CNN_VARS
+from NewsCrawler.settings import NEWPOST_VARS,READER_VARS,IN_VARS
 
 
 class SportSpider(CrawlSpider):
