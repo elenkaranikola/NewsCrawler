@@ -147,6 +147,7 @@ TOVIMA_VARS = {
    'SPORT_PAGES': 200,
    'CULTURE_PAGES': 200,
    'FOOD_PAGES': 40,
+   'CATEGORY_TECH': "Science"
 }
 
 KATHIMERINI_VARS = {
@@ -162,6 +163,7 @@ KATHIMERINI_VARS = {
    'CULTURE_PAGES': 200,
    'ECONOMY_PAGES': 200,
    'CATEGORY_AUTHOR': "Κύριο Αρθρο",
+   'CATEGORY_TECH': "Science",
 }
 
 NAFTEMPORIKI_VARS = {
@@ -181,6 +183,7 @@ LIFO_VARS = {
    'WORLD_PAGES': 200,
    'TECH_PAGES': 200,
    'PEOPLE_PAGES': 200,
+   'CATEGORY_TECH': "Tech & Science",
 }
 
 INSOMNIA_VARS = {
@@ -260,6 +263,7 @@ READER_VARS = {
 
 PROTAGON_VARS = {
    'WEBSITE': "protagon.gr",
+   'CATEGORY_TECH': "Επιστήμη & Τεχνολογία",
    'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_ENVIRONMENT': "Περιβάλλον",
    'CATEGORY_ECONOMICS': "Οικονομία",
