@@ -2,6 +2,7 @@
 
 In this repository we create a crawler using scrapy.
 Our crawler has 10 different spiders, one spider for every subject given bellow:
+
     1. Greece
     2. World
     3. Economics
@@ -42,16 +43,16 @@ From each article we collect data concerning:
     - text
     - url of the specific article
 
-
 In order to run our spider and save it's extracted data in a csv file do the following:
 
-``` bash
+```bash
   1. $ pip install requirements.txt
   2. $ git clone https://github.com/elenisproject/NewsCrawler news2
   3. $ cd news2
   4. $ scrapy crawl "spidername" -o out.csv -t csv
-    - where spidername belongs in {world, environment, economics, politics, greece, sport, style, tech, culture, food}
 ```
+
+    - where spidername belongs in {world, environment, economics, politics, greece, sport, style, tech, culture, food}
 
 *In case you want to run the spider without the outpout printed in the terminal run for eachspider the command:*
 
