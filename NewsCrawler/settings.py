@@ -113,6 +113,7 @@ GAZZEETTA_VARS = {
 }
 
 PRESSPROJECT_VARS = {
+   'CATEGORY_WORLD': "Διεθνή",
    'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_GREECE': "Ελλάδα",
    'CATEGORY_CULTURE': "Πολιτισμός",
@@ -173,6 +174,7 @@ NAFTEMPORIKI_VARS = {
    'CATEGORY_GREECE': "ΚΟΙΝΩΝΙΑ",
    'CATEGORY_CULTURE': "ΠΟΛΙΤΙΣΤΙΚΑ",
    'CATEGORY_SPORT': "ΑΘΛΗΤΙΚΑ",
+   'CATEGORY_WORLD': "ΚΟΣΜΟΣ",
 }
 
 LIFO_VARS = {
@@ -192,6 +194,7 @@ INSOMNIA_VARS = {
 
 EFSYN_VARS = {
    'WEBSITE': "efsyn.gr",
+   'CATEGORY_WORLD': "kosmos",
    'CATEGORY_POLITICS': "politiki",
    'CATEGORY_GREECE': "ellada",
    'CATEGORY_CULTURE': "tehnes",
@@ -269,9 +272,11 @@ PROTAGON_VARS = {
    'CATEGORY_ECONOMICS': "Οικονομία",
    'CATEGORY_GREECE': "Greece",
    'CATEGORY_CULTURE': "Πολιτισμός",
+   'CATEGORY_WORLD': "Κόσμος",
 }
 
 NEWPOST_VARS = {
+   'WORLD_PAGES': 200,
    'STYLE_PAGES': 200,
    'SPORT_PAGES': 200,
    'ECONOMICS_PAGES': 200,
@@ -294,3 +299,6 @@ IN_VARS = {
    'CULTURE_SUBTOPIC': "Culture & Entertainment",
 }
 
+THETOC_VARS = {
+   'WEBSITE': 'thetoc.gr'
+}
