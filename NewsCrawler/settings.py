@@ -89,14 +89,19 @@ EXTENSIONS = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 #HTTPERROR_ALLOW_ALL = True
 
+
 #APPLICATION SETTINGS
+#-------------------------------------------------------------------------------------
+#        MAX NUMBER OF PAGES IS 200
+#-------------------------------------------------------------------------------------
+
 PERIODISTA_VARS = {
    'WEBSITE': "peridista.gr",
-	'ECONOMY_PAGES':630,
-	'GREECE_PAGES':480,
-	'POLITICS_PAGES':3930,
-   'WORLD_PAGES':1020,
-   'SPORT_PAGES':300,
+	'ECONOMY_PAGES':200,
+	'GREECE_PAGES':200,
+	'POLITICS_PAGES':200,
+   'WORLD_PAGES':200,
+   'SPORT_PAGES':200,
 }
 
 SPORT24_VARS = {
@@ -134,28 +139,28 @@ TANEA_VARS = {
 
 TOVIMA_VARS = {
    'AUTHOR': "tovima.gr",
-   'POLITICS_PAGES': 900,
-   'WORLD_PAGES': 800,
-   'GREECE_PAGES': 1100,
+   'POLITICS_PAGES': 200,
+   'WORLD_PAGES': 200,
+   'GREECE_PAGES': 200,
    'SCIENCE_PAGES': 125,
-   'ECONOMICS_PAGES': 800,
-   'SPORT_PAGES': 1800,
+   'ECONOMICS_PAGES': 200,
+   'SPORT_PAGES': 200,
    'CULTURE_PAGES': 200,
    'FOOD_PAGES': 40,
 }
 
 KATHIMERINI_VARS = {
    'AUTHOR': "kathimerini.gr",
-   'GREECE_PAGES': 1400,
-   'WORLD_PAGES': 1400,
+   'GREECE_PAGES': 200,
+   'WORLD_PAGES': 200,
    'ENVIRONMENT_PAGES': 20,
    'TECH_PAGES': 10,
    'SCIENCE_PAGES': 30,
    'SPORT_PAGES': 200,
-   'POLITICS_PAGES': 900,
+   'POLITICS_PAGES': 200,
    'FOOD_PAGES': 30,
-   'CULTURE_PAGES': 274,
-   'ECONOMY_PAGES': 1400,
+   'CULTURE_PAGES': 200,
+   'ECONOMY_PAGES': 200,
    'CATEGORY_AUTHOR': "Κύριο Αρθρο",
 }
 
@@ -171,11 +176,11 @@ NAFTEMPORIKI_VARS = {
 LIFO_VARS = {
    'AUTHOR': "lifo.gr",
    'ENVIRONMENT_PAGES': 50,
-   'POLITICS_PAGES': 1338,
-   'CULTURE_PAGES': 434,
-   'WORLD_PAGES': 3057,
-   'TECH_PAGES': 472,
-   'PEOPLE_PAGES': 363,
+   'POLITICS_PAGES': 200,
+   'CULTURE_PAGES': 200,
+   'WORLD_PAGES': 200,
+   'TECH_PAGES': 200,
+   'PEOPLE_PAGES': 200,
 }
 
 INSOMNIA_VARS = {
@@ -193,11 +198,11 @@ EFSYN_VARS = {
    'GREECE': "Greece",
    'WORLD': "World",
    'ART': "Culture",
-   'POLITICS_PAGES': 3200,
-   'ECONOMICS_PAGES': 2000,
-   'GREECE_PAGES': 2000,
-   'WORLD_PAGES': 2100,
-   'ART_PAGES': 1200,
+   'POLITICS_PAGES': 200,
+   'ECONOMICS_PAGES': 200,
+   'GREECE_PAGES': 200,
+   'WORLD_PAGES': 200,
+   'ART_PAGES': 200,
 }
 
 POPAGANDA_VARS = {
@@ -218,11 +223,11 @@ POPAGANDA_VARS = {
 }
 
 TOPONTIKI_VARS = {
-   'POLITICS_PAGES': 952,
-   'ECONOMICS_PAGES': 356,
+   'POLITICS_PAGES': 200,
+   'ECONOMICS_PAGES': 200,
    'ENVIRONMENT_PAGES': 15,
-   'SPORT_PAGES': 205,
-   'WORLD_PAGES': 1576,
+   'SPORT_PAGES': 200,
+   'WORLD_PAGES': 200,
    'CULTURE_PAGES': 25,
    'WEBSITE': "topontiki.gr",
    'CATEGORY_ECONOMICS': "ΟΙΚΟΝΟΜΙΑ",
@@ -263,11 +268,11 @@ PROTAGON_VARS = {
 }
 
 NEWPOST_VARS = {
-   'STYLE_PAGES': 5757,
-   'SPORT_PAGES': 9167,
-   'ECONOMICS_PAGES': 6666,
-   'CULTURE_PAGES': 2981,
-   'FOOD_PAGES': 1227,
+   'STYLE_PAGES': 200,
+   'SPORT_PAGES': 200,
+   'ECONOMICS_PAGES': 200,
+   'CULTURE_PAGES': 200,
+   'FOOD_PAGES': 200,
    'WEBSITE': "newpost.gr",
    'STYLE_SUBTOPIC': "Lifestyle",
 }
