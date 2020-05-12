@@ -72,9 +72,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                    "article_date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
             }
 
@@ -100,9 +100,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
-                    "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "article_date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
@@ -135,9 +135,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
+                    "article_date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
                     "author": TANEA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
@@ -170,9 +170,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//time/span/text()').get(), 
+                    "article_date": response.xpath('//time/span/text()').get(), 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
@@ -208,9 +208,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": response.xpath('//span[@class="item-category"]/a/text()').get(),
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                    "article_date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
                     "author": author,
-                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
@@ -247,9 +247,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//time/text()').get(), 
+                    "article_date": response.xpath('//time/text()').get(), 
                     "author": author,
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -285,8 +285,8 @@ class DogSpider(CrawlSpider):
                     "subtopic": POPAGANDA_VARS['FOOD'],
                     "website": POPAGANDA_VARS['WEBSITE'],
                     "title": final_title,
-                    "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()|//div[@class="fullscreen-date"]/text()').get()).group(0), 
+                    "article_date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="article_date"]/text()|//div[@class="fullscreen-date"]/text()').get()).group(0), 
                     "author": re.sub(r'\n',"",author),
-                    "text": clear_characters.replace(" ","",1),
+                    "article_body": clear_characters.replace(" ","",1),
                     "url": response.url,
                 }

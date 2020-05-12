@@ -99,9 +99,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": subtopic,
                     "website" : SPORT24_VARS['WEBSITE'],
                     "title": title,
-                    "date": response.xpath('//span[@class="byline_date"]/b/text()').get(),
+                    "article_date": response.xpath('//span[@class="byline_date"]/b/text()').get(),
                     "author": response.xpath('//span[@class="byline_author"]/b/text()').get(),
-                    "text": clear_escape, 
+                    "article_body": clear_escape, 
                     "url": url
                 }
 
@@ -129,9 +129,9 @@ class SportSpider(CrawlSpider):
                 "subtopic": subtopic,
                 "website": GAZZEETTA_VARS['WEBSITE'],
                 "title": title,
-                "date": response.xpath('//div[@class="article_date"]/text()').get(),
+                "article_date": response.xpath('//div[@class="article_date"]/text()').get(),
                 "author": author,
-                "text": response.xpath('//div[@itemprop="articleBody"]//p/text()|//p/a/text()|//p/strong/text()').getall() ,#|//div[@itemprop="articleBody"]//p/a/text()|div[@itemprop="articleBody"]//p/strong/text()').getall(),
+                "article_body": response.xpath('//div[@itemprop="articleBody"]//p/text()|//p/a/text()|//p/strong/text()').getall() ,#|//div[@itemprop="articleBody"]//p/a/text()|div[@itemprop="articleBody"]//p/strong/text()').getall(),
                 "url": url
             }
 
@@ -153,9 +153,9 @@ class SportSpider(CrawlSpider):
                 "subtopic": GENERAL_CATEGORIES['SPORT'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
-                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                "article_date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "text": re.sub( r'\n',"",clear_characters),
+                "article_body": re.sub( r'\n',"",clear_characters),
                 "url": url,                
             }
 
@@ -192,9 +192,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": READER_VARS['AUTHOR'],
                     "title": re.sub( r'\n|\t',"",title),
-                    "date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),
+                    "article_date": re.sub( r'\n|\t',"",response.xpath('//time/text()').get()),
                     "author": author,
-                    "text": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,              
                 }
 
@@ -220,9 +220,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
-                    "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                    "article_date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "text": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
                 }
 
@@ -258,9 +258,9 @@ class SportSpider(CrawlSpider):
                         "subtopic": sub,
                         "website": re.search(r"www.+\.gr",url).group(0),
                         "title": title,
-                        "date": date, 
+                        "article_date": date, 
                         "author": author,
-                        "text": re.sub( r'\s\s\s',"",text),
+                        "article_body": re.sub( r'\s\s\s',"",text),
                         "url": url,                
                     }
 
@@ -286,9 +286,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
-                    "date": response.xpath('//time/text()').get(), 
+                    "article_date": response.xpath('//time/text()').get(), 
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
                 }
 
@@ -313,9 +313,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                    "article_date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
             }
 
@@ -341,9 +341,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": re.sub( r'\t|\n|\r',"",title),
-                    "date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
+                    "article_date": re.sub(r'\t|\n|\r',"",response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()), 
                     "author": PERIODISTA_VARS['WEBSITE'],
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
                 } 
 
@@ -369,9 +369,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
-                    "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "article_date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -409,9 +409,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": subtopic,
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
+                    "article_date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
                     "author": TANEA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -444,9 +444,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//time/span/text()').get(), 
+                    "article_date": response.xpath('//time/span/text()').get(), 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -483,9 +483,9 @@ class SportSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                    "article_date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
                     "author": author,
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -521,9 +521,9 @@ class SportSpider(CrawlSpider):
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
-                        "date": response.xpath('//div[@class="Date"]/text()').get(), 
+                        "article_date": response.xpath('//div[@class="article_date"]/text()').get(), 
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                         "url": url,                
                     }
 
@@ -563,9 +563,9 @@ class SportSpider(CrawlSpider):
                         "subtopic": POPAGANDA_VARS['SPORT'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,
-                        "date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="date"]/text()').get()).group(0), 
+                        "article_date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="article_date"]/text()').get()).group(0), 
                         "author": POPAGANDA_VARS['WEBSITE'],
-                        "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                         "url": url,                
                     }
 
@@ -601,8 +601,8 @@ class SportSpider(CrawlSpider):
                         "subtopic": GENERAL_CATEGORIES['SPORT'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,
-                        "date": response.xpath('//span[@class="date"]/text()').get(), 
+                        "article_date": response.xpath('//span[@class="article_date"]/text()').get(), 
                         "author": TOPONTIKI_VARS['WEBSITE'],
-                        "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                         "url": url,                
                     }

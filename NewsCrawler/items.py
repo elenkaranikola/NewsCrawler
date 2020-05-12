@@ -13,8 +13,8 @@ class NewsCrawlerItem(scrapy.Item):
     subtopic = scrapy.Field()
     website = scrapy.Field()
     title = scrapy.Field()
-    date = scrapy.Field()
+    article_date = scrapy.Field()
     author = scrapy.Field()
-    text =  scrapy.Field()
+    article_body =  scrapy.Field()
     url = scrapy.Field()
     pass

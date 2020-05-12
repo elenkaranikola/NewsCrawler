@@ -67,6 +67,13 @@ ITEM_PIPELINES = {
     'NewsCrawler.pipelines.NewsCrawlerPipeline': 300,
 }
 
+DB_CREDS = {
+    'host':'localhost',
+    'user':'root',
+    'pass':'eleni123',
+    'db':'NewsCrawler'
+}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

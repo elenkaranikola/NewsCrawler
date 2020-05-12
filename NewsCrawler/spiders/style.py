@@ -75,9 +75,9 @@ class DogSpider(CrawlSpider):
                 "subtopic": GENERAL_CATEGORIES['STYLE'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
-                "date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                "article_date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "text": re.sub( r'\n|\t',"",final_text),
+                "article_body": re.sub( r'\n|\t',"",final_text),
                 "url": url,     
             }
 
@@ -102,9 +102,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['STYLE'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
-                    "date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                    "article_date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "text": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
                 }
 
@@ -130,9 +130,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": IN_VARS['STYLE_SUBTOPIC'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
-                    "date": response.xpath('//time/text()').get(), 
+                    "article_date": response.xpath('//time/text()').get(), 
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
                 }
 
@@ -158,9 +158,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": NEWPOST_VARS['STYLE_SUBTOPIC'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                    "article_date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "text": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
             }
 
@@ -189,9 +189,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": subtopic,
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
-                    "date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "article_date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
 
@@ -224,9 +224,9 @@ class DogSpider(CrawlSpider):
                     "subtopic": TANEA_VARS['CATEGORY_STYLE'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
+                    "article_date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
                     "author": TANEA_VARS['AUTHOR'],
-                    "text": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
 
@@ -267,8 +267,8 @@ class DogSpider(CrawlSpider):
                     "subtopic": subtopic,
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
-                    "date": response.xpath('//time/text()').get(), 
+                    "article_date": response.xpath('//time/text()').get(), 
                     "author": author,
-                    "text": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
