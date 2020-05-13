@@ -274,7 +274,7 @@ class DogSpider(CrawlSpider):
             url = response.url
 
             date = (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0]
-            date_for_sql_format = formatdate(date)
+            final_date = formatdate(date)
 
             #check if we are in an article and that this article doesn't have any images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
@@ -282,7 +282,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['GREECE'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": date_for_sql_format, 
+                    "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -317,6 +317,7 @@ class DogSpider(CrawlSpider):
                     flag = re.search(r"@",clear_characters)
                     url = response.url
                     date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
+                    final_date = formatdate(date)
 
                     #check if we are in an article and that this article doesn't have any images
                     if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
@@ -324,7 +325,7 @@ class DogSpider(CrawlSpider):
                             "subtopic": GENERAL_CATEGORIES['GREECE'],
                             "website": PRESSPROJECT_VARS['AUTHOR'],
                             "title": final_title,
-                            "article_date": date, 
+                            "article_date": final_date, 
                             "author": PRESSPROJECT_VARS['AUTHOR'],
                             "article_body": re.sub( r'\s\s\s',"",clear_characters),
                             "url": url,                

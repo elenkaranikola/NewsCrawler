@@ -276,7 +276,7 @@ class DogSpider(CrawlSpider):
             url = response.url
 
             date = (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0]
-            date_for_sql_format = formatdate(date)
+            final_date = formatdate(date)
 
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
@@ -284,7 +284,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": date_for_sql_format, 
+                    "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -315,10 +315,12 @@ class DogSpider(CrawlSpider):
                     final_text = re.sub( "space", " ",uneeded_spaces)
                     clear_characters = re.sub( "\xa0","",final_text)
 
+                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
+                    final_date = formatdate(date)
+
                     #flag to see later on if we have tweets ect
                     flag = re.search(r"@",clear_characters)
                     url = response.url
-                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
 
                     #check if we are in an article and that it doesn't have images
                     if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
@@ -326,7 +328,7 @@ class DogSpider(CrawlSpider):
                             "subtopic": GENERAL_CATEGORIES['CULTURE'],
                             "website": PRESSPROJECT_VARS['AUTHOR'],
                             "title": final_title,
-                            "article_date": date, 
+                            "article_date": final_date, 
                             "author": PRESSPROJECT_VARS['AUTHOR'],
                             "article_body": re.sub( r'\s\s\s',"",clear_characters),
                             "url": url,                

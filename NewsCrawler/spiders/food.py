@@ -69,7 +69,7 @@ class DogSpider(CrawlSpider):
             url = response.url
 
             date = (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0]
-            date_for_sql_format = formatdate(date)
+            final_date = formatdate(date)
 
             #check if we are in an article and that it doesn't have any images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
@@ -77,7 +77,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": date_for_sql_format, 
+                    "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -294,6 +294,9 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub(r'\s\s\s|\n',"",final_text)
 
+            date = response.xpath('//div[@class="article_date"]/text()|//div[@class="fullscreen-date"]/text()').get()
+            final_date = formatdate(date)
+
             author = response.xpath('//div[@class="author-title"]/a/text()|//div[@itemprop="author-title"]/*/text()|//div[@class="fullscreen-author"]/a/text()').get()
             if author == None:
                 author = POPAGANDA_VARS['WEBSITE']
@@ -305,7 +308,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": POPAGANDA_VARS['FOOD'],
                     "website": POPAGANDA_VARS['WEBSITE'],
                     "title": final_title,
-                    "article_date": re.search(r'\d+\.\d+\.\d+',response.xpath('//div[@class="article_date"]/text()|//div[@class="fullscreen-date"]/text()').get()).group(0), 
+                    "article_date": final_date, 
                     "author": re.sub(r'\n',"",author),
                     "article_body": clear_characters.replace(" ","",1),
                     "url": response.url,

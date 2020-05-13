@@ -336,6 +336,8 @@ class DogSpider(CrawlSpider):
                     flag = re.search(r"@",clear_characters)
                     url = response.url
                     date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
+                    final_date = formatdate(date)
+                    
 
                     #check if we are in an article and that it doesn't have images
                     if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
@@ -343,7 +345,7 @@ class DogSpider(CrawlSpider):
                             "subtopic": GENERAL_CATEGORIES['WORLD'],
                             "website": PRESSPROJECT_VARS['AUTHOR'],
                             "title": final_title,
-                            "article_date": date, 
+                            "article_date": final_date, 
                             "author": PRESSPROJECT_VARS['AUTHOR'],
                             "article_body": re.sub( r'\s\s\s',"",clear_characters),
                             "url": url,                
