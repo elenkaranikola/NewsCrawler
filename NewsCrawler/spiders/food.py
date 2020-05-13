@@ -7,6 +7,8 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,POPAGANDA_VARS,NEWPOST_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,LIFO_VARS,GENERAL_CATEGORIES
+import mysql.connector
+from mydef import formatdate
 
 class DogSpider(CrawlSpider):
     name = 'food'
@@ -47,7 +49,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+gefsignostis"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+recipes"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=('https://www.iefimerida.gr/gastronomie'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
-        Rule(LinkExtractor(allow=('newpost.gr/gefsi'), deny=()), callback='parse_newpost', follow=True),   
+        Rule(LinkExtractor(allow=(r"newpost.gr/gefsi/(\w+).+"), deny=()), callback='parse_newpost', follow=True),   
     )
     
     def parse_newpost(self,response):
@@ -66,13 +68,16 @@ class DogSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
 
+            date = (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0]
+            date_for_sql_format = formatdate(date)
+
             #check if we are in an article and that it doesn't have any images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                    "article_date": date_for_sql_format, 
                     "author": NEWPOST_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -94,13 +99,16 @@ class DogSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
 
+            date = response.xpath('//span[@class="created"]/text()').get()
+            final_date = formatdate(date)
+
             #check if we are in an article and that it doesn't have any images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
-                    "article_date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
@@ -125,6 +133,9 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub("\xa0","",final_text)
 
+            date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
+            final_date = formatdate(date)
+
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
@@ -135,7 +146,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
+                    "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
@@ -160,6 +171,9 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub("\xa0","",final_text)
 
+            date = response.xpath('//time/span/text()').get()
+            final_date = formatdate(date)
+
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
@@ -170,7 +184,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": response.xpath('//time/span/text()').get(), 
+                    "article_date": final_date, 
                     "author": TOVIMA_VARS['AUTHOR'],
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
@@ -195,6 +209,9 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub("\xa0","",final_text)
 
+            date = response.xpath('//time/text()').get()
+            final_date = formatdate(date)
+
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
@@ -208,7 +225,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": response.xpath('//span[@class="item-category"]/a/text()').get(),
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": re.search(r"(\d+).(\w+).(\d+)",response.xpath('//time/text()').get()).group(0), 
+                    "article_date": final_date, 
                     "author": author,
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
@@ -224,6 +241,9 @@ class DogSpider(CrawlSpider):
             uneeded_spaces = re.sub( " ", "",markspaces)
             put_spaces_back = re.sub( "space", " ",uneeded_spaces)
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            date = response.xpath('//time/text()').get()
+            final_date = formatdate(date)
 
             #get the article's text
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
@@ -247,7 +267,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['FOOD'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": response.xpath('//time/text()').get(), 
+                    "article_date": final_date, 
                     "author": author,
                     "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                

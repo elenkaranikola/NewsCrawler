@@ -7,6 +7,9 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,LIFO_VARS,NEWPOST_VARS
 from NewsCrawler.settings import CNN_VARS,GENERAL_CATEGORIES,IN_VARS
+import mysql.connector
+from mydef import formatdate
+
 
 class DogSpider(CrawlSpider):
     name = 'style'
@@ -40,7 +43,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('/politismos/'),deny=('gallery')), callback='parse_infinite_cnn', follow=True), 
         Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True),
-        Rule(LinkExtractor(allow=('newpost.gr/lifestyle'), deny=()), callback='parse_newpost', follow=True), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=()), callback='parse_newpost', follow=True), 
         )
 
 #next three functions for cnn infinite scroll for fashion
@@ -70,12 +73,16 @@ class DogSpider(CrawlSpider):
         article_type = url.split('/')[5]
         contains_photos = re.search('Photos',final_text)
         #the article isn't a photo gallery
+
+        date = response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()
+        final_date = formatdate(date)
+
         if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None:
             yield{ 
                 "subtopic": GENERAL_CATEGORIES['STYLE'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
-                "article_date": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()),
+                "article_date": final_date,
                 "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
                 "article_body": re.sub( r'\n|\t',"",final_text),
                 "url": url,     
@@ -93,6 +100,9 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub( "\xa0","",final_text)
 
+            date = response.xpath('//span[@class="article-date"]/text()').get()
+            final_date = 20+formatdate(date)
+
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
@@ -102,7 +112,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": GENERAL_CATEGORIES['STYLE'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
-                    "article_date": " ".join(re.findall(r"[0-9]+.[α-ωΑ-Ω]+\..[0-9]+",response.xpath('//span[@class="article-date"]/text()').get())),
+                    "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
                     "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
@@ -124,13 +134,16 @@ class DogSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
 
+            date = response.xpath('//time/text()').get()
+            final_date = formatdate(date)
+
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": IN_VARS['STYLE_SUBTOPIC'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": response.xpath('//time/text()').get(), 
+                    "article_date": final_date,
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -152,13 +165,16 @@ class DogSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
 
+            date = (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0]
+            date_for_sql_format = formatdate(date)
+
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": NEWPOST_VARS['STYLE_SUBTOPIC'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
-                    "article_date": (response.xpath('//small[@class="article-created-time"]/text()').get()).split('/')[0], 
+                    "article_date": date_for_sql_format, 
                     "author": NEWPOST_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
@@ -183,13 +199,16 @@ class DogSpider(CrawlSpider):
             url = response.url
             subtopic = url.split('/')[3]
 
+            date = response.xpath('//span[@class="created"]/text()').get()
+            final_date = formatdate(date)
+
             #check if we are in an article and that it doesn't have images
-            if title is not None and len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": subtopic,
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
-                    "article_date": re.sub(r"\|"," ",re.search(r"(\d+)\|(\d+)\|(\d+)",response.xpath('//span[@class="created"]/text()').get()).group(0)), 
+                    "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
                     "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
@@ -214,17 +233,20 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub("\xa0","",final_text)
 
+            date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
+            final_date = formatdate(date)
+
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
             
             #check if we are in an article and that it doesn't have images
-            if title is not None and len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": TANEA_VARS['CATEGORY_STYLE'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": response.xpath('//span[@class="firamedium postdate updated"]/text()').get(), 
+                    "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
@@ -240,6 +262,9 @@ class DogSpider(CrawlSpider):
             uneeded_spaces = re.sub( " ", "",markspaces)
             put_spaces_back = re.sub( "space", " ",uneeded_spaces)
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            date = response.xpath('//time/text()').get()
+            final_date = formatdate(date)
 
             #get article's text
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
@@ -267,7 +292,7 @@ class DogSpider(CrawlSpider):
                     "subtopic": subtopic,
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
-                    "article_date": response.xpath('//time/text()').get(), 
+                    "article_date": final_date, 
                     "author": author,
                     "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
