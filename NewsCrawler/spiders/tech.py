@@ -10,47 +10,7 @@ from NewsCrawler.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS,IN_VARS
 from NewsCrawler.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS
 from NewsCrawler.settings import GENERAL_CATEGORIES,CNN_VARS,PROTAGON_VARS
 import mysql.connector
-import unicodedata
-
-def remove_accents(input_str):
-    nfkd_form = unicodedata.normalize('NFKD', input_str)
-    return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
-
-#function to make date ready for database
-def formatdate(date):
-    fulldate = re.search(r'(\d+).(\w+).(\d+)',date)
-    days = fulldate.group(1)
-    month = fulldate.group(2)
-    year = fulldate.group(3)
-    three_first_letters = re.search(r'\w\w\w\w',month)
-    if three_first_letters != None:
-        three_first_letters = re.search(r'\w\w\w\w',month).group(0)
-        month = remove_accents(three_first_letters.lower())
-        if month == "ιανο" or month == "γενα": 
-            month = "1"
-        elif month == "φεβρ" or month == "φλεβ":
-            month = '2'
-        elif month == "μαρτ":
-            month = '3'
-        elif month == "απρι":
-            month = '4'
-        elif month == "μαιο":
-            month = '5'
-        elif month == "ιουν": 
-            month = '6'
-        elif month == "ιουλ":
-            month = '7'
-        elif month == "αυγο":
-            month = '8'
-        elif month == "σεπτ":
-            month = '9'
-        elif month == "οκτω":
-            month = '10'
-        elif month == "νοεμ":
-            month = '11'
-        elif month == "δεκε":
-            month = '12'
-    return "-".join([year,month,days])
+from mydef import formatdate
 
 class DogSpider(CrawlSpider):
     name =GENERAL_CATEGORIES['TECH']
