@@ -202,7 +202,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     yield {
                         "subtopic": GENERAL_CATEGORIES['WORLD'],
-                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
@@ -234,7 +234,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
                     "article_date": final_date, 
                     "author": PERIODISTA_VARS['WEBSITE'],

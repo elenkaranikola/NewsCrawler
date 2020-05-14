@@ -10,7 +10,7 @@ from NewsCrawler.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
 from NewsCrawler.settings import NEWPOST_VARS,SPORT24_VARS,GAZZEETTA_VARS,CNN_VARS
-from NewsCrawler.settings import NEWPOST_VARS,READER_VARS,IN_VARS,THETOC_VARS
+from NewsCrawler.settings import NEWPOST_VARS,READER_VARS,IN_VARS,THETOC_VARS,PROTAGON_VARS
 import mysql.connector
 
 
@@ -272,7 +272,7 @@ class SportSpider(CrawlSpider):
                 if len(text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     yield {
                         "subtopic": sub,
-                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
@@ -364,7 +364,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
                     "article_date": final_date,  
                     "author": PERIODISTA_VARS['WEBSITE'],

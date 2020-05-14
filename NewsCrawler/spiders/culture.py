@@ -223,7 +223,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     yield {
                         "subtopic": GENERAL_CATEGORIES['CULTURE'],
-                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
                         "article_date": final_date, 
                         "author": author,

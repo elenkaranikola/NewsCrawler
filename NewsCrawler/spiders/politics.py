@@ -8,7 +8,7 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import PERIODISTA_VARS, PRESSPROJECT_VARS, IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
 from NewsCrawler.settings import KATHIMERINI_VARS, NAFTEMPORIKI_VARS,LIFO_VARS,EFSYN_VARS
-from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, READER_VARS
+from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, READER_VARS,CNN_VARS
 from NewsCrawler.settings import PROTAGON_VARS,NEWPOST_VARS,THETOC_VARS,IN_VARS
 import mysql.connector
 
@@ -94,7 +94,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": CNN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
@@ -126,7 +126,7 @@ class DogSpider(CrawlSpider):
             url = response.url
             yield {
                 "subtopic": GENERAL_CATEGORIES['POLITICS'],
-                "website": re.search(r"www.+\.gr",url).group(0),
+                "website": READER_VARS['WEBSITE'],
                 "title": re.sub( r'\n|\t',"",title),
                 "article_date": final_date,
                 "author": author,
@@ -190,7 +190,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     yield {
                         "subtopic": GENERAL_CATEGORIES['POLITICS'],
-                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
@@ -221,7 +221,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
                     "article_date": final_date,  
                     "author": "periodista.gr",

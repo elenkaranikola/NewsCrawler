@@ -8,7 +8,7 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import LIFO_VARS,POPAGANDA_VARS,PROTAGON_VARS
-from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES
+from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,CNN_VARS
 import mysql.connector
 
 class DogSpider(CrawlSpider):
@@ -68,7 +68,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": CNN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
@@ -106,7 +106,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     yield {
                         "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
-                        "website": re.search(r"www.+\.gr",url).group(0),
+                        "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
                         "article_date": final_date, 
                         "author": author,

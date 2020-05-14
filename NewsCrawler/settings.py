@@ -267,6 +267,7 @@ GENERAL_CATEGORIES = {
 }
 
 READER_VARS = {
+   'WEBSITE': "reader.gr",
    'AUTHOR': "reader.gr",
    'MAX_LINKS': 100,
 }
