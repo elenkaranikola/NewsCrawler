@@ -3,7 +3,7 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
-from NewsCrawler.mydef import formatdate
+from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
