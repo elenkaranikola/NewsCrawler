@@ -9,7 +9,7 @@ from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS,EFSYN_VARS,READER_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, NEWPOST_VARS
-from NewsCrawler.settings import PROTAGON_VARS,THETOC_VARS
+from NewsCrawler.settings import PROTAGON_VARS,THETOC_VARS,IN_VARS
 import mysql.connector
 
 
@@ -249,7 +249,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),

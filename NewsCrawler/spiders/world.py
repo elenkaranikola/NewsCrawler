@@ -8,7 +8,7 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
 from NewsCrawler.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS,LIFO_VARS,EFSYN_VARS
-from NewsCrawler.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
+from NewsCrawler.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES,IN_VARS
 from NewsCrawler.settings import NEWPOST_VARS,CNN_VARS,READER_VARS,THETOC_VARS,PROTAGON_VARS
 import mysql.connector
 
@@ -265,7 +265,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),

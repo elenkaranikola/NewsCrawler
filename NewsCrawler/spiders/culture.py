@@ -253,7 +253,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
                     "subtopic":IN_VARS['CULTURE_SUBTOPIC'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
                     "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
