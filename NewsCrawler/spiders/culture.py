@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
@@ -9,9 +11,8 @@ from NewsCrawler.settings import PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS,CNN_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,PROTAGON_VARS
-from NewsCrawler.settings import IN_VARS,NEWPOST_VARS
+from NewsCrawler.settings import IN_VARS,NEWPOST_VARS,THETOC_VARS
 import mysql.connector
-from mydef import formatdate
 
 
 class DogSpider(CrawlSpider):
@@ -174,7 +175,7 @@ class DogSpider(CrawlSpider):
             clear_characters = re.sub( "\xa0","",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
-            final_date = 20+formatdate(date)
+            final_date = THETOC_VARS['full_date'] +formatdate(date)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)

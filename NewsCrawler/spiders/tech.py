@@ -2,6 +2,7 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
@@ -10,7 +11,7 @@ from NewsCrawler.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS,IN_VARS
 from NewsCrawler.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS
 from NewsCrawler.settings import GENERAL_CATEGORIES,CNN_VARS,PROTAGON_VARS
 import mysql.connector
-from mydef import formatdate
+
 
 class DogSpider(CrawlSpider):
     name =GENERAL_CATEGORIES['TECH']

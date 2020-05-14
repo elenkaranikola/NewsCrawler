@@ -307,5 +307,6 @@ IN_VARS = {
 }
 
 THETOC_VARS = {
-   'WEBSITE': 'thetoc.gr'
+   'WEBSITE': 'thetoc.gr',
+   'full_date': "20"
 }

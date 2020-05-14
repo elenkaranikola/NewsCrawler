@@ -2,13 +2,14 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,POPAGANDA_VARS,NEWPOST_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,LIFO_VARS,GENERAL_CATEGORIES
 import mysql.connector
-from mydef import formatdate
+
 
 class DogSpider(CrawlSpider):
     name = 'food'

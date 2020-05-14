@@ -2,6 +2,7 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
@@ -9,9 +10,9 @@ from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VA
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS,PROTAGON_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,READER_VARS
-from NewsCrawler.settings import PERIODISTA_VARS,NEWPOST_VARS
+from NewsCrawler.settings import PERIODISTA_VARS,NEWPOST_VARS,THETOC_VARS
 import mysql.connector
-from mydef import formatdate
+
 
 class DogSpider(CrawlSpider):
     name = 'greece'
@@ -146,7 +147,7 @@ class DogSpider(CrawlSpider):
             clear_characters = re.sub( "\xa0","",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
-            final_date = 20+formatdate(date)
+            final_date = THETOC_VARS['full_date'] +formatdate(date)
             
             url = response.url
             if len(clear_characters)> GENERAL_CATEGORIES['ALLOWED_LENGTH']:

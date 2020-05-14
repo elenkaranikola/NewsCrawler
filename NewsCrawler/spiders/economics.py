@@ -2,15 +2,16 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS,EFSYN_VARS,READER_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, NEWPOST_VARS
-from NewsCrawler.settings import PROTAGON_VARS
+from NewsCrawler.settings import PROTAGON_VARS,THETOC_VARS
 import mysql.connector
-from mydef import formatdate
+
 
 
 class DogSpider(CrawlSpider):
@@ -141,7 +142,7 @@ class DogSpider(CrawlSpider):
             clear_characters = re.sub( "\xa0","",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
-            final_date = 20+formatdate(date)
+            final_date = THETOC_VARS['full_date'] +formatdate(date)
 
             url = response.url
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:

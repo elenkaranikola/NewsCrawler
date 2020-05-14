@@ -2,13 +2,14 @@
 import scrapy
 import re
 from scrapy.linkextractors import LinkExtractor
+from NewsCrawler.mydef import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,LIFO_VARS,NEWPOST_VARS
-from NewsCrawler.settings import CNN_VARS,GENERAL_CATEGORIES,IN_VARS
+from NewsCrawler.settings import CNN_VARS,GENERAL_CATEGORIES,IN_VARS,THETOC_VARS
 import mysql.connector
-from mydef import formatdate
+
 
 
 class DogSpider(CrawlSpider):
@@ -101,7 +102,7 @@ class DogSpider(CrawlSpider):
             clear_characters = re.sub( "\xa0","",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
-            final_date = 20+formatdate(date)
+            final_date = THETOC_VARS['full_date'] +formatdate(date)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -110,7 +111,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 yield {
                     "subtopic": GENERAL_CATEGORIES['STYLE'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": THETOC_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
