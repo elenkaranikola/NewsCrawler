@@ -211,11 +211,11 @@ EFSYN_VARS = {
    'GREECE': "Greece",
    'WORLD': "World",
    'ART': "Culture",
-   'POLITICS_PAGES': 200,
-   'ECONOMICS_PAGES': 200,
-   'GREECE_PAGES': 200,
-   'WORLD_PAGES': 200,
-   'ART_PAGES': 200,
+   'POLITICS_PAGES': 100,
+   'ECONOMICS_PAGES': 100,
+   'GREECE_PAGES': 100,
+   'WORLD_PAGES': 100,
+   'ART_PAGES': 100,
 }
 
 POPAGANDA_VARS = {
