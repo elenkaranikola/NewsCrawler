@@ -9,9 +9,6 @@ import mysql.connector
 class NewsCrawlerPipeline(object):
 
     def __init__(self):
-        self.create_connection()
-
-    def create_connection(self):
         self.conn = mysql.connector.connect(
             host = DB_CREDS['host'],
             user = DB_CREDS['user'],
