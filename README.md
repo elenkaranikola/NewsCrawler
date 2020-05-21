@@ -15,7 +15,7 @@ Our crawler has 10 different spiders, one spider for every subject given bellow:
     9. Style
     10. Food
 
-We use our spiders to extract articles from 20 different greek website. So far we have extracted articles from here:
+We use our spiders to extract articles from 20 different greek websites. So far we have extracted articles from:
 
     - cnn.gr
     - reader.gr
@@ -41,7 +41,7 @@ From each article we collect data concerning:
     - title
     - date
     - author
-    - text
+    - article text
     - url of the specific article
 
 In order to run our spider and save it's extracted data in a csv file do the following:

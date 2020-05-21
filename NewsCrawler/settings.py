@@ -30,7 +30,7 @@ ROBOTSTXT_OBEY = False
 # See also autothrottle settings and docs
 #DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 10
+#CONCURRENT_REQUESTS_PER_DOMAIN = 3
 #CONCURRENT_REQUESTS_PER_IP = 1
 
 # Disable cookies (enabled by default)
@@ -146,7 +146,7 @@ TANEA_VARS = {
    'CULTURE_PAGES': 5,
    'FOOD_PAGES': 5,
    'WOMEN_PAGES': 3,
-   'SCIENCE_PAGES': 14,
+   'SCIENCE_PAGES': 8,
    'CATEGORY_CULTURE': "culture",
    'CATEGORY_STYLE': "Woman",
 }
@@ -166,16 +166,16 @@ TOVIMA_VARS = {
 
 KATHIMERINI_VARS = {
    'AUTHOR': "kathimerini.gr",
-   'GREECE_PAGES': 200,
-   'WORLD_PAGES': 200,
+   'GREECE_PAGES': 27,
+   'WORLD_PAGES': 38,
    'ENVIRONMENT_PAGES': 20,
    'TECH_PAGES': 10,
    'SCIENCE_PAGES': 30,
-   'SPORT_PAGES': 200,
-   'POLITICS_PAGES': 200,
+   'SPORT_PAGES': 38,
+   'POLITICS_PAGES': 33,
    'FOOD_PAGES': 30,
    'CULTURE_PAGES': 30,
-   'ECONOMY_PAGES': 200,
+   'ECONOMY_PAGES': 50,
    'CATEGORY_AUTHOR': "Κύριο Αρθρο",
    'CATEGORY_TECH': "Science",
 }
@@ -192,12 +192,12 @@ NAFTEMPORIKI_VARS = {
 
 LIFO_VARS = {
    'AUTHOR': "lifo.gr",
-   'ENVIRONMENT_PAGES': 50,
-   'POLITICS_PAGES': 200,
-   'CULTURE_PAGES': 15,
-   'WORLD_PAGES': 200,
-   'TECH_PAGES': 200,
-   'PEOPLE_PAGES': 200,
+   'ENVIRONMENT_PAGES': 14,
+   'POLITICS_PAGES': 14,
+   'CULTURE_PAGES': 14,
+   'WORLD_PAGES': 14,
+   'TECH_PAGES': 14,
+   'PEOPLE_PAGES': 14,
    'CATEGORY_TECH': "Tech & Science",
 }
 
@@ -303,8 +303,8 @@ NEWPOST_VARS = {
 
 CNN_VARS = {
    'ARTICLE_TYPE': "story",
-   'CNN_CULTURE_PAGES': 180,
-   'CNN_STYLE_PAGES': 180,
+   'CNN_CULTURE_PAGES': 20,
+   'CNN_STYLE_PAGES': 20,
    'WEBSITE': "cnn.gr",
 }
 
