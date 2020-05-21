@@ -6,6 +6,10 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import logging
+from scrapy.http import Request
+import tldextract
+from scrapy import logformatter
 
 
 class NewsCrawlerSpiderMiddleware(object):
@@ -101,3 +105,16 @@ class NewsCrawlerDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class DomainDepthMiddleware(object):
+    def __init__(self, domain_depths, default_depth):
+        self.domain_depths = domain_depths
+        self.default_depth = default_depth
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        settings = crawler.settings
+        domain_depths = settings.getdict('DOMAIN_DEPTHS', default={})
+        default_depth = settings.getint('DEPTH_LIMIT', 1)
+
+        return cls(domain_depths, default_depth)

@@ -14,6 +14,8 @@ BOT_NAME = 'NewsCrawler'
 SPIDER_MODULES = ['NewsCrawler.spiders']
 NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
+#DEPTH_LIMIT = 2
+DOMAIN_DEPTHS = {'pontiki.gr': 1, 'efsyn.gr': 1}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
 
@@ -28,7 +30,7 @@ ROBOTSTXT_OBEY = False
 # See also autothrottle settings and docs
 #DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 50
+CONCURRENT_REQUESTS_PER_DOMAIN = 10
 #CONCURRENT_REQUESTS_PER_IP = 1
 
 # Disable cookies (enabled by default)
@@ -135,9 +137,9 @@ IEFIMERIDA_VARS = {
 TANEA_VARS = {
    'AUTHOR': "tanea.gr",
    'SUBTOPIC_LENGTH_ALLOWED': 15,
-   'CINEMA_PAGES':7,
-   'MUSIC_PAGES':8,
-   'CULTURE_PAGES': 12,
+   'CINEMA_PAGES':2,
+   'MUSIC_PAGES':3,
+   'CULTURE_PAGES': 5,
    'FOOD_PAGES': 5,
    'WOMEN_PAGES': 3,
    'SCIENCE_PAGES': 14,
@@ -153,7 +155,7 @@ TOVIMA_VARS = {
    'SCIENCE_PAGES': 125,
    'ECONOMICS_PAGES': 200,
    'SPORT_PAGES': 200,
-   'CULTURE_PAGES': 200,
+   'CULTURE_PAGES': 15,
    'FOOD_PAGES': 40,
    'CATEGORY_TECH': "Science"
 }
@@ -168,7 +170,7 @@ KATHIMERINI_VARS = {
    'SPORT_PAGES': 200,
    'POLITICS_PAGES': 200,
    'FOOD_PAGES': 30,
-   'CULTURE_PAGES': 200,
+   'CULTURE_PAGES': 30,
    'ECONOMY_PAGES': 200,
    'CATEGORY_AUTHOR': "Κύριο Αρθρο",
    'CATEGORY_TECH': "Science",
@@ -188,7 +190,7 @@ LIFO_VARS = {
    'AUTHOR': "lifo.gr",
    'ENVIRONMENT_PAGES': 50,
    'POLITICS_PAGES': 200,
-   'CULTURE_PAGES': 200,
+   'CULTURE_PAGES': 15,
    'WORLD_PAGES': 200,
    'TECH_PAGES': 200,
    'PEOPLE_PAGES': 200,
@@ -215,7 +217,7 @@ EFSYN_VARS = {
    'ECONOMICS_PAGES': 100,
    'GREECE_PAGES': 100,
    'WORLD_PAGES': 100,
-   'ART_PAGES': 100,
+   'ART_PAGES': 25,
 }
 
 POPAGANDA_VARS = {
@@ -241,7 +243,7 @@ TOPONTIKI_VARS = {
    'ENVIRONMENT_PAGES': 15,
    'SPORT_PAGES': 200,
    'WORLD_PAGES': 200,
-   'CULTURE_PAGES': 25,
+   'CULTURE_PAGES': 15,
    'WEBSITE': "topontiki.gr",
    'CATEGORY_ECONOMICS': "ΟΙΚΟΝΟΜΙΑ",
    'CATEGORY_ENVIRONMENT': "ΠΕΡΙΒAΛΛΟΝ",

@@ -14,9 +14,18 @@ from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,PROTAGON_VARS
 from NewsCrawler.settings import IN_VARS,NEWPOST_VARS,THETOC_VARS
 import mysql.connector
 
-
+in_counter = 0
+thetoc_counter = 0
+protagon_counter = 0
+thepressproject_counter = 0
+naftemporiki_counter = 0
+iefimerida_counter = 0
+popaganda_counter = 0
+cnn_counter = 0
+efsyn_counter = 0
 class DogSpider(CrawlSpider):
     name = 'culture'
+    handle_httpstatus_list = [301, 302]
     allowed_domains = [
         'topontiki.gr',
         'popaganda.gr',
@@ -61,22 +70,22 @@ class DogSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
-        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
-        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
-        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True), 
-        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True),
-        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True),
-        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True, process_request='process_thepressproject'), 
+        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
         Rule(LinkExtractor(allow=(r"newpost.gr/entertainment/(\w+).+"), deny=()), callback='parse_newpost', follow=True),
     )
 
@@ -95,6 +104,7 @@ class DogSpider(CrawlSpider):
 
             
     def parseItem(self,response):
+        global cnn_counter
         title = response.xpath('//h1[@class="story-title"]/text()').get()
 
         text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()       
@@ -111,7 +121,8 @@ class DogSpider(CrawlSpider):
         url = response.url
         article_type = url.split('/')[5]
         contains_photos = re.search('Photos',clear_characters)
-        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None:
+        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
+            cnn_counter += 1
             yield{ 
                 "subtopic": GENERAL_CATEGORIES['CULTURE'],
                 "website": CNN_VARS['WEBSITE'],
@@ -136,6 +147,7 @@ class DogSpider(CrawlSpider):
 
             
     def parseItemPS(self,response):
+        global cnn_counter
         title = response.xpath('//h1[@class="story-title"]/text()').get()
 
         text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
@@ -152,7 +164,8 @@ class DogSpider(CrawlSpider):
         url = response.url
         article_type = url.split('/')[5]
         contains_photos = re.search('Photos',clear_characters)
-        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None:
+        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
+            cnn_counter += 1
             yield{ 
                 "subtopic": GENERAL_CATEGORIES['CULTURE'],
                 "website": CNN_VARS['WEBSITE'],
@@ -162,11 +175,16 @@ class DogSpider(CrawlSpider):
                 "article_body": re.sub( r'\n|\t',"",clear_characters),
                 "url": url,     
             }
+    def process_cnn(self, request):
+        global cnn_counter
+        if cnn_counter < 300:
+            return request
 
     def parse_thetoc(self,response):
+        global thetoc_counter
         #check if we are in an articles url
         title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
-        if title is not None:
+        if title is not None and thetoc_counter < 300:
             text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
             list_to_string = " ".join(" ".join(text))
             markspaces = re.sub( "  ", "space",list_to_string)
@@ -182,21 +200,27 @@ class DogSpider(CrawlSpider):
             url = response.url
 
             #check if we are in an article and that this article doesn't have any images
-            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:               
+                thetoc_counter += 1
                 yield {
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": THETOC_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
                     "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
                 }
+    def process_thetoc(self, request):
+        global thetoc_counter
+        if thetoc_counter < 300:
+            return request
 
     def parse_protagon(self,response):
+        global protagon_counter
         #check if we are in an articles url
         title = response.xpath('//h1[@class="entry-title"]/text()').get() 
-        if title is not None :
+        if title is not None and protagon_counter < 300 :
             #check if we are in the correct category
             sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
             if sub == PROTAGON_VARS['CATEGORY_CULTURE']:
@@ -221,6 +245,7 @@ class DogSpider(CrawlSpider):
 
                 #check if we are in an article and that it doesn't have images
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                    protagon_counter += 1
                     yield {
                         "subtopic": GENERAL_CATEGORIES['CULTURE'],
                         "website": PROTAGON_VARS['WEBSITE'],
@@ -230,11 +255,16 @@ class DogSpider(CrawlSpider):
                         "article_body": re.sub( r'\s\s\s',"",clear_characters),
                         "url": url,                
                     }
+    def process_protagon(self, request):
+        global protagon_counter
+        if protagon_counter < 300:
+            return request
 
     def parse_in(self,response):
         #check if we are in an articles url
+        global in_counter
         title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None:
+        if title is not None and in_counter < 300 :
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
             list_to_string = " ".join(" ".join(text))
             markspaces = re.sub( "  ", "space",list_to_string)
@@ -251,6 +281,7 @@ class DogSpider(CrawlSpider):
 
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                in_counter +=1
                 yield {
                     "subtopic":IN_VARS['CULTURE_SUBTOPIC'],
                     "website": IN_VARS['WEBSITE'],
@@ -260,6 +291,11 @@ class DogSpider(CrawlSpider):
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
                 }
+    def process_in(self, request):
+        global in_counter
+        if in_counter < 300:
+            return request
+
 
     def parse_newpost(self,response):
         #check if we are in an articles url
@@ -293,8 +329,9 @@ class DogSpider(CrawlSpider):
 
     def parse_thepressproject(self,response):
         #check if we are in an articles url
+        global thepressproject_counter
         title = response.xpath('//h1[@class="entry-title"]/text()|//h1[@class="entry-title"]/*/text()').get()
-        if title is not None :
+        if title is not None and thepressproject_counter < 300:
             #check if we are in the correct category
             sub = response.xpath('//div[@class="article-categories"]/a/text()').get()
             if sub == PRESSPROJECT_VARS['CATEGORY_CULTURE']:
@@ -325,6 +362,7 @@ class DogSpider(CrawlSpider):
 
                     #check if we are in an article and that it doesn't have images
                     if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                        thepressproject_counter +=1
                         yield {
                             "subtopic": GENERAL_CATEGORIES['CULTURE'],
                             "website": PRESSPROJECT_VARS['AUTHOR'],
@@ -334,11 +372,17 @@ class DogSpider(CrawlSpider):
                             "article_body": re.sub( r'\s\s\s',"",clear_characters),
                             "url": url,                
                         }
+    def process_thepressproject(self, request):
+        global thepressproject_counter
+        if thepressproject_counter < 300:
+            return request
+
 
     def parse_iefimerida(self,response):
+        global iefimerida_counter
         #check if we are in an articles url
         title = response.xpath('//h1/span/text()').get() 
-        if title is not None :
+        if title is not None and iefimerida_counter < 300:
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
             list_to_string = " ".join(" ".join(text))
             markspaces = re.sub( "  ", "space",list_to_string)
@@ -355,6 +399,7 @@ class DogSpider(CrawlSpider):
 
             #check if we are in an article and that it doesn't have images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                iefimerida_counter +=1
                 yield {
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
@@ -364,6 +409,10 @@ class DogSpider(CrawlSpider):
                     "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                     "url": url,                
                 }
+    def process_iefimerida(self, request):
+        global iefimerida_counter
+        if iefimerida_counter < 300:
+            return request
 
     def parse_tanea(self,response):
         #check if we are in an articles url
@@ -480,9 +529,10 @@ class DogSpider(CrawlSpider):
                 }
 
     def parse_naftemporiki(self,response):
+        global naftemporiki_counter
         #check if we are in an articles url
         title = response.xpath('//h2[@id="sTitle"]/text()').get() 
-        if title is not None:
+        if title is not None and naftemporiki_counter < 300:
             #check if we are in the correct category
             subtopic = response.xpath('//span[@itemprop="articleSection"]/text()').get()
             if subtopic == NAFTEMPORIKI_VARS['CATEGORY_CULTURE'] :
@@ -508,7 +558,8 @@ class DogSpider(CrawlSpider):
                 url = response.url
                 
                 #check if we are in an article and that it doesn't have images
-                if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None: 
+                    naftemporiki_counter += 1
                     yield {
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
@@ -518,6 +569,11 @@ class DogSpider(CrawlSpider):
                         "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                         "url": url,                
                     }
+
+    def process_request(self, request):
+        global naftemporiki_counter
+        if naftemporiki_counter < 300:
+            return request
 
     def parse_lifo(self,response):
         #check if we are in an articles url
@@ -560,9 +616,10 @@ class DogSpider(CrawlSpider):
                 }
 
     def parse_efsyn(self,response):
+        global efsyn_counter
         #check if we are in an articles url
         title = response.xpath('//h1[1]/text()').get() 
-        if title is not None:
+        if title is not None and efsyn_counter < 300:
             #check if we are in the correct category
             subtopic = response.xpath('//article/a/@href').get()
             category = subtopic.split('/')[1]
@@ -594,6 +651,7 @@ class DogSpider(CrawlSpider):
 
                 #check if we are in an article and that it doesn't have images
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                    efsyn_counter += 1
                     yield {
                         "subtopic": EFSYN_VARS['ART'],
                         "website": EFSYN_VARS['WEBSITE'],
@@ -603,11 +661,16 @@ class DogSpider(CrawlSpider):
                         "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                         "url": url,                
                     }
+    def process_efsyn(self, request):
+        global efsyn_counter
+        if efsyn_counter < 300:
+            return request
 
     def parse_popaganda(self,response):
         #check if we are in an articles url
+        global popaganda_counter
         title = response.xpath('//h1/text()').get() 
-        if title is not None: 
+        if title is not None and popaganda_counter < 300: 
             #check if we are in the correct category
             category = response.xpath('//div[@class="category"]/a/text()').get()
             if category == POPAGANDA_VARS['CATEGORY_CULTURE'] :
@@ -638,6 +701,7 @@ class DogSpider(CrawlSpider):
 
                 #check if we are in an article and that it doesn't have images
                 if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                    popaganda_counter +=1
                     yield {
                         "subtopic": POPAGANDA_VARS['CULTURE'],
                         "website": POPAGANDA_VARS['WEBSITE'],
@@ -647,6 +711,10 @@ class DogSpider(CrawlSpider):
                         "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                         "url": url,                
                     }
+    def process_popaganda(self, request):
+        global popaganda_counter
+        if popaganda_counter < 300:
+            return request
 
 
     def parse_topontiki(self,response):
