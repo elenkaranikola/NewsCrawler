@@ -12,6 +12,7 @@ import tldextract
 from scrapy import logformatter
 
 
+
 class NewsCrawlerSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -118,3 +119,22 @@ class DomainDepthMiddleware(object):
         default_depth = settings.getint('DEPTH_LIMIT', 1)
 
         return cls(domain_depths, default_depth)
+
+    def process_spider_output(self, response, result, spider):
+        def _filter(request):
+            if isinstance(request, Request):
+                # get max depth per domain
+                domain = tldextract.extract(request.url).registered_domain
+                maxdepth = self.domain_depths.get(domain, self.default_depth)
+
+                depth = response.meta.get('depth', 0) + 1
+                request.meta['depth'] = depth
+
+                if maxdepth and depth > maxdepth:
+                    logging.basicConfig(format="Ignoring link (depth > %(maxdepth)d): %(requrl)s ",
+                            level=logging.DEBUG, spider=spider,
+                            maxdepth=maxdepth, requrl=request.url)
+                    return False
+            return True
+
+        return (r for r in result or () if _filter(r))
