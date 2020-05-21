@@ -14,6 +14,7 @@ from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,PROTAGON_VARS
 from NewsCrawler.settings import IN_VARS,NEWPOST_VARS,THETOC_VARS
 import mysql.connector
 
+lifo_counter = 0
 in_counter = 0
 thetoc_counter = 0
 protagon_counter = 0
@@ -72,7 +73,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
@@ -576,9 +577,10 @@ class DogSpider(CrawlSpider):
             return request
 
     def parse_lifo(self,response):
+        global lifo_counter
         #check if we are in an articles url
         title = response.xpath('//h1[@itemprop="headline"]/text()|//meta[@itemprop="headline"]/text()|//h1/*/text()').get() 
-        if title is not None:
+        if title is not None and lifo_counter < 300 :
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
@@ -605,6 +607,7 @@ class DogSpider(CrawlSpider):
             
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                lifo_counter += 1
                 yield {
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": LIFO_VARS['AUTHOR'],
@@ -614,6 +617,11 @@ class DogSpider(CrawlSpider):
                     "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
                     "url": url,                
                 }
+
+    def process_lifo(self, request):
+        global lifo_counter
+        if lifo_counter < 300:
+            return request
 
     def parse_efsyn(self,response):
         global efsyn_counter

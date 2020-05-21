@@ -54,7 +54,7 @@ class DogSpider(CrawlSpider):
     efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
     tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
-    newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,18717)]
+    newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
     periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
     urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls
     start_urls = urls[:]

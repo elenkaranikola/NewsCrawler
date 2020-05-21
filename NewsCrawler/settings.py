@@ -15,7 +15,7 @@ SPIDER_MODULES = ['NewsCrawler.spiders']
 NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
 #DEPTH_LIMIT = 2
-DOMAIN_DEPTHS = {'pontiki.gr': 1, 'efsyn.gr': 1}
+DOMAIN_DEPTHS = {'pontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'newpost.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
 
@@ -106,11 +106,11 @@ DB_CREDS = {
 
 PERIODISTA_VARS = {
    'WEBSITE': "peridista.gr",
-	'ECONOMY_PAGES':200,
-	'GREECE_PAGES':200,
-	'POLITICS_PAGES':200,
-   'WORLD_PAGES':200,
-   'SPORT_PAGES':200,
+	'ECONOMY_PAGES':10,
+	'GREECE_PAGES':10,
+	'POLITICS_PAGES':10,
+   'WORLD_PAGES':10,
+   'SPORT_PAGES':10,
 }
 
 SPORT24_VARS = {
@@ -149,14 +149,14 @@ TANEA_VARS = {
 
 TOVIMA_VARS = {
    'AUTHOR': "tovima.gr",
-   'POLITICS_PAGES': 200,
-   'WORLD_PAGES': 200,
-   'GREECE_PAGES': 200,
-   'SCIENCE_PAGES': 125,
-   'ECONOMICS_PAGES': 200,
-   'SPORT_PAGES': 200,
+   'POLITICS_PAGES': 15,
+   'WORLD_PAGES': 15,
+   'GREECE_PAGES': 15,
+   'SCIENCE_PAGES': 15,
+   'ECONOMICS_PAGES': 15,
+   'SPORT_PAGES': 15,
    'CULTURE_PAGES': 15,
-   'FOOD_PAGES': 40,
+   'FOOD_PAGES': 15,
    'CATEGORY_TECH': "Science"
 }
 
@@ -213,10 +213,10 @@ EFSYN_VARS = {
    'GREECE': "Greece",
    'WORLD': "World",
    'ART': "Culture",
-   'POLITICS_PAGES': 100,
-   'ECONOMICS_PAGES': 100,
-   'GREECE_PAGES': 100,
-   'WORLD_PAGES': 100,
+   'POLITICS_PAGES': 20,
+   'ECONOMICS_PAGES': 20,
+   'GREECE_PAGES': 20,
+   'WORLD_PAGES': 20,
    'ART_PAGES': 25,
 }
 
@@ -238,11 +238,11 @@ POPAGANDA_VARS = {
 }
 
 TOPONTIKI_VARS = {
-   'POLITICS_PAGES': 200,
-   'ECONOMICS_PAGES': 200,
+   'POLITICS_PAGES': 15,
+   'ECONOMICS_PAGES': 15,
    'ENVIRONMENT_PAGES': 15,
-   'SPORT_PAGES': 200,
-   'WORLD_PAGES': 200,
+   'SPORT_PAGES': 15,
+   'WORLD_PAGES': 15,
    'CULTURE_PAGES': 15,
    'WEBSITE': "topontiki.gr",
    'CATEGORY_ECONOMICS': "ΟΙΚΟΝΟΜΙΑ",
@@ -286,12 +286,13 @@ PROTAGON_VARS = {
 }
 
 NEWPOST_VARS = {
-   'WORLD_PAGES': 200,
-   'STYLE_PAGES': 200,
-   'SPORT_PAGES': 200,
-   'ECONOMICS_PAGES': 200,
-   'CULTURE_PAGES': 200,
-   'FOOD_PAGES': 200,
+   'WORLD_PAGES': 33,
+   'STYLE_PAGES': 33,
+   'SPORT_PAGES': 33,
+   'ECONOMICS_PAGES': 33,
+   'CULTURE_PAGES': 33,
+   'FOOD_PAGES': 33,
+   'GREECE_PAGES': 33,
    'WEBSITE': "newpost.gr",
    'STYLE_SUBTOPIC': "Lifestyle",
 }
