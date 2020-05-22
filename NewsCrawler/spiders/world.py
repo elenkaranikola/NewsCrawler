@@ -77,7 +77,7 @@ class DogSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','culture','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+world/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
@@ -92,7 +92,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True), 
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True),
         Rule(LinkExtractor(allow=(r".in\.gr.+/world/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=()), callback='parse_newpost', follow=True), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True), 
         )
 #function to crawl cnn.gr    
     def parce_cnn(self,response):
@@ -117,6 +117,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 cnn_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
@@ -157,6 +158,7 @@ class DogSpider(CrawlSpider):
             url = response.url
             
             yield {
+                "topic": GENERAL_CATEGORIES['WORLD'],
                 "subtopic": GENERAL_CATEGORIES['WORLD'],
                 "website": READER_VARS['AUTHOR'],
                 "title": re.sub( r'\n|\t',"",title),
@@ -192,6 +194,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": THETOC_VARS['WEBSITE'],
                     "title": title,
@@ -239,6 +242,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['WORLD'],
                         "subtopic": GENERAL_CATEGORIES['WORLD'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -278,6 +282,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 periodista_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
@@ -316,6 +321,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -354,6 +360,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -396,6 +403,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>10 and flag is None:
                 newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -436,6 +444,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -481,6 +490,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -526,6 +536,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tovima_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -576,6 +587,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -624,6 +636,7 @@ class DogSpider(CrawlSpider):
                 if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['WORLD'],
                         "subtopic": GENERAL_CATEGORIES['WORLD'],
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -674,6 +687,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['WORLD'],
                     "subtopic": GENERAL_CATEGORIES['WORLD'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
@@ -728,6 +742,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     efsyn_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['WORLD'],
                         "subtopic": EFSYN_VARS['WORLD'],
                         "website": EFSYN_VARS['WEBSITE'],
                         "title": final_title,
@@ -781,6 +796,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     popaganda_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['WORLD'],
                         "subtopic": POPAGANDA_VARS['WORLD'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,
@@ -829,6 +845,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['WORLD'],
                         "subtopic": GENERAL_CATEGORIES['WORLD'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,

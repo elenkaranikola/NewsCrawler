@@ -55,7 +55,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('/politismos/'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
         Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
-        Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=()), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_newsit(self,response):
@@ -86,6 +86,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>10 and flag is None:
                 newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": GENERAL_CATEGORIES['STYLE'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -135,6 +136,7 @@ class DogSpider(CrawlSpider):
         if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
             cnn_counter += 1
             yield{ 
+                "topic": GENERAL_CATEGORIES['STYLE'],
                 "subtopic": GENERAL_CATEGORIES['STYLE'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
@@ -172,6 +174,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": GENERAL_CATEGORIES['STYLE'],
                     "website": THETOC_VARS['WEBSITE'],
                     "title": title,
@@ -209,6 +212,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": IN_VARS['STYLE_SUBTOPIC'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -247,6 +251,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": NEWPOST_VARS['STYLE_SUBTOPIC'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -288,6 +293,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": subtopic,
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -333,6 +339,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": TANEA_VARS['CATEGORY_STYLE'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -386,6 +393,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['STYLE'],
                     "subtopic": subtopic,
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,

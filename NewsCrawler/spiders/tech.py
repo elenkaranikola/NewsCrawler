@@ -64,7 +64,7 @@ class DogSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=(r"\.newsit\.gr.+texnologia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','culture','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=('insomnia.gr/articles/'), deny=('page', )), callback='parse_insomnia', follow=True ,process_request='process_insomnia'),
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+tech_science/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
@@ -76,7 +76,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('cnn.gr/tech'), deny=('cnn.gr/tech/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
         Rule(LinkExtractor(allow=('protagon.gr/themata/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/tech/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/tech/(\w+).+"), deny=()), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/tech/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_newsit(self,response):
@@ -107,6 +107,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>10 and flag is None:
                 newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": GENERAL_CATEGORIES['TECH'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -142,6 +143,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 cnn_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": GENERAL_CATEGORIES['TECH'],
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
@@ -189,6 +191,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['TECH'],
                         "subtopic": GENERAL_CATEGORIES['TECH'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -227,6 +230,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": GENERAL_CATEGORIES['TECH'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -265,6 +269,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": GENERAL_CATEGORIES['TECH'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -303,6 +308,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": GENERAL_CATEGORIES['TECH'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -348,6 +354,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic":GENERAL_CATEGORIES['TECH'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -393,6 +400,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tovima_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": TOVIMA_VARS['CATEGORY_TECH'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -438,6 +446,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic":GENERAL_CATEGORIES['TECH'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -488,6 +497,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": KATHIMERINI_VARS['CATEGORY_TECH'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -536,6 +546,7 @@ class DogSpider(CrawlSpider):
                 if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['TECH'],
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -586,6 +597,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": LIFO_VARS['CATEGORY_TECH'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
@@ -627,6 +639,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 insomnia_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['TECH'],
                     "subtopic": subtopic,
                     "website": INSOMNIA_VARS['WEBSITE'],
                     "title": title,
@@ -680,6 +693,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     popaganda_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['TECH'],
                         "subtopic": POPAGANDA_VARS['TECH'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,

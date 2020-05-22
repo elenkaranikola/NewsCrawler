@@ -88,7 +88,7 @@ class PoliticsSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True , process_request='process_protagon'),
         Rule(LinkExtractor(allow=('periodista.gr/politiki'), deny=('start=')), callback='parse_periodista', follow=True , process_request='process_periodista'),   
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/politics/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True , process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/politiki/(\w+).+"), deny=()), callback='parse_newpost', follow=True , process_request='process_newpost'),
+        Rule(LinkExtractor(allow=(r"newpost.gr/politiki/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True , process_request='process_newpost'),
     )
 
     def parse_cnn(self,response):
@@ -111,6 +111,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 cnn_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
@@ -150,6 +151,7 @@ class PoliticsSpider(CrawlSpider):
             url = response.url
             reader_counter += 1
             yield {
+                "topic": GENERAL_CATEGORIES['POLITICS'],
                 "subtopic": GENERAL_CATEGORIES['POLITICS'],
                 "website": READER_VARS['WEBSITE'],
                 "title": re.sub( r'\n|\t',"",title),
@@ -184,6 +186,7 @@ class PoliticsSpider(CrawlSpider):
             if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": url.split('/')[3],
                     "website": THETOC_VARS['WEBSITE'],
                     "title": title,
@@ -228,6 +231,7 @@ class PoliticsSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['POLITICS'],
                         "subtopic": GENERAL_CATEGORIES['POLITICS'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -266,6 +270,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 periodista_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
@@ -304,6 +309,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -342,6 +348,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -384,6 +391,7 @@ class PoliticsSpider(CrawlSpider):
             if len(final_text)>10 and flag is None:
                 newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -422,6 +430,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -468,6 +477,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -513,6 +523,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tovima_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -562,6 +573,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES["POLITICS"],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -610,6 +622,7 @@ class PoliticsSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['POLITICS'],
                         "subtopic": GENERAL_CATEGORIES["POLITICS"],
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -659,6 +672,7 @@ class PoliticsSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['POLITICS'],
                     "subtopic": GENERAL_CATEGORIES['POLITICS'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
@@ -711,6 +725,7 @@ class PoliticsSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     efsyn_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['POLITICS'],
                         "subtopic": EFSYN_VARS['POLITICS'],
                         "website": EFSYN_VARS['WEBSITE'],
                         "title": final_title,
@@ -759,6 +774,7 @@ class PoliticsSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['POLITICS'],
                         "subtopic": GENERAL_CATEGORIES['POLITICS'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,

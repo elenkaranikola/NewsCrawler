@@ -79,7 +79,7 @@ class SportSpider(CrawlSpider):
     rules = (
         Rule(LinkExtractor(allow=(r"\.newsit\.gr.+athlitika/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'),        
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','culture','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/a8lhtismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='kathimerini'), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
@@ -93,7 +93,7 @@ class SportSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/sports/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/athlitika/(\w+).+"), deny=()), callback='parse_newpost', follow=True ,process_request='process_newpost'),
+        Rule(LinkExtractor(allow=(r"newpost.gr/athlitika/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),
         Rule(LinkExtractor(allow=('periodista.gr/athlhtika-paraskhnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
         )
 
@@ -125,6 +125,7 @@ class SportSpider(CrawlSpider):
             if len(final_text)>10 and flag is None:
                 newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -164,6 +165,7 @@ class SportSpider(CrawlSpider):
             if flag is None:
                 sport24_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": subtopic,
                     "website" : SPORT24_VARS['WEBSITE'],
                     "title": title,
@@ -205,6 +207,7 @@ class SportSpider(CrawlSpider):
             final_date = formatdate(date)
 
             yield {
+                "topic": GENERAL_CATEGORIES['SPORT'],
                 "subtopic": subtopic,
                 "website": GAZZEETTA_VARS['WEBSITE'],
                 "title": title,
@@ -239,6 +242,7 @@ class SportSpider(CrawlSpider):
 
             url = response.url
             yield {
+                "topic": GENERAL_CATEGORIES['SPORT'],
                 "subtopic": GENERAL_CATEGORIES['SPORT'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
@@ -288,6 +292,7 @@ class SportSpider(CrawlSpider):
             if title is not None:
                 reader_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": READER_VARS['AUTHOR'],
                     "title": re.sub( r'\n|\t',"",title),
@@ -326,6 +331,7 @@ class SportSpider(CrawlSpider):
             if len(text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": THETOC_VARS['WEBSITE'],
                     "title": title,
@@ -370,6 +376,7 @@ class SportSpider(CrawlSpider):
                 if len(text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['SPORT'],
                         "subtopic": sub,
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -408,6 +415,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -445,6 +453,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -483,6 +492,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 periodista_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
@@ -521,6 +531,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -571,6 +582,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": subtopic,
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -616,6 +628,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tovima_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -665,6 +678,7 @@ class SportSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None: 
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
                     "subtopic": GENERAL_CATEGORIES['SPORT'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -713,6 +727,7 @@ class SportSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['SPORT'],
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -765,6 +780,7 @@ class SportSpider(CrawlSpider):
                 if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     popaganda_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['SPORT'],
                         "subtopic": POPAGANDA_VARS['SPORT'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,
@@ -813,6 +829,7 @@ class SportSpider(CrawlSpider):
                 if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['SPORT'],
                         "subtopic": GENERAL_CATEGORIES['SPORT'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,
