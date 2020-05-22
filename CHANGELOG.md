@@ -8,7 +8,7 @@ All notable changes will be documented in this file.
 - spider for reader.gr added
 - spiders for protagon.gr, in.gr, periodista.gr, thetoc.gr added
 - README.md creation
-- spiderd for thepressproject.gr, iefimerida.gr, tanea.gr added
+- spiders for thepressproject.gr, iefimerida.gr, tanea.gr added
 - spider for kathimerini.gr final
 - spiders for naftemporiki.gr, lifo.gr added
 - spider for insfomnia.gr added
