@@ -179,7 +179,7 @@ class EconomicSpider(CrawlSpider):
                 yield {
                     "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
-                    "website": re.search(r"www.+\.gr",url).group(0),
+                    "website": THETOC_VARS['WEBSITE'],
                     "title": title,
                     "article_date":final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
