@@ -125,14 +125,6 @@ GAZZEETTA_VARS = {
    'WEBSITE': "gazzetta.gr"
 }
 
-PRESSPROJECT_VARS = {
-   'CATEGORY_WORLD': "Διεθνή",
-   'CATEGORY_POLITICS': "Πολιτική",
-   'CATEGORY_GREECE': "Ελλάδα",
-   'CATEGORY_CULTURE': "Πολιτισμός",
-   'CATEGORY_ECONOMICS': "Οικονομία",
-   'AUTHOR': "thepressproject.gr"
-}
 
 IEFIMERIDA_VARS = {
    'AUTHOR': "iefimerida.gr"
