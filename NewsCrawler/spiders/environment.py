@@ -20,7 +20,7 @@ cnn_counter = 0
 protagon_counter = 0
 iefimerida_counter = 0
 
-class DogSpider(CrawlSpider):
+class EnvironmentSpider(CrawlSpider):
     name = 'environment'
     allowed_domains = [
         'topontiki.gr',
@@ -47,7 +47,7 @@ class DogSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','culture','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+perivallon'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+environment_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
@@ -78,6 +78,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 cnn_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
@@ -123,6 +124,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -161,6 +163,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -209,6 +212,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 kathimerini_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -257,6 +261,7 @@ class DogSpider(CrawlSpider):
                 if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -306,6 +311,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
@@ -357,6 +363,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     popaganda_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "subtopic": POPAGANDA_VARS['ENVIRONMENT'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,
@@ -405,6 +412,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,

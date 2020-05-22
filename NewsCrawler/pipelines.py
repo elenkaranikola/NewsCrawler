@@ -22,7 +22,8 @@ class NewsCrawlerPipeline(object):
         return item
     
     def store_db(self,item):
-        self.curr.execute("""insert into articles (subtopic, website, title, article_date, author, article_body, url) values (%s,%s,%s,%s,%s,%s,%s)""",(
+        self.curr.execute("""insert into articles (topic, subtopic, website, title, article_date, author, article_body, url) values (%s,%s,%s,%s,%s,%s,%s,%s)""",(
+            item['topic'],
             item['subtopic'],
             item['website'],
             item['title'],

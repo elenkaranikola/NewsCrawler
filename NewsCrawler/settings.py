@@ -15,7 +15,7 @@ SPIDER_MODULES = ['NewsCrawler.spiders']
 NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
 #DEPTH_LIMIT = 3
-DOMAIN_DEPTHS = {'naftemporiki.gr': 0,'pontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'newpost.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1, 'popaganda':3}
+DOMAIN_DEPTHS = {'naftemporiki.gr': 0,'topontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1, 'popaganda':3}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
 
@@ -135,7 +135,7 @@ TANEA_VARS = {
    'SUBTOPIC_LENGTH_ALLOWED': 15,
    'CINEMA_PAGES':2,
    'MUSIC_PAGES':3,
-   'CULTURE_PAGES': 5,
+   'CULTURE_PAGES': 12,
    'FOOD_PAGES': 5,
    'WOMEN_PAGES': 3,
    'SCIENCE_PAGES': 8,
@@ -151,7 +151,7 @@ TOVIMA_VARS = {
    'SCIENCE_PAGES': 15,
    'ECONOMICS_PAGES': 15,
    'SPORT_PAGES': 15,
-   'CULTURE_PAGES': 15,
+   'CULTURE_PAGES': 20,
    'FOOD_PAGES': 15,
    'CATEGORY_TECH': "Science"
 }
@@ -186,7 +186,7 @@ LIFO_VARS = {
    'AUTHOR': "lifo.gr",
    'ENVIRONMENT_PAGES': 14,
    'POLITICS_PAGES': 14,
-   'CULTURE_PAGES': 14,
+   'CULTURE_PAGES': 20,
    'WORLD_PAGES': 14,
    'TECH_PAGES': 14,
    'PEOPLE_PAGES': 14,
@@ -286,7 +286,7 @@ NEWPOST_VARS = {
    'STYLE_PAGES': 33,
    'SPORT_PAGES': 33,
    'ECONOMICS_PAGES': 33,
-   'CULTURE_PAGES': 33,
+   'CULTURE_PAGES': 38,
    'FOOD_PAGES': 33,
    'GREECE_PAGES': 33,
    'WEBSITE': "newpost.gr",
@@ -295,8 +295,8 @@ NEWPOST_VARS = {
 
 CNN_VARS = {
    'ARTICLE_TYPE': "story",
-   'CNN_CULTURE_PAGES': 20,
-   'CNN_STYLE_PAGES': 20,
+   'CNN_CULTURE_PAGES': 70,
+   'CNN_STYLE_PAGES': 70,
    'WEBSITE': "cnn.gr",
 }
 

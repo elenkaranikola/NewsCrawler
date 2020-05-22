@@ -12,7 +12,7 @@ from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS,CNN_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,PROTAGON_VARS
 from NewsCrawler.settings import IN_VARS,NEWPOST_VARS,THETOC_VARS
-#import mysql.connector
+import mysql.connector
 
 lifo_counter = 0
 in_counter = 0
@@ -23,7 +23,7 @@ iefimerida_counter = 0
 popaganda_counter = 0
 cnn_counter = 0
 efsyn_counter = 0
-class DogSpider(CrawlSpider):
+class CultureSpider(CrawlSpider):
     name = 'culture'
     #handle_httpstatus_list = [301, 302]
     allowed_domains = [
@@ -39,55 +39,55 @@ class DogSpider(CrawlSpider):
         'newpost.gr',
         'protagon.gr',
         'iefimerida.gr',
-        'thepressproject.gr',
         'tovima.gr',
         'kathimerini.gr',
         ]
     url = [
-        #'https://popaganda.gr/newstrack/culture/',
-        #'https://www.naftemporiki.gr/culture',
-        #'https://www.tanea.gr/category/lifearts/culture/',
-        #'https://www.tanea.gr/category/lifearts/cinema/',
-        #'https://www.tanea.gr/category/lifearts/music/',
-        #'https://www.cnn.gr/style/politismos',
-        #'https://www.cnn.gr/style/psyxagogia',
-        #'https://www.thetoc.gr/',
-        #'https://www.protagon.gr/epikairotita/',
-        #'https://www.in.gr/culture/',
-        #'https://newpost.gr/entertainment',
-        #'https://www.iefimerida.gr',
+        'https://popaganda.gr/newstrack/culture/',
+        'https://www.naftemporiki.gr/culture',
+        'https://www.tanea.gr/category/lifearts/culture/',
+        'https://www.tanea.gr/category/lifearts/cinema/',
+        'https://www.tanea.gr/category/lifearts/music/',
+        'https://www.cnn.gr/style/politismos',
+        'https://www.cnn.gr/style/psyxagogia',
+        'https://www.thetoc.gr/',
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/culture/',
+        'https://newpost.gr/entertainment',
+        'https://www.iefimerida.gr',
         ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
-    #efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
-    #lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
-    #kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
-    #tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
-    #tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
-    #urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls
-    #start_urls = urls[:]
-    start_urls = url
+    topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
+    lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
+    tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
+    tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
+    newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
+    urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + topontiki_urls + efsyn_urls
+    start_urls = urls[:]
+
+    
     
 
 
     rules = (
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
-        #Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
-        #Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=(r"newpost.gr/entertainment/(\w+).+"), deny=()), callback='parse_newpost', follow=True),
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
+        Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r'newpost.gr/books|newpost.gr/cinema/|newpost.gr/moysikh/|newpost.gr/art/|newpost.gr/theatre/|newpost.gr/entertainment'), deny=('page')), callback='parse_newpost', follow=True),
     )
 
 #next three functions for cnn infinite scroll for culture
@@ -125,6 +125,7 @@ class DogSpider(CrawlSpider):
         if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
             cnn_counter += 1
             yield{ 
+                "topic": GENERAL_CATEGORIES['CULTURE'],
                 "subtopic": GENERAL_CATEGORIES['CULTURE'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
@@ -168,6 +169,7 @@ class DogSpider(CrawlSpider):
         if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
             cnn_counter += 1
             yield{ 
+                "topic": GENERAL_CATEGORIES['CULTURE'],
                 "subtopic": GENERAL_CATEGORIES['CULTURE'],
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
@@ -204,6 +206,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:               
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": THETOC_VARS['WEBSITE'],
                     "title": title,
@@ -248,6 +251,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": GENERAL_CATEGORIES['CULTURE'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -284,6 +288,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 in_counter +=1
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic":IN_VARS['CULTURE_SUBTOPIC'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -319,6 +324,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article and that it doesn't have images
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -351,6 +357,7 @@ class DogSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 iefimerida_counter +=1
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -394,6 +401,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article and that it doesn't have images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -430,6 +438,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article and that it doesn't have images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -469,6 +478,7 @@ class DogSpider(CrawlSpider):
             #check if we are in an article and that it doesn't have images
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": response.xpath('//span[@class="item-category"]/a/text()').get(),
                     "website": KATHIMERINI_VARS['AUTHOR'],
                     "title": final_title,
@@ -511,6 +521,7 @@ class DogSpider(CrawlSpider):
                 if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None: 
                     naftemporiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": response.xpath('//div[@class="Breadcrumb"]/a[2]/text()').get(),
                         "website": NAFTEMPORIKI_VARS['AUTHOR'],
                         "title": final_title,
@@ -558,6 +569,7 @@ class DogSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 lifo_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
                     "website": LIFO_VARS['AUTHOR'],
                     "title": final_title,
@@ -610,6 +622,7 @@ class DogSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     efsyn_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": EFSYN_VARS['ART'],
                         "website": EFSYN_VARS['WEBSITE'],
                         "title": final_title,
@@ -660,6 +673,7 @@ class DogSpider(CrawlSpider):
                 if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     popaganda_counter +=1
                     yield {
+                        "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": POPAGANDA_VARS['CULTURE'],
                         "website": POPAGANDA_VARS['WEBSITE'],
                         "title": final_title,
@@ -704,6 +718,7 @@ class DogSpider(CrawlSpider):
                 #check if we are in an article and that it doesn't have images
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     yield {
+                        "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": GENERAL_CATEGORIES['CULTURE'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,

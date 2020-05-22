@@ -28,7 +28,7 @@ tovima_counter = 0
 periodista_counter = 0
 newpost_counter = 0
 
-class EconomocSpider(CrawlSpider):
+class EconomicSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
         'topontiki.gr',
@@ -104,6 +104,7 @@ class EconomocSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 cnn_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
@@ -143,6 +144,7 @@ class EconomocSpider(CrawlSpider):
 
             url = response.url
             yield {
+                "topic": GENERAL_CATEGORIES['ECONOMICS'],
                 "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                 "website": READER_VARS['WEBSITE'],
                 "title": re.sub( r'\n|\t',"",title),
@@ -175,6 +177,7 @@ class EconomocSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']:
                 thetoc_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": re.search(r"www.+\.gr",url).group(0),
                     "title": title,
@@ -219,6 +222,7 @@ class EconomocSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     protagon_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ECONOMICS'],
                         "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                         "website": PROTAGON_VARS['WEBSITE'],
                         "title": title,
@@ -255,6 +259,7 @@ class EconomocSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 periodista_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": PERIODISTA_VARS['WEBSITE'],
                     "title": re.sub( r'\t|\n|\r',"",title),
@@ -293,6 +298,7 @@ class EconomocSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 in_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
@@ -330,6 +336,7 @@ class EconomocSpider(CrawlSpider):
             if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 newpost_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": NEWPOST_VARS['WEBSITE'],
                     "title": title,
@@ -345,8 +352,9 @@ class EconomocSpider(CrawlSpider):
             return request 
 
     def parse_newsit(self,response):
+        global newsit_counter
         title = response.xpath('//h1/text()').get() 
-        if title is not None:
+        if title is not None and newsit_counter < 300:
             list_to_string = " ".join(" ".join(title))
             markspaces = re.sub( "       ", "space",list_to_string)
             uneeded_spaces = re.sub( " ", "",markspaces)
@@ -369,7 +377,9 @@ class EconomocSpider(CrawlSpider):
 
             #check if we are in an article, and if it doesn't have images
             if len(final_text)>10 and flag is None:
+                newsit_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": NEWSIT_VARS['WEBSITE'],
                     "title": final_title,
@@ -408,6 +418,7 @@ class EconomocSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 iefimerida_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": IEFIMERIDA_VARS['AUTHOR'],
                     "title": title,
@@ -451,6 +462,7 @@ class EconomocSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": TANEA_VARS['AUTHOR'],
                     "title": final_title,
@@ -493,6 +505,7 @@ class EconomocSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tovima_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": TOVIMA_VARS['AUTHOR'],
                     "title": final_title,
@@ -535,6 +548,7 @@ class EconomocSpider(CrawlSpider):
             if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 naftemporiki_counter += 1
                 yield {
+                    "topic": GENERAL_CATEGORIES['ECONOMICS'],
                     "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                     "website": NAFTEMPORIKI_VARS['AUTHOR'],
                     "title": final_title,
@@ -585,6 +599,7 @@ class EconomocSpider(CrawlSpider):
                 if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     efsyn_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ECONOMICS'],
                         "subtopic": EFSYN_VARS['ECONOMICS'],
                         "website": EFSYN_VARS['WEBSITE'],
                         "title": final_title,
@@ -632,6 +647,7 @@ class EconomocSpider(CrawlSpider):
                 if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
+                        "topic": GENERAL_CATEGORIES['ECONOMICS'],
                         "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
                         "title": final_title,

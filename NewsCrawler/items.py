@@ -10,6 +10,7 @@ import scrapy
 
 class NewsCrawlerItem(scrapy.Item):
     # define the fields for your item here like:
+    topic = scrapy.Field
     subtopic = scrapy.Field()
     website = scrapy.Field()
     title = scrapy.Field()
