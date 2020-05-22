@@ -8,6 +8,7 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,LIFO_VARS,NEWPOST_VARS
 from NewsCrawler.settings import CNN_VARS,GENERAL_CATEGORIES,IN_VARS,THETOC_VARS
+from NewsCrawler.settings import NEWSIT_VARS
 import mysql.connector
 
 
@@ -15,6 +16,7 @@ import mysql.connector
 class DogSpider(CrawlSpider):
     name = 'style'
     allowed_domains = [
+        'newsit.gr',
         'lifo.gr',
         'tanea.gr',
         'cnn.gr',
@@ -24,6 +26,7 @@ class DogSpider(CrawlSpider):
         'iefimerida.gr',
         ]
     url = [
+        'https://www.newsit.gr/category/lifestyle/',
         'https://www.cnn.gr/style/politismos',
         'https://www.thetoc.gr/',
         'https://www.in.gr/'
@@ -37,6 +40,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True),
@@ -46,6 +50,41 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True),
         Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=()), callback='parse_newpost', follow=True), 
         )
+
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['STYLE'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
 
 #next three functions for cnn infinite scroll for fashion
     def parse_infinite_cnn(self,response):

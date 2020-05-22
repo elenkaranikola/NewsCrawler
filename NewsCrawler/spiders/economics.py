@@ -6,7 +6,7 @@ from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
-from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from NewsCrawler.settings import PERIODISTA_VARS,NEWSIT_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,NAFTEMPORIKI_VARS,EFSYN_VARS,READER_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, NEWPOST_VARS
 from NewsCrawler.settings import PROTAGON_VARS,THETOC_VARS,IN_VARS,CNN_VARS
@@ -20,7 +20,7 @@ reader_counter = 0
 thetoc_counter = 0
 protagon_counter = 0
 in_counter = 0
-thepressproject_counter = 0
+newsit_counter = 0
 iefimerida_counter = 0
 topontiki_counter = 0
 efsyn_counter = 0
@@ -43,7 +43,7 @@ class EconomocSpider(CrawlSpider):
         'periodista.gr',
         'in.gr',
         'newpost.gr',
-        'thepressproject.gr',
+        'newsit.gr',
         'iefimerida.gr',
         ]
     url = [
@@ -56,7 +56,7 @@ class EconomocSpider(CrawlSpider):
         'http://www.periodista.gr/oikonomia',
         'https://www.in.gr/economy/',
         'http://newpost.gr/',
-        'https://www.thepressproject.gr/',
+        'https://www.newsit.gr/category/oikonomia/',
         'https://www.iefimerida.gr',
         ]
     topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
@@ -74,7 +74,7 @@ class EconomocSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'),
         Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True ,process_request='process_thepressproject'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
         Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
         Rule(LinkExtractor(allow=('cnn.gr/oikonomia'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
         Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
@@ -344,54 +344,44 @@ class EconomocSpider(CrawlSpider):
         if newpost_counter < 300:
             return request 
 
-    def parse_thepressproject(self,response):
-        global thepressproject_counter
-        #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title"]/text()|//h1[@class="entry-title"]/*/text()').get()
-        if title is not None and thepressproject_counter < 300:
-            #check if we are in the correct category
-            sub = response.xpath('//div[@class="article-categories"]/a/text()').get()
-            if sub == PRESSPROJECT_VARS['CATEGORY_ECONOMICS']:
-                #check if this is a video article
-                video_article = response.xpath('//i[@class="title-icon video-icon fab fa-youtube"]').get()
-                if video_article is None:
-                    list_to_string = " ".join(" ".join(title))
-                    no_whites = re.sub(r'\t|\n',"",list_to_string)
-                    markspaces = re.sub( "       ", "space",no_whites)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_title = re.sub( "space", " ",uneeded_spaces)
-                    delete_front_space = re.sub("    ","",final_title)
-                    final_title = re.sub("   ","",delete_front_space)
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
-                    text = response.xpath('//div[@id="maintext"]//p/text()|//div[@id="maintext"]//strong/text()|//div[@id="maintext"]//p/*/text()').getall()
-                    list_to_string = " ".join(" ".join(text))
-                    markspaces = re.sub( "  ", "space",list_to_string)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_text = re.sub( "space", " ",uneeded_spaces)
-                    clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
 
-                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
-                    final_date = formatdate(date)
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
 
-                    #flag to see later on if we have tweets ect
-                    flag = re.search(r"@",clear_characters)
-                    url = response.url
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
 
-                    #check if we are in an article and that it doesn't have any images
-                    if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
-                        thepressproject_counter += 1
-                        yield {
-                            "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
-                            "website": PRESSPROJECT_VARS['AUTHOR'],
-                            "title": final_title,
-                            "article_date": final_date, 
-                            "author": PRESSPROJECT_VARS['AUTHOR'],
-                            "article_body": re.sub( r'\s\s\s',"",clear_characters),
-                            "url": url,                
-                        }
-    def process_thepressproject(self, request):
-        global thepressproject_counter
-        if thepressproject_counter < 300:
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
+
+    def process_newsit(self, request):
+        global newsit_counter
+        if newsit_counter < 300:
             return request                
 
     def parse_iefimerida(self,response):

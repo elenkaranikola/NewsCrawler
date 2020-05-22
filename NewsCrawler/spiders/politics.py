@@ -6,7 +6,7 @@ from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
-from NewsCrawler.settings import PERIODISTA_VARS, PRESSPROJECT_VARS, IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
+from NewsCrawler.settings import PERIODISTA_VARS, NEWSIT_VARS, IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS
 from NewsCrawler.settings import KATHIMERINI_VARS, NAFTEMPORIKI_VARS,LIFO_VARS,EFSYN_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES, READER_VARS,CNN_VARS
 from NewsCrawler.settings import PROTAGON_VARS,NEWPOST_VARS,THETOC_VARS,IN_VARS
@@ -29,7 +29,7 @@ class DogSpider(CrawlSpider):
         'periodista.gr',
         'in.gr',
         'newpost.gr',
-        'thepressproject.gr',
+        'newsit.gr',
         'iefimerida.gr',
         'tanea.gr',
         ]
@@ -43,7 +43,7 @@ class DogSpider(CrawlSpider):
         'https://www.in.gr/politics/',
         'http://www.periodista.gr/',
         'http://newpost.gr/',
-        'https://www.thepressproject.gr/',
+        'https://www.newsit.gr/category/politikh/',
         'https://www.iefimerida.gr',
         ]
     topontiki_urls = ['http://www.topontiki.gr/category/politiki?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['POLITICS_PAGES'])]
@@ -65,7 +65,7 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=('iefimerida.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
-        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True), 
         Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/','protoselida')), callback='parse_cnn', follow=True),
         Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parse_reader', follow=True), 
         Rule(LinkExtractor(allow=('thetoc.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True),
@@ -291,50 +291,40 @@ class DogSpider(CrawlSpider):
                     "url": url,                
             }
 
-    def parse_thepressproject(self,response):
-        #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title"]/text()|//h1[@class="entry-title"]/*/text()').get()
-        if title is not None :
-            #check if we are in the correct category
-            sub = response.xpath('//div[@class="article-categories"]/a/text()').get()
-            if sub == PRESSPROJECT_VARS['CATEGORY_POLITICS']:
-                #check if this is a video article
-                video_article = response.xpath('//i[@class="title-icon video-icon fab fa-youtube"]').get()
-                if video_article is None:
-                    #fix title's format
-                    list_to_string = " ".join(" ".join(title))
-                    no_whites = re.sub(r'\t|\n',"",list_to_string)
-                    markspaces = re.sub( "       ", "space",no_whites)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_title = re.sub( "space", " ",uneeded_spaces)
-                    delete_front_space = re.sub("    ","",final_title)
-                    final_title = re.sub("   ","",delete_front_space)
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
-                    #get article's text
-                    text = response.xpath('//div[@id="maintext"]//p/text()|//div[@id="maintext"]//strong/text()|//div[@id="maintext"]//p/*/text()').getall()
-                    list_to_string = " ".join(" ".join(text))
-                    markspaces = re.sub( "  ", "space",list_to_string)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_text = re.sub( "space", " ",uneeded_spaces)
-                    clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
 
-                    #flag to see later on if we have tweets ect
-                    flag = re.search(r"@",clear_characters)
-                    url = response.url
-                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
-                    final_date = formatdate(date)
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
 
-                    #check if we are in an article and that it doesn't have any images
-                    if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
-                        yield {
-                            "subtopic": GENERAL_CATEGORIES['POLITICS'],
-                            "website":PRESSPROJECT_VARS['AUTHOR'],
-                            "title": final_title,
-                            "article_date": final_date, 
-                            "author": PRESSPROJECT_VARS['AUTHOR'],
-                            "article_body": re.sub( r'\s\s\s',"",clear_characters),
-                            "url": url,                
-                        }
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['POLITICS'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
 
     def parse_iefimerida(self,response):
         #check if we are in an articles url

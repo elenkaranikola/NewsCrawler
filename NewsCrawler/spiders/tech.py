@@ -8,7 +8,7 @@ from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
 from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS,TOVIMA_VARS,NEWPOST_VARS
 from NewsCrawler.settings import KATHIMERINI_VARS,NAFTEMPORIKI_VARS,IN_VARS
-from NewsCrawler.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS
+from NewsCrawler.settings import LIFO_VARS,INSOMNIA_VARS,POPAGANDA_VARS,NEWSIT_VARS
 from NewsCrawler.settings import GENERAL_CATEGORIES,CNN_VARS,PROTAGON_VARS
 import mysql.connector
 
@@ -16,6 +16,7 @@ import mysql.connector
 class DogSpider(CrawlSpider):
     name =GENERAL_CATEGORIES['TECH']
     allowed_domains = [
+        'newsit.gr',
         'popaganda.gr',
         'insomnia.gr',
         'lifo.gr',
@@ -30,6 +31,7 @@ class DogSpider(CrawlSpider):
         'iefimerida.gr',
         ]
     url = [
+        'https://www.newsit.gr/category/texnologia/',
         'https://popaganda.gr/newstrack/technews/',
         'https://www.insomnia.gr/articles/',
         'https://www.naftemporiki.gr/techscience',
@@ -48,6 +50,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+texnologia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=('insomnia.gr/articles/'), deny=('page', )), callback='parse_insomnia', follow=True),
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+tech_science/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True), 
@@ -62,6 +65,41 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/tech/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True), 
         Rule(LinkExtractor(allow=(r"newpost.gr/tech/(\w+).+"), deny=()), callback='parse_newpost', follow=True), 
         )
+
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['TECH'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
 
     def parse_cnn(self,response):
         #check if we are in an articles url

@@ -14,8 +14,8 @@ BOT_NAME = 'NewsCrawler'
 SPIDER_MODULES = ['NewsCrawler.spiders']
 NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
-DEPTH_LIMIT = 3
-DOMAIN_DEPTHS = {'pontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'newpost.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1}
+#DEPTH_LIMIT = 3
+DOMAIN_DEPTHS = {'naftemporiki.gr': 0,'pontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'newpost.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1, 'popaganda':3}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
 
@@ -317,4 +317,7 @@ IN_VARS = {
 THETOC_VARS = {
    'WEBSITE': 'thetoc.gr',
    'full_date': "20"
+}
+NEWSIT_VARS = {
+   'WEBSITE': 'newsit.gr'
 }

@@ -28,7 +28,7 @@ We use our spiders to extract articles from 20 different greek websites. So far 
     - sport24.gr
     - tanea.gr
     - iefimerida.gr
-    - thepressproject.gr
+    - newsit.gr
     - tovima.gr
     - kathimerini.gr
     - naftemporiki.gr

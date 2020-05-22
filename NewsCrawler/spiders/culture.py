@@ -7,7 +7,7 @@ from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
-from NewsCrawler.settings import PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from NewsCrawler.settings import IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS,CNN_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,PROTAGON_VARS
@@ -18,7 +18,6 @@ lifo_counter = 0
 in_counter = 0
 thetoc_counter = 0
 protagon_counter = 0
-thepressproject_counter = 0
 naftemporiki_counter = 0
 iefimerida_counter = 0
 popaganda_counter = 0
@@ -26,7 +25,7 @@ cnn_counter = 0
 efsyn_counter = 0
 class DogSpider(CrawlSpider):
     name = 'culture'
-    handle_httpstatus_list = [301, 302]
+    #handle_httpstatus_list = [301, 302]
     allowed_domains = [
         'topontiki.gr',
         'popaganda.gr',
@@ -45,19 +44,18 @@ class DogSpider(CrawlSpider):
         'kathimerini.gr',
         ]
     url = [
-        'https://popaganda.gr/newstrack/culture/',
-        'https://www.naftemporiki.gr/culture',
-        'https://www.tanea.gr/category/lifearts/culture/',
-        'https://www.tanea.gr/category/lifearts/cinema/',
-        'https://www.tanea.gr/category/lifearts/music/',
-        'https://www.cnn.gr/style/politismos',
-        'https://www.cnn.gr/style/psyxagogia',
-        'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/',
-        'https://www.in.gr/culture/',
-        'https://newpost.gr/entertainment',
-        'https://www.thepressproject.gr/',
-        'https://www.iefimerida.gr',
+        #'https://popaganda.gr/newstrack/culture/',
+        #'https://www.naftemporiki.gr/culture',
+        #'https://www.tanea.gr/category/lifearts/culture/',
+        #'https://www.tanea.gr/category/lifearts/cinema/',
+        #'https://www.tanea.gr/category/lifearts/music/',
+        #'https://www.cnn.gr/style/politismos',
+        #'https://www.cnn.gr/style/psyxagogia',
+        #'https://www.thetoc.gr/',
+        #'https://www.protagon.gr/epikairotita/',
+        #'https://www.in.gr/culture/',
+        #'https://newpost.gr/entertainment',
+        #'https://www.iefimerida.gr',
         ]
     #topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
     #efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
@@ -75,21 +73,20 @@ class DogSpider(CrawlSpider):
     rules = (
         #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         #Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
-        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
+        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
+        #Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
         #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True, process_request='process_thepressproject'), 
-        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        #Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
+        #Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
+        #Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
+        #Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
+        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
         #Rule(LinkExtractor(allow=(r"newpost.gr/entertainment/(\w+).+"), deny=()), callback='parse_newpost', follow=True),
     )
 
@@ -330,57 +327,6 @@ class DogSpider(CrawlSpider):
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
             }
-
-    def parse_thepressproject(self,response):
-        #check if we are in an articles url
-        global thepressproject_counter
-        title = response.xpath('//h1[@class="entry-title"]/text()|//h1[@class="entry-title"]/*/text()').get()
-        if title is not None and thepressproject_counter < 300:
-            #check if we are in the correct category
-            sub = response.xpath('//div[@class="article-categories"]/a/text()').get()
-            if sub == PRESSPROJECT_VARS['CATEGORY_CULTURE']:
-                #check if this is a video article               
-                video_article = response.xpath('//i[@class="title-icon video-icon fab fa-youtube"]').get()
-                if video_article is None:
-                    list_to_string = " ".join(" ".join(title))
-                    no_whites = re.sub(r'\t|\n',"",list_to_string)
-                    markspaces = re.sub( "       ", "space",no_whites)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_title = re.sub( "space", " ",uneeded_spaces)
-                    delete_front_space = re.sub("    ","",final_title)
-                    final_title = re.sub("   ","",delete_front_space)
-
-                    text = response.xpath('//div[@id="maintext"]//p/text()|//div[@id="maintext"]//strong/text()|//div[@id="maintext"]//p/*/text()').getall()
-                    list_to_string = " ".join(" ".join(text))
-                    markspaces = re.sub( "  ", "space",list_to_string)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_text = re.sub( "space", " ",uneeded_spaces)
-                    clear_characters = re.sub( "\xa0","",final_text)
-
-                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
-                    final_date = formatdate(date)
-
-                    #flag to see later on if we have tweets ect
-                    flag = re.search(r"@",clear_characters)
-                    url = response.url
-
-                    #check if we are in an article and that it doesn't have images
-                    if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
-                        thepressproject_counter +=1
-                        yield {
-                            "subtopic": GENERAL_CATEGORIES['CULTURE'],
-                            "website": PRESSPROJECT_VARS['AUTHOR'],
-                            "title": final_title,
-                            "article_date": final_date, 
-                            "author": PRESSPROJECT_VARS['AUTHOR'],
-                            "article_body": re.sub( r'\s\s\s',"",clear_characters),
-                            "url": url,                
-                        }
-    def process_thepressproject(self, request):
-        global thepressproject_counter
-        if thepressproject_counter < 300:
-            return request
-
 
     def parse_iefimerida(self,response):
         global iefimerida_counter
@@ -681,7 +627,7 @@ class DogSpider(CrawlSpider):
         #check if we are in an articles url
         global popaganda_counter
         title = response.xpath('//h1/text()').get() 
-        if title is not None and popaganda_counter < 300: 
+        if title is not None and popaganda_counter < 200: 
             #check if we are in the correct category
             category = response.xpath('//div[@class="category"]/a/text()').get()
             if category == POPAGANDA_VARS['CATEGORY_CULTURE'] :
@@ -724,7 +670,7 @@ class DogSpider(CrawlSpider):
                     }
     def process_popaganda(self, request):
         global popaganda_counter
-        if popaganda_counter < 300:
+        if popaganda_counter < 200:
             return request
 
 

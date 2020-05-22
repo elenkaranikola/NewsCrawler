@@ -6,7 +6,7 @@ from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
-from NewsCrawler.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from NewsCrawler.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS,NEWSIT_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS
 from NewsCrawler.settings import POPAGANDA_VARS,TOPONTIKI_VARS,GENERAL_CATEGORIES
 from NewsCrawler.settings import NEWPOST_VARS,SPORT24_VARS,GAZZEETTA_VARS,CNN_VARS
@@ -17,6 +17,7 @@ import mysql.connector
 class SportSpider(CrawlSpider):
     name = 'sport'
     allowed_domains = [
+        'newsit.gr',
         'topontiki.gr',
         'popaganda.gr',
         'naftemporiki.gr',
@@ -35,6 +36,7 @@ class SportSpider(CrawlSpider):
         'iefimerida.gr',
         ]
     url = [
+        'https://www.newsit.gr/category/athlitika/',
         'https://popaganda.gr/newstrack/sports/',
         'https://www.naftemporiki.gr/sports',
         'https://www.tanea.gr',
@@ -57,6 +59,7 @@ class SportSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+athlitika/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True),        
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True), 
@@ -76,7 +79,41 @@ class SportSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('periodista.gr/athlhtika-paraskhnia'), deny=('start=')), callback='parse_periodista', follow=True), 
         )
 
-    
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['SPORT'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }    
+
     #function for items from sport24
     def parse_sport24(self,response):
         #check if we are in an articles url

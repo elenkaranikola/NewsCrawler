@@ -6,17 +6,18 @@ from NewsCrawler.utilities import formatdate
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 from NewsCrawler.items import NewsCrawlerItem
-from NewsCrawler.settings import PERIODISTA_VARS,PRESSPROJECT_VARS,IEFIMERIDA_VARS,TANEA_VARS
+from NewsCrawler.settings import PERIODISTA_VARS,IEFIMERIDA_VARS,TANEA_VARS
 from NewsCrawler.settings import TOVIMA_VARS,KATHIMERINI_VARS,NAFTEMPORIKI_VARS,CNN_VARS
 from NewsCrawler.settings import LIFO_VARS,EFSYN_VARS,POPAGANDA_VARS,PROTAGON_VARS
 from NewsCrawler.settings import TOPONTIKI_VARS,GENERAL_CATEGORIES,READER_VARS
-from NewsCrawler.settings import PERIODISTA_VARS,NEWPOST_VARS,THETOC_VARS,IN_VARS
+from NewsCrawler.settings import PERIODISTA_VARS,NEWPOST_VARS,THETOC_VARS,IN_VARS,NEWSIT_VARS
 import mysql.connector
 
 
 class DogSpider(CrawlSpider):
     name = 'greece'
     allowed_domains = [
+        'newsit.gr',
         'topontiki.gr',
         'popaganda.gr',
         'efsyn.gr',
@@ -29,13 +30,13 @@ class DogSpider(CrawlSpider):
         'periodista.gr',
         'in.gr',
         'newpost.gr',
-        'thepressproject.gr',
         'iefimerida.gr',
         'tanea.gr',
         'kathimerini.gr',
         'naftemporiki.gr',
         ]
     url = [
+        'https://www.newsit.gr/ellada/',
         'http://www.topontiki.gr/category/ellada',
         'https://popaganda.gr/newstrack/greece-newstrack/',
         'https://www.lifo.gr/now/greece',
@@ -48,7 +49,6 @@ class DogSpider(CrawlSpider):
         'https://www.protagon.gr/epikairotita/ellada',
         'https://www.in.gr/greece/',
         'https://newpost.gr/ellada/',
-        'https://www.thepressproject.gr/',
         'https://www.tanea.gr',
         ]
     efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
@@ -60,6 +60,7 @@ class DogSpider(CrawlSpider):
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True), 
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_popaganda', follow=True), 
         Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True), 
@@ -69,7 +70,6 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
         Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True), 
-        Rule(LinkExtractor(allow=('thepressproject'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thepressproject', follow=True), 
         Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True),  
         Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True),
         Rule(LinkExtractor(allow=('cnn.gr/news/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True),
@@ -78,6 +78,41 @@ class DogSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True),
         Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=()), callback='parse_newpost', follow=True), 
     )
+
+    def parse_newsit(self,response):
+        title = response.xpath('//h1/text()').get() 
+        if title is not None:
+            list_to_string = " ".join(" ".join(title))
+            markspaces = re.sub( "       ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            put_spaces_back = re.sub( "space", " ",uneeded_spaces)
+            final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+
+            text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub("\xa0","",final_text)
+
+            date = response.xpath('//time[@class="entry-date published"]/text()').get()
+            final_date = formatdate(date)
+
+            #flag to see later on if we have tweets ect
+            flag = re.search(r"@",clear_characters)
+            url = response.url
+
+            #check if we are in an article, and if it doesn't have images
+            if len(final_text)>10 and flag is None:
+                yield {
+                    "subtopic": GENERAL_CATEGORIES['GREECE'],
+                    "website": NEWSIT_VARS['WEBSITE'],
+                    "title": final_title,
+                    "article_date": final_date, 
+                    "author": NEWSIT_VARS['WEBSITE'],
+                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "url": url,                
+                }
 
     def parse_cnn(self,response):
         #check if we are in an articles url
@@ -288,49 +323,6 @@ class DogSpider(CrawlSpider):
                     "article_body": re.sub( r'\s\s\s',"",clear_characters),
                     "url": url,                
             }
-
-    def parse_thepressproject(self,response):
-        #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title"]/text()|//h1[@class="entry-title"]/*/text()').get()
-        if title is not None:
-            #check if we are in the correct category
-            sub = response.xpath('//div[@class="article-categories"]/a/text()').get()
-            if sub == PRESSPROJECT_VARS['CATEGORY_GREECE']:
-                #check if this articles is a video
-                video_article = response.xpath('//i[@class="title-icon video-icon fab fa-youtube"]').get()
-                if video_article is None:
-                    list_to_string = " ".join(" ".join(title))
-                    no_whites = re.sub(r'\t|\n',"",list_to_string)
-                    markspaces = re.sub( "       ", "space",no_whites)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_title = re.sub( "space", " ",uneeded_spaces)
-                    delete_front_space = re.sub("    ","",final_title)
-                    final_title = re.sub("   ","",delete_front_space)
-
-                    text = response.xpath('//div[@id="maintext"]//p/text()|//div[@id="maintext"]//strong/text()|//div[@id="maintext"]//p/*/text()').getall()
-                    list_to_string = " ".join(" ".join(text))
-                    markspaces = re.sub( "  ", "space",list_to_string)
-                    uneeded_spaces = re.sub( " ", "",markspaces)
-                    final_text = re.sub( "space", " ",uneeded_spaces)
-                    clear_characters = re.sub( "\xa0","",final_text)
-
-                    #flag to see later on if we have tweets ect
-                    flag = re.search(r"@",clear_characters)
-                    url = response.url
-                    date = response.xpath('//div[@class="article-date"]/label[1]/text()').get()
-                    final_date = formatdate(date)
-
-                    #check if we are in an article and that this article doesn't have any images
-                    if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
-                        yield {
-                            "subtopic": GENERAL_CATEGORIES['GREECE'],
-                            "website": PRESSPROJECT_VARS['AUTHOR'],
-                            "title": final_title,
-                            "article_date": final_date, 
-                            "author": PRESSPROJECT_VARS['AUTHOR'],
-                            "article_body": re.sub( r'\s\s\s',"",clear_characters),
-                            "url": url,                
-                        }
                     
     def parse_iefimerida(self,response):
         #check if we are in an articles url
