@@ -1,7 +1,8 @@
 # Change log
+
 All notable changes will be documented in this file.
 
-### 20/4/2020-20/5/2020
+## 20/4/2020-20/5/2020
 
 - spiders for cnn.gr, gazzetta.gr added
 - spider for reader.gr added
@@ -20,4 +21,14 @@ All notable changes will be documented in this file.
 - utilities.py added
 - pipeline.py fixes
 
-### 21/5/2020
+## 21/5/2020
+
+### UnderDev
+
+- middlewares in culture,economics,environment
+
+### Final
+
+### Added
+
+### Fixed
