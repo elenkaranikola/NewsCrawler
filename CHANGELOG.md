@@ -48,3 +48,19 @@ All notable changes will be documented in this file.
 ### Added
 
 ### Fixed
+
+## 26/5/2020
+
+### UnderDev
+
+### Final
+
+- max number of articles in all spider.
+
+### Added
+
+- replaced thepressproject.gr for newsit.gr .
+- middleware for controlling depth limit per domain.
+- data category named "topic".
+
+### Fixed
