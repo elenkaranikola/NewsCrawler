@@ -3,6 +3,7 @@
 In this repository we create a crawler using Scrapy. With this crawler, we extract articles from the given news sites, based on their subject. From each article, we are insterested in saving its author, context, date of publication and of course the articles text body. The extracted data is being saved in a local database, otherwise it can be stored in a csv file.
 
 ## Spiders subject:
+
 _Our crawler has 10 different spiders, one spider for each subject given bellow:_
 
     1. Greece
@@ -16,7 +17,8 @@ _Our crawler has 10 different spiders, one spider for each subject given bellow:
     9. Style
     10. Food
     
-## Used websites:
+## Used Websites:
+
 _The following 20 websites are being used to extract our articles:_
 
     - cnn.gr
@@ -40,7 +42,8 @@ _The following 20 websites are being used to extract our articles:_
     - insomnia.gr
     - popaganda.gr
 
-## Structure of the extracted data
+## Structure of the extracted data:
+
 _From each article we collect data concerning:_
 
     - topic
@@ -53,6 +56,7 @@ _From each article we collect data concerning:_
     - url of the specific article
 
 ## Commands to run this project:
+
 _In order to run our spider and save it's extracted data in a csv file do the following:_
 
 ```bash
@@ -71,6 +75,7 @@ _In order to run our spider and save it's extracted data in a csv file do the fo
 ```
 
 ## Project structure:
+
 _Code File description:_
 
     - reguirements.txt: Contains Pyhton libraries used for this project.
@@ -79,6 +84,3 @@ _Code File description:_
     - pipelines.py: Database credentials and connector.
     - settings.py: Custom settings for controlling our spiders.
     - utilities.py: Functions needed in our project.
-    
-   
-    
