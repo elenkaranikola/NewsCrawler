@@ -20,7 +20,7 @@ in_counter = 0
 newpost_counter = 0
 iefimerida_counter = 0
 
-class DogSpider(CrawlSpider):
+class StyleSpider(CrawlSpider):
     name = 'style'
     allowed_domains = [
         'newsit.gr',
@@ -34,25 +34,27 @@ class DogSpider(CrawlSpider):
         ]
     url = [
         'https://www.newsit.gr/category/lifestyle/',
-        'https://www.cnn.gr/style/politismos',
-        'https://www.thetoc.gr/',
-        'https://www.in.gr/'
+        'https://www.cnn.gr/style/moda',
+        'https://www.thetoc.gr/people-style',
+        'https://www.in.gr/life/'
         'https://newpost.gr/lifestyle',
         'https://www.iefimerida.gr',
         ]
     lifo_urls = ['https://www.lifo.gr/articles/design_articles']+['https://www.lifo.gr/articles/fashion_articles']+['https://www.lifo.gr/now/people/page:{}'.format(x) for x in range(1,LIFO_VARS['PEOPLE_PAGES'])]
     newpost_urls = ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,NEWPOST_VARS['STYLE_PAGES'])]
-    tanea_urls = ['https://www.tanea.gr/category/woman/page/{}'.format(x) for x in range(1,TANEA_VARS['WOMEN_PAGES'])]
+    tanea_urls = ['https://www.tanea.gr/category/woman/page/{}'.format(x) for x in range(1,TANEA_VARS['WOMEN_PAGES'])] +['https://www.tanea.gr/category/kid/page/{}'.format(x) for x in range(1,TANEA_VARS['CHILD_PAGES'])]
+    
     urls = url + newpost_urls + tanea_urls + lifo_urls
     start_urls = urls[:]
 
     rules = (
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+kid",r"\.tanea\.gr.+woman"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
         Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'),
-        Rule(LinkExtractor(allow=('https://www.iefimerida.gr/design|https://www.iefimerida.gr/gynaika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('/politismos/'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/design','iefimerida.gr/gynaika','iefimerida.gr/zoi','iefimerida.gr/poli'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('cnn.gr/style/moda'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
         Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
         Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 

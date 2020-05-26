@@ -26,8 +26,9 @@ in_counter = 0
 newpost_counter = 0
 iefimerida_counter = 0
 
-class DogSpider(CrawlSpider):
-    name =GENERAL_CATEGORIES['TECH']
+class TechSpider(CrawlSpider):
+    name ='tech'
+    handle_httpstatus_list = [301, 302]
     allowed_domains = [
         'newsit.gr',
         'popaganda.gr',
@@ -48,22 +49,23 @@ class DogSpider(CrawlSpider):
         'https://popaganda.gr/newstrack/technews/',
         'https://www.insomnia.gr/articles/',
         'https://www.naftemporiki.gr/techscience',
-        'https://www.cnn.gr/',
+        'https://www.cnn.gr/tech',
         'https://www.protagon.gr/themata/',
         'https://www.in.gr/tech/',
         'https://newpost.gr/tech',
-        'https://www.iefimerida.gr',
         ]
+    iefimerida_url = ['https://www.iefimerida.gr/tehnologia?page={}'.format(x) for x in range(0,IEFIMERIDA_VARS['TECH_PAGES'])]
     lifo_urls = ['https://www.lifo.gr/now/tech_science/page:{}'.format(x) for x in range(1,LIFO_VARS['TECH_PAGES'])]
-    newpost_urls = ['http://newpost.gr/tech?page={}'.format(x) for x in range(1,1266)]
+    newpost_urls = ['http://newpost.gr/tech?page={}'.format(x) for x in range(1,NEWPOST_VARS['TECH_PAGES'])]
     tanea_urls = ['https://www.tanea.gr/category/science-technology/page/{}'.format(x) for x in range(1,TANEA_VARS['SCIENCE_PAGES'])]
     tovima_urls = ['https://www.tovima.gr/category/science/page/{}'.format(x) for x in range(1,TOVIMA_VARS['SCIENCE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1385128351&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['SCIENCE_PAGES'])] + ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_1149063040&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['TECH_PAGES'])]
-    urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls
+    urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + iefimerida_url
     start_urls = urls[:]
+    
 
     rules = (
-        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+texnologia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+texnologia/"), deny=()), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','culture','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=('insomnia.gr/articles/'), deny=('page', )), callback='parse_insomnia', follow=True ,process_request='process_insomnia'),
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+tech_science/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
@@ -96,15 +98,20 @@ class DogSpider(CrawlSpider):
             final_text = re.sub( "space", " ",uneeded_spaces)
             clear_characters = re.sub("\xa0","",final_text)
 
+            if len(final_text)<10:
+                text = response.xpath('//div[@class="entry-content"]//p/text()|//div[@class="entry-content"]//strong/text()|//div[@class="entry-content"]//h3/text()|//div[@class="entry-content"]//p/*/text()').getall()
+                list_to_string = " ".join(" ".join(text))
+                markspaces = re.sub( "  ", "space",list_to_string)
+                uneeded_spaces = re.sub( " ", "",markspaces)
+                final_text = re.sub( "space", " ",uneeded_spaces)
+                clear_characters = re.sub("\xa0","",final_text)
+
+
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
 
-            #flag to see later on if we have tweets ect
-            flag = re.search(r"@",clear_characters)
-            url = response.url
-
             #check if we are in an article, and if it doesn't have images
-            if len(final_text)>10 and flag is None:
+            if len(final_text)>10 :
                 newsit_counter += 1
                 yield {
                     "topic": GENERAL_CATEGORIES['TECH'],
@@ -114,7 +121,7 @@ class DogSpider(CrawlSpider):
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
                     "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
-                    "url": url,                
+                    "url": response.url,                
                 }
 
     def process_newsit(self, request):

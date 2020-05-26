@@ -15,7 +15,7 @@ SPIDER_MODULES = ['NewsCrawler.spiders']
 NEWSPIDER_MODULE = 'NewsCrawler.spiders'
 
 #DEPTH_LIMIT = 3
-DOMAIN_DEPTHS = {'naftemporiki.gr': 0,'topontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'periodista.gr':1, 'lifo.gr': 1, 'kathimerini.gr':1, 'tanea.gr':1, 'popaganda':3}
+DOMAIN_DEPTHS = {'naftemporiki.gr': 0,'topontiki.gr': 1, 'efsyn.gr': 1, 'tovima.gr':1, 'periodista.gr':1, 'kathimerini.gr':1, 'popaganda':3}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
 
@@ -109,12 +109,12 @@ DB_CREDS = {
 #-------------------------------------------------------------------------------------
 
 PERIODISTA_VARS = {
-   'WEBSITE': "peridista.gr",
-	'ECONOMY_PAGES':10,
-	'GREECE_PAGES':10,
-	'POLITICS_PAGES':10,
-   'WORLD_PAGES':10,
-   'SPORT_PAGES':10,
+   'WEBSITE': "periodista.gr",
+	'ECONOMY_PAGES':390,
+	'GREECE_PAGES':390,
+	'POLITICS_PAGES':390,
+   'WORLD_PAGES':390,
+   'SPORT_PAGES':390,
 }
 
 SPORT24_VARS = {
@@ -127,7 +127,9 @@ GAZZEETTA_VARS = {
 
 
 IEFIMERIDA_VARS = {
-   'AUTHOR': "iefimerida.gr"
+   'AUTHOR': "iefimerida.gr",
+   'ENVIRONMENT_PAGES': 20,
+   'TECH_PAGES': 20,
 }
 
 TANEA_VARS = {
@@ -138,7 +140,9 @@ TANEA_VARS = {
    'CULTURE_PAGES': 12,
    'FOOD_PAGES': 5,
    'WOMEN_PAGES': 3,
+   'CHILD_PAGES': 2,
    'SCIENCE_PAGES': 8,
+   'ECONOMICS_PAGES': 10,
    'CATEGORY_CULTURE': "culture",
    'CATEGORY_STYLE': "Woman",
 }
@@ -146,7 +150,7 @@ TANEA_VARS = {
 TOVIMA_VARS = {
    'AUTHOR': "tovima.gr",
    'POLITICS_PAGES': 15,
-   'WORLD_PAGES': 15,
+   'WORLD_PAGES': 20,
    'GREECE_PAGES': 15,
    'SCIENCE_PAGES': 15,
    'ECONOMICS_PAGES': 15,
@@ -160,7 +164,7 @@ KATHIMERINI_VARS = {
    'AUTHOR': "kathimerini.gr",
    'GREECE_PAGES': 27,
    'WORLD_PAGES': 38,
-   'ENVIRONMENT_PAGES': 20,
+   'ENVIRONMENT_PAGES': 30,
    'TECH_PAGES': 10,
    'SCIENCE_PAGES': 30,
    'SPORT_PAGES': 38,
@@ -187,7 +191,7 @@ LIFO_VARS = {
    'ENVIRONMENT_PAGES': 14,
    'POLITICS_PAGES': 14,
    'CULTURE_PAGES': 20,
-   'WORLD_PAGES': 14,
+   'WORLD_PAGES': 20,
    'TECH_PAGES': 14,
    'PEOPLE_PAGES': 14,
    'CATEGORY_TECH': "Tech & Science",
@@ -209,10 +213,10 @@ EFSYN_VARS = {
    'GREECE': "Greece",
    'WORLD': "World",
    'ART': "Culture",
-   'POLITICS_PAGES': 20,
-   'ECONOMICS_PAGES': 20,
+   'POLITICS_PAGES': 120,
+   'ECONOMICS_PAGES': 30,
    'GREECE_PAGES': 20,
-   'WORLD_PAGES': 20,
+   'WORLD_PAGES': 120,
    'ART_PAGES': 25,
 }
 
@@ -234,11 +238,12 @@ POPAGANDA_VARS = {
 }
 
 TOPONTIKI_VARS = {
+   'GREECE_PAGES': 15,
    'POLITICS_PAGES': 15,
    'ECONOMICS_PAGES': 15,
    'ENVIRONMENT_PAGES': 15,
    'SPORT_PAGES': 15,
-   'WORLD_PAGES': 15,
+   'WORLD_PAGES': 25,
    'CULTURE_PAGES': 15,
    'WEBSITE': "topontiki.gr",
    'CATEGORY_ECONOMICS': "ΟΙΚΟΝΟΜΙΑ",
@@ -276,15 +281,16 @@ PROTAGON_VARS = {
    'CATEGORY_POLITICS': "Πολιτική",
    'CATEGORY_ENVIRONMENT': "Περιβάλλον",
    'CATEGORY_ECONOMICS': "Οικονομία",
-   'CATEGORY_GREECE': "Greece",
+   'CATEGORY_GREECE': "Ελλάδα",
    'CATEGORY_CULTURE': "Πολιτισμός",
    'CATEGORY_WORLD': "Κόσμος",
 }
 
 NEWPOST_VARS = {
-   'WORLD_PAGES': 33,
+   'TECH_PAGES' : 33,
+   'WORLD_PAGES': 38,
    'STYLE_PAGES': 33,
-   'SPORT_PAGES': 33,
+   'SPORT_PAGES': 66,
    'ECONOMICS_PAGES': 33,
    'CULTURE_PAGES': 38,
    'FOOD_PAGES': 33,
@@ -296,7 +302,7 @@ NEWPOST_VARS = {
 CNN_VARS = {
    'ARTICLE_TYPE': "story",
    'CNN_CULTURE_PAGES': 70,
-   'CNN_STYLE_PAGES': 70,
+   'CNN_STYLE_PAGES': 600,
    'WEBSITE': "cnn.gr",
 }
 

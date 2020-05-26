@@ -58,23 +58,25 @@ class GreeceSpider(CrawlSpider):
         'https://popaganda.gr/newstrack/greece-newstrack/',
         'https://www.lifo.gr/now/greece',
         'https://www.naftemporiki.gr/society',
-        'https://www.iefimerida.gr',
-        'http://www.periodista.gr/',
-        'https://www.cnn.gr/',
+        'https://www.iefimerida.gr/ellada',
+        'http://www.periodista.gr/koinwnia',
+        'https://www.cnn.gr/news/ellada',
         'https://www.reader.gr/news/koinonia',
-        'https://www.thetoc.gr/',
+        'https://www.thetoc.gr/koinwnia',
         'https://www.protagon.gr/epikairotita/ellada',
         'https://www.in.gr/greece/',
         'https://newpost.gr/ellada/',
-        'https://www.tanea.gr',
+        'https://www.tanea.gr/category/greece/',
         ]
+    topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
     efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
     tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
     newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
     periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
-    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls
+    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
     start_urls = urls[:]
+    
 
     rules = (
         Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 

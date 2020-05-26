@@ -48,17 +48,17 @@ class EconomicSpider(CrawlSpider):
         ]
     url = [
         'https://www.naftemporiki.gr/finance/economy',
-        'https://www.tanea.gr',
+        'https://www.tanea.gr/category/economy/',
         'https://www.cnn.gr/',
         'https://www.reader.gr/news/oikonomia',
         'https://www.thetoc.gr/',
         'https://www.protagon.gr/epikairotita/',
-        'http://www.periodista.gr/oikonomia',
         'https://www.in.gr/economy/',
         'http://newpost.gr/',
         'https://www.newsit.gr/category/oikonomia/',
         'https://www.iefimerida.gr',
-        ]
+       ]
+    tanea_urls = ['https://www.tanea.gr/category/economy/economy-greece/page/{}'.format(x) for x in range(1,TANEA_VARS['ECONOMICS_PAGES'])]
     topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
     efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
     to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
@@ -67,16 +67,17 @@ class EconomicSpider(CrawlSpider):
     urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls + topontiki_urls
     start_urls = urls[:]
 
+
     rules = (
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/','efsyn.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
         Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'),
         Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
         Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
         Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
-        Rule(LinkExtractor(allow=('cnn.gr/oikonomia'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
+        Rule(LinkExtractor(allow=('cnn.gr/oikonomia/article'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
         Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
         Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
@@ -587,6 +588,8 @@ class EconomicSpider(CrawlSpider):
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
                 if author == None:
                     author = response.xpath('//div[@class="article__author"]/span/text()').get()
+                    if author ==  None:
+                        author = EFSYN_VARS['WEBSITE']
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)

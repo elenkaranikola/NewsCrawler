@@ -51,16 +51,16 @@ class PoliticsSpider(CrawlSpider):
         ]
     url = [
         'https://www.naftemporiki.gr/politics',
-        'https://www.tanea.gr',
-        'https://www.cnn.gr/',
-        'https://www.reader.gr',
-        'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/',
+        'https://www.tanea.gr/category/politics/',
+        'https://www.cnn.gr/news/politiki',
+        'https://www.reader.gr/news/politiki',
+        'https://www.thetoc.gr/politiki',
+        'https://www.protagon.gr/epikairotita/politiki',
         'https://www.in.gr/politics/',
-        'http://www.periodista.gr/',
-        'http://newpost.gr/',
+        'http://www.periodista.gr/politiki',
+        'https://newpost.gr/politiki',
         'https://www.newsit.gr/category/politikh/',
-        'https://www.iefimerida.gr',
+        'https://www.iefimerida.gr/politiki',
         ]
     topontiki_urls = ['http://www.topontiki.gr/category/politiki?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['POLITICS_PAGES'])]
     efsyn_urls = ['https://www.efsyn.gr/politiki?page={}'.format(x) for x in range(1,EFSYN_VARS['POLITICS_PAGES'])]
@@ -71,6 +71,7 @@ class PoliticsSpider(CrawlSpider):
     tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
     urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
     start_urls = urls[:]
+    
 
     rules = (
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 

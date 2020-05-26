@@ -36,13 +36,14 @@ class EnvironmentSpider(CrawlSpider):
         'https://popaganda.gr/newstrack/environment/',
         'https://www.naftemporiki.gr/green',
         'https://www.cnn.gr/',
-        'https://www.protagon.gr/epikairotita/',
+        'https://www.protagon.gr/epikairotita/perivallon-epikairotita',
         'https://www.iefimerida.gr',
         ]
+    iefimerida_url = ['https://www.iefimerida.gr/green?page={}'.format(x) for x in range(0,IEFIMERIDA_VARS['ENVIRONMENT_PAGES'])]
     topontiki_urls = ['http://www.topontiki.gr/category/perivallon?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ENVIRONMENT_PAGES'])]
     lifo_urls = ['https://www.lifo.gr/now/perivallon/page:{}'.format(x) for x in range(1,LIFO_VARS['ENVIRONMENT_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1194114316&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['ENVIRONMENT_PAGES'])]
-    urls = url + kathimerini_urls + lifo_urls + topontiki_urls
+    urls = url + kathimerini_urls + lifo_urls + topontiki_urls + iefimerida_url
     start_urls = urls[:]
 
     rules = (
@@ -52,7 +53,7 @@ class EnvironmentSpider(CrawlSpider):
         Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+environment_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/perivallon/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        Rule(LinkExtractor(allow=('https://www.iefimerida.gr/green'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/green'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
         Rule(LinkExtractor(allow=('cnn.gr/news/perivallon')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'), 
         )
@@ -100,7 +101,7 @@ class EnvironmentSpider(CrawlSpider):
         if title is not None and protagon_counter < 300 :
             #check if we are in the correct category
             sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
-            if sub == PROTAGON_VARS['ENVIRONMENT']:
+            if sub == PROTAGON_VARS['CATEGORY_ENVIRONMENT']:
                 #get the article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
                 list_to_string = " ".join(" ".join(text))

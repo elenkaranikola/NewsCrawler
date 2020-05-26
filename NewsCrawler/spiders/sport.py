@@ -57,13 +57,13 @@ class SportSpider(CrawlSpider):
         'https://www.newsit.gr/category/athlitika/',
         'https://popaganda.gr/newstrack/sports/',
         'https://www.naftemporiki.gr/sports',
-        'https://www.tanea.gr',
-        'https://www.iefimerida.gr',
+        'https://www.tanea.gr/category/sports/',
+        'https://www.iefimerida.gr/spor',
         'http://www.gazzetta.gr/',
         'https://www.sport24.gr',
-        'https://www.cnn.gr',
+        'https://www.cnn.gr/news/sports',
         'https://www.reader.gr/athlitismos',
-        'https://www.thetoc.gr/',
+        'https://www.thetoc.gr/athlitika',
         'https://www.protagon.gr/epikairotita/',
         'https://www.in.gr/sports/',
         'https://newpost.gr/athlitika',
@@ -81,19 +81,18 @@ class SportSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
         Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','culture','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
-        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/a8lhtismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='kathimerini'), 
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/a8lhtismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
         Rule(LinkExtractor(allow=(r"\.tovima\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
         Rule(LinkExtractor(allow=('iefimerida.gr/spor'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=(r"gaz.+/football/.+article/",r"gaz.+/basketball/.+article/",r"gaz.+/f/other-sports/.+article/",r"gaz.+/volleyball/.+article/",r"gaz.+/tennis/.+article/",), deny=('power-rankings/')), callback='parse_gazzetta', follow=True ,process_request='process_gazzeta'),    
-        Rule(LinkExtractor(allow=('sport24.gr/football/','sport24.gr/sports/','sport24.gr/Basket/'), 
-        deny=('vid','gallery','pic')),callback='parse_sport24', follow=True ,process_request='process_sport24'),
+        Rule(LinkExtractor(allow=(r"gaz.+/football/",r"gaz.+/basketball/",r"gaz.+/other-sports/",r"gaz.+/volleyball/",r"gaz.+/tennis/",), deny=('power-rankings/')), callback='parse_gazzetta', follow=True ,process_request='process_gazzeta'),    
+        Rule(LinkExtractor(allow=('sport24.gr/football/','sport24.gr/sports/','sport24.gr/Basket/'), deny=('vid','gallery','pic')),callback='parse_sport24', follow=True ,process_request='process_sport24'),
         Rule(LinkExtractor(allow=('cnn.gr/news/sports')),callback='parse_cnn', follow=True ,process_request='process_cnn'),
         Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parse_reader_crawl', follow=True ,process_request='process_reader'),
         Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
         Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
         Rule(LinkExtractor(allow=(r"\.in\.gr.+/sports/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/athlitika/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),
+        Rule(LinkExtractor(allow=('newpost.gr/athlitika/'), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),
         Rule(LinkExtractor(allow=('periodista.gr/athlhtika-paraskhnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
         )
 
@@ -145,7 +144,7 @@ class SportSpider(CrawlSpider):
         global sport24_counter
         #check if we are in an articles url
         title = response.xpath('//div[@class="storyContent"]/h1/text()').get()
-        if title is not None and sport24_counter:
+        if title is not None and sport24_counter < 300:
             #get article's text
             text = response.xpath('//div[@itemprop="articleBody"]//p/text()|//div[@itemprop="articleBody"]//h3/text()|//div[@itemprop="articleBody"]//p/*/text()').getall()
             list_to_string = " ".join(" ".join(text))
@@ -156,24 +155,25 @@ class SportSpider(CrawlSpider):
             clear_escape = re.sub(r'\n|\t',"",clear_characters)
 
             date = response.xpath('//span[@class="byline_date"]/b/text()').get()
-            final_date = formatdate(date)
+            fix_date = re.search(r"(\d+).(\w+)\..(\d+)",date).group(0)
+            nodot_date = re.sub(r"\.","",fix_date)
+            final_date = formatdate(nodot_date)
 
             #flag to see later on if we have tweets ect
-            flag = re.search(r"@",clear_escape)
+            #flag = re.search(r"@",clear_escape)
             url = response.url
             subtopic = url.split('/')[3]
-            if flag is None:
-                sport24_counter += 1
-                yield {
-                    "topic": GENERAL_CATEGORIES['SPORT'],
-                    "subtopic": subtopic,
-                    "website" : SPORT24_VARS['WEBSITE'],
-                    "title": title,
-                    "article_date": final_date,
-                    "author": response.xpath('//span[@class="byline_author"]/b/text()').get(),
-                    "article_body": clear_escape, 
-                    "url": url
-                }
+            sport24_counter += 1
+            yield {
+                "topic": GENERAL_CATEGORIES['SPORT'],
+                "subtopic": subtopic,
+                "website" : SPORT24_VARS['WEBSITE'],
+                "title": title,
+                "article_date": final_date,
+                "author": response.xpath('//span[@class="byline_author"]/b/text()').get(),
+                "article_body": clear_escape, 
+                "url": url
+            }
 
     def process_sport24(self, request):
         global sport24_counter
@@ -186,7 +186,6 @@ class SportSpider(CrawlSpider):
         #check if we are in an articles url
         title = response.xpath('//div[@class="field-item even"]/h1/text()').get()
         if title is not None and gazzetta_counter < 300:
-            gazzetta_counter += 1
             # extract subtitle by splitting our url by '/'
             # and keeping the third object on our created list
             url = response.url
@@ -200,22 +199,35 @@ class SportSpider(CrawlSpider):
                     author = temp
                 else:
                     author = GAZZEETTA_VARS['WEBSITE']
-            else:
+            elif author is None:
                 author = response.xpath('//h3[@class="blogger-social"]/a/text()').get()
+            else:
+                author = GAZZEETTA_VARS['WEBSITE']
 
             date = response.xpath('//div[@class="article_date"]/text()').get()
             final_date = formatdate(date)
 
-            yield {
-                "topic": GENERAL_CATEGORIES['SPORT'],
-                "subtopic": subtopic,
-                "website": GAZZEETTA_VARS['WEBSITE'],
-                "title": title,
-                "article_date": final_date,
-                "author": author,
-                "article_body": response.xpath('//div[@itemprop="articleBody"]//p/text()|//p/a/text()|//p/strong/text()').getall() ,#|//div[@itemprop="articleBody"]//p/a/text()|div[@itemprop="articleBody"]//p/strong/text()').getall(),
-                "url": url
-            }
+            text = response.xpath('//div[@itemprop="articleBody"]//p/text()|//p/a/text()|//p/strong/text()').getall()
+            list_to_string = " ".join(" ".join(text))
+            markspaces = re.sub( "  ", "space",list_to_string)
+            uneeded_spaces = re.sub( " ", "",markspaces)
+            final_text = re.sub( "space", " ",uneeded_spaces)
+            clear_characters = re.sub( "\xa0","",final_text)
+            clear_escape = re.sub(r'\n|\t',"",clear_characters)
+
+            flag = re.search(r"@",clear_escape)
+            if flag is None:
+                gazzetta_counter += 1
+                yield {
+                    "topic": GENERAL_CATEGORIES['SPORT'],
+                    "subtopic": subtopic,
+                    "website": GAZZEETTA_VARS['WEBSITE'],
+                    "title": title,
+                    "article_date": final_date,
+                    "author": author,
+                    "article_body": clear_escape ,
+                    "url": url
+                }
 
     def process_gazzeta(self, request):
         global gazzetta_counter
@@ -382,7 +394,7 @@ class SportSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",text),
+                        "article_body": re.sub( r'\s\s\s',"",final_text),
                         "url": url,                
                     }
 
