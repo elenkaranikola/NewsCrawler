@@ -1,6 +1,6 @@
 # News Crawler
 
-In this repository we create a crawler using scrapy. With the crawler we extract articles from the given news sites based on their subject. From each article we are insterested in saving its author, context, date of publication and of course the articles text body. The extracted data is being saved in a local database, otherwise we can store them in a csv file.
+In this repository we create a crawler using Scrapy. With the crawler we extract articles from the given news sites based on their subject. From each article we are insterested in saving its author, context, date of publication and of course the articles text body. The extracted data is being saved in a local database, otherwise we can store them in a csv file.
 
 ## Spiders subject:
 _Our crawler has 10 different spiders, one spider for each subject given bellow:_
