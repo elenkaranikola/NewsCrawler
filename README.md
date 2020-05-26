@@ -57,7 +57,7 @@ _From each article we collect data concerning:_
 
 ## Commands to run this project:
 
-_In order to run our spider and save it's extracted data in a csv file do the following:_
+_In order to run our spider and save it's extracted data in a csv file, do the following:_
 
 ```bash
   1. $ pip install -r requirements.txt
