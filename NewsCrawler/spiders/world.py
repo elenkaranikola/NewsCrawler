@@ -51,49 +51,48 @@ class WorldSpider(CrawlSpider):
         'newsit.gr',
         'iefimerida.gr',
         ]
-    #url = [
-    #    'https://popaganda.gr/newstrack/world/',
-    #    'https://www.naftemporiki.gr/world',
-    #    'https://www.tanea.gr/category/world/',
-    #    'https://www.cnn.gr/news/kosmos',
-    #    'https://www.reader.gr/news/diethni',
-    #    'https://www.thetoc.gr/diethni',
-    #    'https://www.protagon.gr/epikairotita/',
-    #    'http://www.periodista.gr/kosmos',
-    #    'https://www.in.gr/world/',
-    #    'https://www.newsit.gr/category/kosmos/',
-    #    'https://www.iefimerida.gr/kosmos',
-    #    ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/kosmos?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['WORLD_PAGES'])]
+    url = [
+        'https://popaganda.gr/newstrack/world/',
+        'https://www.naftemporiki.gr/world',
+        'https://www.tanea.gr/category/world/',
+        'https://www.cnn.gr/news/kosmos',
+        'https://www.reader.gr/news/diethni',
+        'https://www.thetoc.gr/diethni',
+        'https://www.protagon.gr/epikairotita/',
+        'http://www.periodista.gr/kosmos',
+        'https://www.in.gr/world/',
+        'https://www.newsit.gr/category/kosmos/',
+        'https://www.iefimerida.gr/kosmos',
+        ]
+    topontiki_urls = ['http://www.topontiki.gr/category/kosmos?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['WORLD_PAGES'])]
     efsyn_urls = ['https://www.efsyn.gr/kosmos?page={}'.format(x) for x in range(1,EFSYN_VARS['WORLD_PAGES'])]
-    #lifo_urls = ['https://www.lifo.gr/now/world/page:{}'.format(x) for x in range(1,LIFO_VARS['WORLD_PAGES'])]
-    #kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['WORLD_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,NEWPOST_VARS['WORLD_PAGES'])]
-    #periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],GENERAL_CATEGORIES['ALLOWED_LENGTH'])]
-    #tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
-    #urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
-    #start_urls = urls[:]
-    start_urls =  efsyn_urls
+    lifo_urls = ['https://www.lifo.gr/now/world/page:{}'.format(x) for x in range(1,LIFO_VARS['WORLD_PAGES'])]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['WORLD_PAGES'])]
+    newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,NEWPOST_VARS['WORLD_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],GENERAL_CATEGORIES['ALLOWED_LENGTH'])]
+    tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
+    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
+    start_urls = urls[:]
 
 
     rules = (
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','culture','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','culture','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
         Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+world/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
-        #Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        #Rule(LinkExtractor(allow=('iefimerida.gr/kosmos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=(r"\.newsit\.gr.+kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        #Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
-        #Rule(LinkExtractor(allow=('cnn.gr/news/kosmos'), deny=('cnn.gr/news/kosmos/gallery/','protoselida')), callback='parce_cnn', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'), 
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r".in\.gr.+/world/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow= True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+world/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/kosmos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
+        Rule(LinkExtractor(allow=('cnn.gr/news/kosmos'), deny=('cnn.gr/news/kosmos/gallery/','protoselida')), callback='parce_cnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
+        Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'), 
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r".in\.gr.+/world/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow= True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 #function to crawl cnn.gr    
     def parce_cnn(self,response):
