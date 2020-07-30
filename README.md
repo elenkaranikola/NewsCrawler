@@ -37,7 +37,7 @@ _The following 20 websites are being used to extract our articles:_
     - kathimerini.gr
     - naftemporiki.gr
     - lifo.gr
-    - newsit.gr
+    - efsyn.gr
     - topontiki.gr
     - insomnia.gr
     - popaganda.gr
