@@ -31,58 +31,61 @@ newpost_counter = 0
 class EconomicSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
-        'topontiki.gr',
-        'efsyn.gr',
-        'naftemporiki.gr',
-        'tovima.gr',
+#        'topontiki.gr',
+#        'efsyn.gr',
+#        'naftemporiki.gr',
+#        'tovima.gr',
         'tanea.gr',
-        'cnn.gr',
-        'reader.gr',
-        'thetoc.gr',
-        'protagon.gr',
-        'periodista.gr',
-        'in.gr',
-        'newpost.gr',
-        'newsit.gr',
-        'iefimerida.gr',
-        ]
-    url = [
-        'https://www.naftemporiki.gr/finance/economy',
-        'https://www.tanea.gr/category/economy/',
-        'https://www.cnn.gr/',
-        'https://www.reader.gr/news/oikonomia',
-        'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/',
-        'https://www.in.gr/economy/',
-        'http://newpost.gr/',
-        'https://www.newsit.gr/category/oikonomia/',
-        'https://www.iefimerida.gr',
-       ]
+#        'cnn.gr',
+#        'reader.gr',
+#    'thetoc.gr',
+#        'protagon.gr',
+#        'periodista.gr',
+#        'in.gr',
+#        'newpost.gr',
+#        'newsit.gr',
+#        'iefimerida.gr',
+    ]
+#    url = [
+#        'https://www.naftemporiki.gr/finance/economy',
+#        'https://www.tanea.gr/category/economy/',
+#        'https://www.cnn.gr/',
+#        'https://www.reader.gr/news/oikonomia',
+#        'https://www.thetoc.gr/',
+#        'https://www.protagon.gr/epikairotita/',
+#        'https://www.in.gr/economy/',
+#        'http://newpost.gr/',
+#        'https://www.newsit.gr/category/oikonomia/',
+#        'https://www.iefimerida.gr',
+#       ]
     tanea_urls = ['https://www.tanea.gr/category/economy/economy-greece/page/{}'.format(x) for x in range(1,TANEA_VARS['ECONOMICS_PAGES'])]
-    topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
-    efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
-    to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
-    newpost_urls = ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,NEWPOST_VARS['ECONOMICS_PAGES'])]
-    periodista_urls = ['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
-    urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls + topontiki_urls
-    start_urls = urls[:]
+#    topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
+#    efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
+#    to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
+#    newpost_urls = ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,NEWPOST_VARS['ECONOMICS_PAGES'])]
+#    periodista_urls = ['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
+#    thetoc_urls = ['https://www.thetoc.gr/oikonomia/?page={}'.format(x) for x in range(0,THETOC_VARS['ECONOMICS_PAGES'])]
+#    urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls + topontiki_urls
+#    start_urls = urls[:]
+
+    start_urls = ['https://www.tanea.gr/category/economy/'] + tanea_urls
 
 
     rules = (
-        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/','efsyn.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_naftemporiki'), 
-        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        #Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/','efsyn.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        #Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_naftemporiki'), 
+        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'),
-        Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
-        Rule(LinkExtractor(allow=('cnn.gr/oikonomia/article'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
-        Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
-        Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r"newpost.gr/oikonomia/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        #Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        #Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        #Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
+        #Rule(LinkExtractor(allow=('cnn.gr/oikonomia/article'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
+        #Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
+        #Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        #Rule(LinkExtractor(allow=(r"newpost.gr/oikonomia/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_cnn(self,response):
@@ -165,11 +168,10 @@ class EconomicSpider(CrawlSpider):
         title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
         if title is not None and thetoc_counter < 300:
             text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
             final_date = THETOC_VARS['full_date'] +formatdate(date)
@@ -184,7 +186,7 @@ class EconomicSpider(CrawlSpider):
                     "title": title,
                     "article_date":final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_thetoc(self, request):
@@ -243,11 +245,10 @@ class EconomicSpider(CrawlSpider):
         title = response.xpath('//h1[@itemprop="headline"]/text()').get() 
         if title is not None and periodista_counter < 300 :
             text = response.xpath('//div[@class="per-item-page-part per-article-body"]//p/text()|//div[@class="per-item-page-part per-article-body"]//strong/text()|//div[@class="per-item-page-part per-article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()
             final_date = formatdate(date)
@@ -266,7 +267,7 @@ class EconomicSpider(CrawlSpider):
                     "title": re.sub( r'\t|\n|\r',"",title),
                     "article_date": final_date, 
                     "author": "periodista.gr",
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }  
     def process_periodista(self, request):
@@ -446,11 +447,10 @@ class EconomicSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
             final_date = formatdate(date)
@@ -460,7 +460,7 @@ class EconomicSpider(CrawlSpider):
             url = response.url
 
             #check if we are in an article and that it doesn't have any images
-            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
                     "topic": GENERAL_CATEGORIES['ECONOMICS'],
@@ -469,7 +469,7 @@ class EconomicSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_tanea(self, request):
@@ -489,11 +489,10 @@ class EconomicSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub("\xa0"," ",final_text)
 
             date = response.xpath('//time/span/text()').get()
             final_date = formatdate(date)
@@ -512,7 +511,7 @@ class EconomicSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_tovima(self, request):
@@ -625,38 +624,32 @@ class EconomicSpider(CrawlSpider):
             #check if we are in the correct category
             sub = response.xpath('//h2/a/text()').get()
             if sub == TOPONTIKI_VARS['CATEGORY_ECONOMICS']:
-                 
-                list_to_string = " ".join(" ".join(title))
-                markspaces = re.sub( "       ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+                
+                from_list_to_string_title = "".join(title)
 
                 text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = final_text.replace("\xa0","")
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
 
                 date = response.xpath('//span[@class="date"]/text()').get()
                 final_date = formatdate(date)
 
                 #flag to see later on if we have tweets ect
-                flag = re.search(r"@",clear_characters)
+                flag = re.search(r"@",final_text)
                 url = response.url
                 
                 #check if we are in an article and that it doesn't have any images
-                if title is not None and len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                if from_list_to_string_title is not None and len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
                         "topic": GENERAL_CATEGORIES['ECONOMICS'],
                         "subtopic": GENERAL_CATEGORIES['ECONOMICS'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
-                        "title": final_title,
+                        "title": from_list_to_string_title,
                         "article_date": final_date, 
                         "author": TOPONTIKI_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": re.sub( r'\s\s\s|\n',"",final_text),
                         "url": url,                
                     }
     def process_topontiki(self, request):

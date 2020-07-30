@@ -23,41 +23,41 @@ iefimerida_counter = 0
 class StyleSpider(CrawlSpider):
     name = 'style'
     allowed_domains = [
-        'newsit.gr',
-        'lifo.gr',
+        #'newsit.gr',
+        #'lifo.gr',
         'tanea.gr',
-        'cnn.gr',
-        'thetoc.gr',
-        'in.gr',
-        'newpost.gr',
-        'iefimerida.gr',
+        #'cnn.gr',
+        #'thetoc.gr',
+        #'in.gr',
+        #'newpost.gr',
+        #'iefimerida.gr',
         ]
-    url = [
-        'https://www.newsit.gr/category/lifestyle/',
-        'https://www.cnn.gr/style/moda',
-        'https://www.thetoc.gr/people-style',
-        'https://www.in.gr/life/'
-        'https://newpost.gr/lifestyle',
-        'https://www.iefimerida.gr',
-        ]
-    lifo_urls = ['https://www.lifo.gr/articles/design_articles']+['https://www.lifo.gr/articles/fashion_articles']+['https://www.lifo.gr/now/people/page:{}'.format(x) for x in range(1,LIFO_VARS['PEOPLE_PAGES'])]
-    newpost_urls = ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,NEWPOST_VARS['STYLE_PAGES'])]
+    #url = [
+    #    'https://www.newsit.gr/category/lifestyle/',
+    #    'https://www.cnn.gr/style/moda',
+    #    'https://www.thetoc.gr/people-style',
+    #    'https://www.in.gr/life/'
+    #    'https://newpost.gr/lifestyle',
+    #    'https://www.iefimerida.gr',
+    #    ]
+    #lifo_urls = ['https://www.lifo.gr/articles/design_articles']+['https://www.lifo.gr/articles/fashion_articles']+['https://www.lifo.gr/now/people/page:{}'.format(x) for x in range(1,LIFO_VARS['PEOPLE_PAGES'])]
+    #newpost_urls = ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,NEWPOST_VARS['STYLE_PAGES'])]
     tanea_urls = ['https://www.tanea.gr/category/woman/page/{}'.format(x) for x in range(1,TANEA_VARS['WOMEN_PAGES'])] +['https://www.tanea.gr/category/kid/page/{}'.format(x) for x in range(1,TANEA_VARS['CHILD_PAGES'])]
-    
-    urls = url + newpost_urls + tanea_urls + lifo_urls
-    start_urls = urls[:]
-
+    #
+    #urls = url + newpost_urls + tanea_urls + lifo_urls
+    #start_urls = urls[:]
+    start_urls = tanea_urls
     rules = (
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+kid",r"\.tanea\.gr.+woman"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'),
-        Rule(LinkExtractor(allow=('iefimerida.gr/design','iefimerida.gr/gynaika','iefimerida.gr/zoi','iefimerida.gr/poli'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('cnn.gr/style/moda'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
-        Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
-        Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+    #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'),
+    #    Rule(LinkExtractor(allow=('iefimerida.gr/design','iefimerida.gr/gynaika','iefimerida.gr/zoi','iefimerida.gr/poli'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+    #    Rule(LinkExtractor(allow=('cnn.gr/style/moda'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
+    #    Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+    #    Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
+    #    Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_newsit(self,response):
@@ -160,11 +160,10 @@ class StyleSpider(CrawlSpider):
         if title is not None and thetoc_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
             final_date = THETOC_VARS['full_date'] +formatdate(date)
@@ -182,7 +181,7 @@ class StyleSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_thetoc(self, request):
@@ -324,11 +323,10 @@ class StyleSpider(CrawlSpider):
 
             #get article's text
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
             final_date = formatdate(date)
@@ -338,7 +336,7 @@ class StyleSpider(CrawlSpider):
             url = response.url
             
             #check if we are in an article and that it doesn't have images
-            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter += 1
                 yield {
                     "topic": GENERAL_CATEGORIES['STYLE'],
@@ -347,7 +345,7 @@ class StyleSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 

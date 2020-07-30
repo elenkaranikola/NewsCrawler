@@ -23,39 +23,42 @@ iefimerida_counter = 0
 class EnvironmentSpider(CrawlSpider):
     name = 'environment'
     allowed_domains = [
-        'topontiki.gr',
-        'popaganda.gr',
-        'lifo.gr',
-        'naftemporiki.gr',
+        #'topontiki.gr',
+        #'popaganda.gr',
+        #'lifo.gr',
+        #'naftemporiki.gr',
         'kathimerini.gr',
-        'cnn.gr',
-        'protagon.gr',
-        'iefimerida.gr',
-        ]
-    url = [
-        'https://popaganda.gr/newstrack/environment/',
-        'https://www.naftemporiki.gr/green',
-        'https://www.cnn.gr/',
-        'https://www.protagon.gr/epikairotita/perivallon-epikairotita',
-        'https://www.iefimerida.gr',
-        ]
-    iefimerida_url = ['https://www.iefimerida.gr/green?page={}'.format(x) for x in range(0,IEFIMERIDA_VARS['ENVIRONMENT_PAGES'])]
-    topontiki_urls = ['http://www.topontiki.gr/category/perivallon?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ENVIRONMENT_PAGES'])]
-    lifo_urls = ['https://www.lifo.gr/now/perivallon/page:{}'.format(x) for x in range(1,LIFO_VARS['ENVIRONMENT_PAGES'])]
+        #'cnn.gr',
+        #'protagon.gr',
+        #'iefimerida.gr',
+        #]
+    ]
+    #url = [
+    #    'https://popaganda.gr/newstrack/environment/',
+    #    'https://www.naftemporiki.gr/green',
+    #    'https://www.cnn.gr/',
+    #    'https://www.protagon.gr/epikairotita/perivallon-epikairotita',
+    #    'https://www.iefimerida.gr',
+    #    ]
+    #iefimerida_url = ['https://www.iefimerida.gr/green?page={}'.format(x) for x in range(0,IEFIMERIDA_VARS['ENVIRONMENT_PAGES'])]
+    #topontiki_urls = ['http://www.topontiki.gr/category/perivallon?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ENVIRONMENT_PAGES'])]
+    #lifo_urls = ['https://www.lifo.gr/now/perivallon/page:{}'.format(x) for x in range(1,LIFO_VARS['ENVIRONMENT_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1194114316&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['ENVIRONMENT_PAGES'])]
-    urls = url + kathimerini_urls + lifo_urls + topontiki_urls + iefimerida_url
-    start_urls = urls[:]
+    #urls = url + kathimerini_urls + lifo_urls + topontiki_urls + iefimerida_url
+    #start_urls = urls[:]
+    start_urls = kathimerini_urls
+
 
     rules = (
-        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','culture','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+perivallon'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+environment_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+    #    Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+    #    Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','culture','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+perivallon'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+environment_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+    #    Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/perivallon/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        Rule(LinkExtractor(allow=('iefimerida.gr/green'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('cnn.gr/news/perivallon')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'), 
+    #    Rule(LinkExtractor(allow=('iefimerida.gr/green'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+    #    Rule(LinkExtractor(allow=('cnn.gr/news/perivallon')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
+    #    Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'), 
         )
 
     def parse_cnn(self,response):
@@ -192,11 +195,10 @@ class EnvironmentSpider(CrawlSpider):
 
             #get the article's text
             text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -219,7 +221,7 @@ class EnvironmentSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -388,19 +390,14 @@ class EnvironmentSpider(CrawlSpider):
             sub = response.xpath('//h2/a/text()').get()
             if sub == TOPONTIKI_VARS['CATEGORY_ENVIRONMENT']:
                 #fix the title's format
-                list_to_string = " ".join(" ".join(title))
-                markspaces = re.sub( "       ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+                list_to_string_title = "".join(title)  
 
                 #get the article's text
                 text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = final_text.replace("\xa0","")
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
+                clear_characters = final_text.replace("\xa0"," ")
 
                 date = response.xpath('//span[@class="date"]/text()').get()
                 final_date = formatdate(date)
@@ -416,7 +413,7 @@ class EnvironmentSpider(CrawlSpider):
                         "topic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "subtopic": GENERAL_CATEGORIES['ENVIRONMENT'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
-                        "title": final_title,
+                        "title": list_to_string_title,
                         "article_date": final_date, 
                         "author": TOPONTIKI_VARS['WEBSITE'],
                         "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),

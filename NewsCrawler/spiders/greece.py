@@ -34,68 +34,68 @@ naftemporiki_counter = 0
 class GreeceSpider(CrawlSpider):
     name = 'greece'
     allowed_domains = [
-        'newsit.gr',
-        'topontiki.gr',
-        'popaganda.gr',
-        'efsyn.gr',
-        'lifo.gr',
-        'cnn.gr',
-        'reader.gr',
-        'tovima.gr',
-        'thetoc.gr',
-        'protagon.gr',
-        'periodista.gr',
-        'in.gr',
-        'newpost.gr',
-        'iefimerida.gr',
-        'tanea.gr',
+        #'newsit.gr',
+        #'topontiki.gr',
+        #'popaganda.gr',
+        #'efsyn.gr',
+        #'lifo.gr',
+        #'cnn.gr',
+        #'reader.gr',
+        #'tovima.gr',
+        #'thetoc.gr',
+        #'protagon.gr',
+        #'periodista.gr',
+        #'in.gr',
+        #'newpost.gr',
+        #'iefimerida.gr',
+        #'tanea.gr',
         'kathimerini.gr',
-        'naftemporiki.gr',
+        #'naftemporiki.gr',
         ]
-    url = [
-        'https://www.newsit.gr/ellada/',
-        'http://www.topontiki.gr/category/ellada',
-        'https://popaganda.gr/newstrack/greece-newstrack/',
-        'https://www.lifo.gr/now/greece',
-        'https://www.naftemporiki.gr/society',
-        'https://www.iefimerida.gr/ellada',
-        'http://www.periodista.gr/koinwnia',
-        'https://www.cnn.gr/news/ellada',
-        'https://www.reader.gr/news/koinonia',
-        'https://www.thetoc.gr/koinwnia',
-        'https://www.protagon.gr/epikairotita/ellada',
-        'https://www.in.gr/greece/',
-        'https://newpost.gr/ellada/',
-        'https://www.tanea.gr/category/greece/',
-        ]
-    topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
-    efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
+    #url = [
+    #    'https://www.newsit.gr/ellada/',
+    #    'http://www.topontiki.gr/category/ellada',
+    #    'https://popaganda.gr/newstrack/greece-newstrack/',
+    #    'https://www.lifo.gr/now/greece',
+    #    'https://www.naftemporiki.gr/society',
+    #    'https://www.iefimerida.gr/ellada',
+    #    'http://www.periodista.gr/koinwnia',
+    #    'https://www.cnn.gr/news/ellada',
+    #    'https://www.reader.gr/news/koinonia',
+    #    'https://www.thetoc.gr/koinwnia',
+    #    'https://www.protagon.gr/epikairotita/ellada',
+    #    'https://www.in.gr/greece/',
+    #    'https://newpost.gr/ellada/',
+    #    'https://www.tanea.gr/category/greece/',
+    #    ]
+    #topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
+    #efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
-    tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
-    newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
-    periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
-    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
-    start_urls = urls[:]
-    
+    #tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
+    #newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
+    #periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
+    #urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
+    #start_urls = urls[:]
+    start_urls = kathimerini_urls
 
     rules = (
-        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','culture','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+    #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+    #    Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+    #    Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','culture','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+    #    Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+    #    Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+    #    Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'),  
-        Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        Rule(LinkExtractor(allow=('cnn.gr/news/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('reader.gr/news/koinonia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
-        Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+    #    Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+    #    Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+    #    Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+    #    Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'),  
+    #    Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+    #    Rule(LinkExtractor(allow=('cnn.gr/news/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
+    #    Rule(LinkExtractor(allow=('reader.gr/news/koinonia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
+    #    Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+    #    Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
+    #    Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
     )
 
     def parse_newsit(self,response):
@@ -220,11 +220,10 @@ class GreeceSpider(CrawlSpider):
         if title is not None and thetoc_counter < 300 :
             thetoc_counter += 1
             text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
             final_date = THETOC_VARS['full_date'] +formatdate(date)
@@ -238,7 +237,7 @@ class GreeceSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -298,11 +297,10 @@ class GreeceSpider(CrawlSpider):
         title = response.xpath('//h1[@itemprop="headline"]/text()').get() 
         if title is not None and periodista_counter < 300 :
             text = response.xpath('//div[@class="per-item-page-part per-article-body"]//p/text()|//div[@class="per-item-page-part per-article-body"]//strong/text()|//div[@class="per-item-page-part per-article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
             url = response.url
 
             date = response.xpath('//div[@class="col-md-4 per-color-grey per-font-size-md per-padding-top-20"]/text()').get()
@@ -321,7 +319,7 @@ class GreeceSpider(CrawlSpider):
                     "title": re.sub( r'\t|\n|\r',"",title),
                     "article_date": final_date,  
                     "author": PERIODISTA_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 } 
 
@@ -457,11 +455,10 @@ class GreeceSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
             final_date = formatdate(date)
@@ -470,7 +467,7 @@ class GreeceSpider(CrawlSpider):
             flag = re.search(r"@",clear_characters)
             url = response.url
             #check if we are in an article and that this article doesn't have any images
-            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                 tanea_counter +=1
                 yield {
                     "topic": GENERAL_CATEGORIES['GREECE'],
@@ -479,7 +476,7 @@ class GreeceSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -500,11 +497,10 @@ class GreeceSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub("\xa0"," ",final_text)
 
             date = response.xpath('//time/span/text()').get()
             final_date = formatdate(date)
@@ -523,7 +519,7 @@ class GreeceSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -544,11 +540,10 @@ class GreeceSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -571,7 +566,7 @@ class GreeceSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -789,37 +784,32 @@ class GreeceSpider(CrawlSpider):
             sub = response.xpath('//h2/a/text()').get()
             if sub == TOPONTIKI_VARS['CATEGORY_GREECE']:
                 
-                list_to_string = " ".join(" ".join(title))
-                markspaces = re.sub( "       ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+                list_to_string_title = "".join(title)  
 
+                #get article's body
                 text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = final_text.replace("\xa0","")
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
 
                 date = response.xpath('//span[@class="date"]/text()').get()
                 final_date = formatdate(date)
 
                 #flag to see later on if we have tweets ect
-                flag = re.search(r"@",clear_characters)
+                flag = re.search(r"@",final_text)
                 url = response.url
                 
                 #check if we are in an article and that this article doesn't have any images
-                if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
+                if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH'] and flag is None:
                     topontiki_counter += 1
                     yield {
                         "topic": GENERAL_CATEGORIES['GREECE'],
                         "subtopic": GENERAL_CATEGORIES['GREECE'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
-                        "title": final_title,
+                        "title": list_to_string_title,
                         "article_date": final_date, 
-                        "author": TOPONTIKI_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "author": response.xpath('//a[@class="author"]/text()').get(),
+                        "article_body": final_text,
                         "url": url,                
                     }
 

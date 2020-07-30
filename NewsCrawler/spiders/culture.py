@@ -27,67 +27,69 @@ class CultureSpider(CrawlSpider):
     name = 'culture'
     #handle_httpstatus_list = [301, 302]
     allowed_domains = [
-        'topontiki.gr',
-        'popaganda.gr',
-        'efsyn.gr',
-        'lifo.gr',
-        'naftemporiki.gr',
-        'in.gr',
-        'cnn.gr',
-        'tanea.gr',
-        'thetoc.gr',
-        'newpost.gr',
-        'protagon.gr',
-        'iefimerida.gr',
-        'tovima.gr',
+        #'topontiki.gr',
+        #'popaganda.gr',
+        #'efsyn.gr',
+        #'lifo.gr',
+        #'naftemporiki.gr',
+        #'in.gr',
+        #'cnn.gr',
+        #'tanea.gr',
+        #'thetoc.gr',
+        #'newpost.gr',
+        #'protagon.gr',
+        #'iefimerida.gr',
+        #'tovima.gr',
         'kathimerini.gr',
         ]
     url = [
-        'https://popaganda.gr/newstrack/culture/',
-        'https://www.naftemporiki.gr/culture',
-        'https://www.tanea.gr/category/lifearts/culture/',
-        'https://www.tanea.gr/category/lifearts/cinema/',
-        'https://www.tanea.gr/category/lifearts/music/',
-        'https://www.cnn.gr/style/politismos',
-        'https://www.cnn.gr/style/psyxagogia',
-        'https://www.thetoc.gr/',
-        'https://www.protagon.gr/epikairotita/',
-        'https://www.in.gr/culture/',
-        'https://newpost.gr/entertainment',
-        'https://www.iefimerida.gr',
+    #    'https://popaganda.gr/newstrack/culture/',
+    #    'https://www.naftemporiki.gr/culture',
+    #    'https://www.tanea.gr/category/lifearts/culture/',
+    #    'https://www.tanea.gr/category/lifearts/cinema/',
+    #    'https://www.tanea.gr/category/lifearts/music/',
+    #    'https://www.cnn.gr/style/politismos',
+    #    'https://www.cnn.gr/style/psyxagogia',
+    #    'https://www.thetoc.gr/politismos/',
+    #    'https://www.protagon.gr/epikairotita/',
+    #    'https://www.in.gr/culture/',
+    #    'https://newpost.gr/entertainment',
+    #    'https://www.iefimerida.gr',
         ]
-    topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
-    efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
-    lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
+    #topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
+    #efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
+    #lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
-    tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
-    tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
-    newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
-    urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + topontiki_urls + efsyn_urls
-    start_urls = urls[:]
+    #tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
+    #tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
+    #newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
+    #thetoc_urls = ['https://www.thetoc.gr/politismos/?page={}'.format(x) for x in range(0,THETOC_VARS['CULTURE_PAGES'])]
+    #urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + topontiki_urls + efsyn_urls
+    #start_urls = urls[:]
+    start_urls = kathimerini_urls
 
     
     
 
 
     rules = (
-        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
-        Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
+        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
+        #Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
-        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
-        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
-        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        Rule(LinkExtractor(allow=(r'newpost.gr/books|newpost.gr/cinema/|newpost.gr/moysikh/|newpost.gr/art/|newpost.gr/theatre/|newpost.gr/entertainment'), deny=('page')), callback='parse_newpost', follow=True),
+        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
+        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        #Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
+        #Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
+        #Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
+        #Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
+        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        #Rule(LinkExtractor(allow=(r'newpost.gr/books|newpost.gr/cinema/|newpost.gr/moysikh/|newpost.gr/art/|newpost.gr/theatre/|newpost.gr/entertainment'), deny=('page')), callback='parse_newpost', follow=True),
     )
 
 #next three functions for cnn infinite scroll for culture
@@ -189,11 +191,10 @@ class CultureSpider(CrawlSpider):
         title = response.xpath('//div[@class="article-title"]//h1/text()').get() 
         if title is not None and thetoc_counter < 300:
             text = response.xpath('//div[@class="article-content articleText"]//p/text()|//div[@class="article-content articleText"]//strong/text()|//div[@class="article-content articleText"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="article-date"]/text()').get()
             final_date = THETOC_VARS['full_date'] +formatdate(date)
@@ -212,7 +213,7 @@ class CultureSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date,
                     "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="author-social"]//h5/a/span[2]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_thetoc(self, request):
@@ -380,13 +381,13 @@ class CultureSpider(CrawlSpider):
             uneeded_spaces = re.sub( " ", "",markspaces)
             put_spaces_back = re.sub( "space", " ",uneeded_spaces)
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+            
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
             final_date = formatdate(date)
@@ -399,7 +400,7 @@ class CultureSpider(CrawlSpider):
                 subtopic = TANEA_VARS['CATEGORY_CULTURE']
             
             #check if we are in an article and that it doesn't have images
-            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 yield {
                     "topic": GENERAL_CATEGORIES['CULTURE'],
                     "subtopic": GENERAL_CATEGORIES['CULTURE'],
@@ -407,7 +408,7 @@ class CultureSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -422,11 +423,10 @@ class CultureSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub("\xa0"," ",final_text)
 
             date = response.xpath('//time/span/text()').get()
             final_date = formatdate(date)
@@ -444,7 +444,7 @@ class CultureSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -459,11 +459,10 @@ class CultureSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -484,7 +483,7 @@ class CultureSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -695,35 +694,29 @@ class CultureSpider(CrawlSpider):
             sub = response.xpath('//h2/a[1]/text()').get()
             #check if we are in the correct category
             if sub == TOPONTIKI_VARS['CATEGORY_CULTURE']: 
-                list_to_string = " ".join(" ".join(title))
-                markspaces = re.sub( "       ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
-
+                list_to_string_title = "".join(title)    
+                #get article's body
                 text = response.xpath('//div[@class="field-item even"]//p/text()|//div[@class="field-item even"]//p/*/text()|//div[@class="field-item even"]//p//span/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = final_text.replace("\xa0","")
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
 
                 date = response.xpath('//span[@class="date"]/text()').get()
                 final_date = formatdate(date)
 
                 #flag to see later on if we have tweets ect
-                flag = re.search(r"@",clear_characters)
+                flag = re.search(r"@",final_text)
                 url = response.url
                 
                 #check if we are in an article and that it doesn't have images
-                if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+                if len(text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                     yield {
                         "topic": GENERAL_CATEGORIES['CULTURE'],
                         "subtopic": GENERAL_CATEGORIES['CULTURE'],
                         "website": TOPONTIKI_VARS['WEBSITE'],
-                        "title": final_title,
+                        "title": list_to_string_title,
                         "article_date": final_date, 
                         "author": response.xpath('//a[@class="author"]/text()').get(),
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": final_text,
                         "url": url,                
                     }

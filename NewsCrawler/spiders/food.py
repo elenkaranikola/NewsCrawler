@@ -21,45 +21,45 @@ tovima_counter = 0
 class FoodSpider(CrawlSpider):
     name = 'food'
     allowed_domains = [
-        'popaganda.gr',
-        'lifo.gr',
+    #    'popaganda.gr',
+    #    'lifo.gr',
         'kathimerini.gr',
-        'tanea.gr',
-        'newpost.gr',
-        'iefimerida.gr',
-        'tovima.gr',
+    #    'tanea.gr',
+    #    'newpost.gr',
+    #    'iefimerida.gr',
+    #    'tovima.gr',
         ]
-    url = [
-        'https://popaganda.gr/table/pou-trone-i-sef-table/',
-        'https://popaganda.gr/table/spirits/',
-        'https://popaganda.gr/table/street-food/',
-        'https://popaganda.gr/table/estiatoria-details/',
-        'https://popaganda.gr/table/spirits/',
-        'https://popaganda.gr/table/greek-producers/',
-        'https://www.lifo.gr/articles/taste_articles',
-        'https://www.lifo.gr/syntages',
-        'http://newpost.gr/gefsi',
-        'https://www.iefimerida.gr',
-        'https://www.tanea.gr/category/recipes/',
-    ]
+    #url = [
+    #    'https://popaganda.gr/table/pou-trone-i-sef-table/',
+    #    'https://popaganda.gr/table/spirits/',
+    #    'https://popaganda.gr/table/street-food/',
+    #    'https://popaganda.gr/table/estiatoria-details/',
+    #    'https://popaganda.gr/table/spirits/',
+    #    'https://popaganda.gr/table/greek-producers/',
+    #    'https://www.lifo.gr/articles/taste_articles',
+    #    'https://www.lifo.gr/syntages',
+    #    'http://newpost.gr/gefsi',
+    #    'https://www.iefimerida.gr',
+    #    'https://www.tanea.gr/category/recipes/',
+    #]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b17_2041842937_413381051&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['FOOD_PAGES'])] + ['https://www.kathimerini.gr/box-ajax?id=b3_2041842937_900635337&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['FOOD_PAGES'])]
-    tovima_urls = ['https://www.tovima.gr/category/gefsignostis/page/{}'.format(x) for x in range(1,TOVIMA_VARS['FOOD_PAGES'])]
-    newpost_urls = ['http://newpost.gr/gefsi?page={}'.format(x) for x in range(1,NEWPOST_VARS['FOOD_PAGES'])]
-    tanea_urls = ['https://www.tanea.gr/category/recipes/page/{}'.format(x) for x in range(1,TANEA_VARS['FOOD_PAGES'])]
-    urls = kathimerini_urls + newpost_urls + tovima_urls + tanea_urls + url
-    start_urls = urls[:]  
-    start_urls = newpost_urls
+    #tovima_urls = ['https://www.tovima.gr/category/gefsignostis/page/{}'.format(x) for x in range(1,TOVIMA_VARS['FOOD_PAGES'])]
+    #newpost_urls = ['http://newpost.gr/gefsi?page={}'.format(x) for x in range(1,NEWPOST_VARS['FOOD_PAGES'])]
+    #tanea_urls = ['https://www.tanea.gr/category/recipes/page/{}'.format(x) for x in range(1,TANEA_VARS['FOOD_PAGES'])]
+    #urls = kathimerini_urls + newpost_urls + tovima_urls + tanea_urls + url
+    #start_urls = urls[:]  
+    start_urls = kathimerini_urls
     
 
     rules = ( 
-        Rule(LinkExtractor(allow=('popaganda.gr/table'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','sport','technews','psichagogia','klp','culture','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+syntages/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+taste_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+        #Rule(LinkExtractor(allow=('popaganda.gr/table'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','sport','technews','psichagogia','klp','culture','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+syntages/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+taste_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+gastronomos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+gefsignostis"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+recipes"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        Rule(LinkExtractor(allow=('https://www.iefimerida.gr/gastronomie'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        Rule(LinkExtractor(allow=('newpost.gr/syntages-glyka','newpost.gr/syntagh-ths-hmeras/','newpost.gr/gefsi/'), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),   
+        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+gefsignostis"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+recipes"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        #Rule(LinkExtractor(allow=('https://www.iefimerida.gr/gastronomie'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        #Rule(LinkExtractor(allow=('newpost.gr/syntages-glyka','newpost.gr/syntagh-ths-hmeras/','newpost.gr/gefsi/'), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),   
     )
     
     def parse_newpost(self,response):
@@ -152,11 +152,10 @@ class FoodSpider(CrawlSpider):
 
             #get the article's text
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//span[@class="firamedium postdate updated"]/text()').get()
             final_date = formatdate(date)
@@ -166,7 +165,7 @@ class FoodSpider(CrawlSpider):
             url = response.url
             
             #check if we are in an article and that it doesn't have any images
-            if len(final_text)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
+            if len(clear_characters)>GENERAL_CATEGORIES['ALLOWED_LENGTH']and flag is None:
                 tanea_counter += 1
                 yield {
                     "topic": GENERAL_CATEGORIES['FOOD'],
@@ -175,7 +174,7 @@ class FoodSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TANEA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -198,11 +197,10 @@ class FoodSpider(CrawlSpider):
 
             #get the article's text
             text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//h3/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(text)
+            clear_characters = re.sub("\xa0"," ",final_text)
 
             date = response.xpath('//time/span/text()').get()
             final_date = formatdate(date)
@@ -221,7 +219,7 @@ class FoodSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": TOVIMA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -244,11 +242,10 @@ class FoodSpider(CrawlSpider):
 
             #get the article's text
             text = response.xpath('//div[@class="freetext"]//p/text()|//div[@class="freetext"]//strong/text()|//div[@class="freetext"]//h3/text()|//div[@class="freetext"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -270,7 +267,7 @@ class FoodSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
