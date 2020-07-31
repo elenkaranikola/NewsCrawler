@@ -23,41 +23,41 @@ iefimerida_counter = 0
 class StyleSpider(CrawlSpider):
     name = 'style'
     allowed_domains = [
-        #'newsit.gr',
-        #'lifo.gr',
+        'newsit.gr',
+        'lifo.gr',
         'tanea.gr',
-        #'cnn.gr',
-        #'thetoc.gr',
-        #'in.gr',
-        #'newpost.gr',
-        #'iefimerida.gr',
+        'cnn.gr',
+        'thetoc.gr',
+        'in.gr',
+        'newpost.gr',
+        'iefimerida.gr',
         ]
-    #url = [
-    #    'https://www.newsit.gr/category/lifestyle/',
-    #    'https://www.cnn.gr/style/moda',
-    #    'https://www.thetoc.gr/people-style',
-    #    'https://www.in.gr/life/'
-    #    'https://newpost.gr/lifestyle',
-    #    'https://www.iefimerida.gr',
-    #    ]
-    #lifo_urls = ['https://www.lifo.gr/articles/design_articles']+['https://www.lifo.gr/articles/fashion_articles']+['https://www.lifo.gr/now/people/page:{}'.format(x) for x in range(1,LIFO_VARS['PEOPLE_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,NEWPOST_VARS['STYLE_PAGES'])]
+    url = [
+        'https://www.newsit.gr/category/lifestyle/',
+        'https://www.cnn.gr/style/moda',
+        'https://www.thetoc.gr/people-style',
+        'https://www.in.gr/life/'
+        'https://newpost.gr/lifestyle',
+        'https://www.iefimerida.gr',
+        ]
+    lifo_urls = ['https://www.lifo.gr/articles/design_articles']+['https://www.lifo.gr/articles/fashion_articles']+['https://www.lifo.gr/now/people/page:{}'.format(x) for x in range(1,LIFO_VARS['PEOPLE_PAGES'])]
+    newpost_urls = ['http://newpost.gr/lifestyle?page={}'.format(x) for x in range(1,NEWPOST_VARS['STYLE_PAGES'])]
     tanea_urls = ['https://www.tanea.gr/category/woman/page/{}'.format(x) for x in range(1,TANEA_VARS['WOMEN_PAGES'])] +['https://www.tanea.gr/category/kid/page/{}'.format(x) for x in range(1,TANEA_VARS['CHILD_PAGES'])]
-    #
-    #urls = url + newpost_urls + tanea_urls + lifo_urls
-    #start_urls = urls[:]
-    start_urls = tanea_urls
+    
+    urls = url + newpost_urls + tanea_urls + lifo_urls
+    start_urls = urls[:]
+
     rules = (
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+kid",r"\.tanea\.gr.+woman"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-    #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'),
-    #    Rule(LinkExtractor(allow=('iefimerida.gr/design','iefimerida.gr/gynaika','iefimerida.gr/zoi','iefimerida.gr/poli'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-    #    Rule(LinkExtractor(allow=('cnn.gr/style/moda'),deny=('gallery')), callback='parse_infinite_cnn', follow=True ,process_request='process_cnn'), 
-    #    Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-    #    Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
-    #    Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+lifestyle/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+design_articles/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+people/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+woman_articles'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'),
+        Rule(LinkExtractor(allow=('iefimerida.gr/design','iefimerida.gr/gynaika','iefimerida.gr/zoi','iefimerida.gr/poli'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('cnn.gr/style/moda'),deny=('gallery')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
+        Rule(LinkExtractor(allow=('thetoc.gr/people-style'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/health/|\.in\.gr.+/life/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
+        Rule(LinkExtractor(allow=(r"newpost.gr/lifestyle/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_newsit(self,response):
@@ -71,11 +71,10 @@ class StyleSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -94,7 +93,7 @@ class StyleSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -103,50 +102,38 @@ class StyleSpider(CrawlSpider):
         if newsit_counter < 300:
             return request
 
-#next three functions for cnn infinite scroll for fashion
-    def parse_infinite_cnn(self,response):
-        pages =  CNN_VARS['CNN_STYLE_PAGES']
-        for page in range(0, pages ,9):
-            url = 'https://www.cnn.gr/style/moda?start={}'.format(page)
-            yield Request(url, callback = self.parse_item_cnn) 
-
-    def parse_item_cnn(self,response):
-        links = response.xpath('//h3[@class="item-title"]/a/@href').getall()
-        for link in links:
-            url = response.urljoin(link)
-            yield Request(url,callback=self.parse_item) #"url": response.urljoin(link),
-
-            
-    def parse_item(self,response):
+           
+    def parse_cnn(self,response):
         global cnn_counter
-        #get article's text
-        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-        title = response.xpath('//h1[@class="story-title"]/text()').get()
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
+        #check if we are in an articles url
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
+        if title is not None and cnn_counter <300:
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-        url = response.url
-        article_type = url.split('/')[5]
-        contains_photos = re.search('Photos',final_text)
-        #the article isn't a photo gallery
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
+            final_date = formatdate(date)
 
-        date = response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()
-        final_date = formatdate(date)
+            #check if this an article and not an photo gallery 
+            url = response.url
+            article_type = url.split('/')[5]
+            contains_photos = re.search('Photos',clear_characters)
 
-        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
-            cnn_counter += 1
-            yield{ 
-                "topic": GENERAL_CATEGORIES['STYLE'],
-                "subtopic": GENERAL_CATEGORIES['STYLE'],
-                "website": CNN_VARS['WEBSITE'],
-                "title": title,
-                "article_date": final_date,
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "article_body": re.sub( r'\n|\t',"",final_text),
-                "url": url,     
-            }
+            if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
+                cnn_counter += 1
+                yield{ 
+                    "topic": GENERAL_CATEGORIES['STYLE'],
+                    "subtopic": GENERAL_CATEGORIES['STYLE'],
+                    "website": CNN_VARS['WEBSITE'],
+                    "title": title,
+                    "article_date": final_date,
+                    "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
+                    "article_body": clear_characters,
+                    "url": url,     
+                }
 
     def process_cnn(self, request):
         global cnn_counter
@@ -192,15 +179,13 @@ class StyleSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None and in_counter < 300:
-            #get article's text
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
+        if title is not None and in_counter < 300 :
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -218,8 +203,8 @@ class StyleSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -235,11 +220,10 @@ class StyleSpider(CrawlSpider):
         if title is not None and newpost_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -258,7 +242,7 @@ class StyleSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -274,11 +258,10 @@ class StyleSpider(CrawlSpider):
         if title is not None and iefimerida_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -300,7 +283,7 @@ class StyleSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -371,11 +354,10 @@ class StyleSpider(CrawlSpider):
 
             #get article's text
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
             if author == None:
@@ -399,7 +381,7 @@ class StyleSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 

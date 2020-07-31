@@ -33,83 +33,82 @@ naftemporiki_counter = 0
 class WorldSpider(CrawlSpider):
     name = 'world'
     allowed_domains = [
-        #'topontiki.gr',
-        #'popaganda.gr',
-        #'efsyn.gr',
-        #'lifo.gr',
-        #'naftemporiki.gr',
+        'topontiki.gr',
+        'popaganda.gr',
+        'efsyn.gr',
+        'lifo.gr',
+        'naftemporiki.gr',
         'kathimerini.gr',
-        #'tovima.gr',
-        #'tanea.gr',
-        #'cnn.gr',
-        #'reader.gr',
-        #'thetoc.gr',
-        #'protagon.gr',
-        #'periodista.gr',
-        #'in.gr',
-        #'newpost.gr',
-        #'newsit.gr',
-        #'iefimerida.gr',
+        'tovima.gr',
+        'tanea.gr',
+        'cnn.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'periodista.gr',
+        'in.gr',
+        'newpost.gr',
+        'newsit.gr',
+        'iefimerida.gr',
         ]
-    #url = [
-    #    'https://popaganda.gr/newstrack/world/',
-    #    'https://www.naftemporiki.gr/world',
-    #    'https://www.tanea.gr/category/world/',
-    #    'https://www.cnn.gr/news/kosmos',
-    #    'https://www.reader.gr/news/diethni',
-    #    'https://www.thetoc.gr/diethni',
-    #    'https://www.protagon.gr/epikairotita/',
-    #    'http://www.periodista.gr/kosmos',
-    #    'https://www.in.gr/world/',
-    #    'https://www.newsit.gr/category/kosmos/',
-    #    'https://www.iefimerida.gr/kosmos',
-    #    ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/kosmos?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['WORLD_PAGES'])]
-    #efsyn_urls = ['https://www.efsyn.gr/kosmos?page={}'.format(x) for x in range(1,EFSYN_VARS['WORLD_PAGES'])]
-    #lifo_urls = ['https://www.lifo.gr/now/world/page:{}'.format(x) for x in range(1,LIFO_VARS['WORLD_PAGES'])]
+    url = [
+        'https://popaganda.gr/newstrack/world/',
+        'https://www.naftemporiki.gr/world',
+        'https://www.tanea.gr/category/world/',
+        'https://www.cnn.gr/kosmos',
+        'https://www.reader.gr/news/diethni',
+        'https://www.thetoc.gr/diethni',
+        'https://www.protagon.gr/epikairotita/',
+        'http://www.periodista.gr/kosmos',
+        'https://www.in.gr/world/',
+        'https://www.newsit.gr/category/kosmos/',
+        'https://www.iefimerida.gr/kosmos',
+        ]
+    topontiki_urls = ['http://www.topontiki.gr/category/kosmos?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['WORLD_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/kosmos?page={}'.format(x) for x in range(1,EFSYN_VARS['WORLD_PAGES'])]
+    lifo_urls = ['https://www.lifo.gr/now/world/page:{}'.format(x) for x in range(1,LIFO_VARS['WORLD_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_1231434187&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['WORLD_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,NEWPOST_VARS['WORLD_PAGES'])]
-    #periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],GENERAL_CATEGORIES['ALLOWED_LENGTH'])]
-    #tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
-    #urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
-    #start_urls = urls[:]
-    start_urls = kathimerini_urls
+    newpost_urls = ['http://newpost.gr/kosmos?page={}'.format(x) for x in range(1,NEWPOST_VARS['WORLD_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/kosmos?start={}'.format(x) for x in range(1,PERIODISTA_VARS['WORLD_PAGES'],GENERAL_CATEGORIES['ALLOWED_LENGTH'])]
+    tovima_urls = ['https://www.tovima.gr/category/world/page/{}'.format(x) for x in range(1,TOVIMA_VARS['WORLD_PAGES'])]
+    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
+    start_urls = urls[:]
+
 
 
     rules = (
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','culture','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        #Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+world/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','culture','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+world/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        #Rule(LinkExtractor(allow=('iefimerida.gr/kosmos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=(r"\.newsit\.gr.+kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        #Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
-        #Rule(LinkExtractor(allow=('cnn.gr/news/kosmos'), deny=('cnn.gr/news/kosmos/gallery/','protoselida')), callback='parce_cnn', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'), 
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r".in\.gr.+/world/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow= True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+world"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/kosmos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+kosmos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=('periodista.gr/kosmos'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
+        Rule(LinkExtractor(allow=('cnn.gr/kosmos'), deny=('cnn.gr/kosmos/gallery/','protoselida')), callback='parce_cnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('reader.gr/news/diethni'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
+        Rule(LinkExtractor(allow=('thetoc.gr/diethni'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'), 
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r".in\.gr.+/world/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow= True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/kosmos/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
+        
 #function to crawl cnn.gr    
     def parce_cnn(self,response):
         global cnn_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        if title is not None and cnn_counter < 300 :
-            #get article's text
-            text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
+        if title is not None and cnn_counter <300:
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-            date = re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get())
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
             final_date = formatdate(date)
 
             url = response.url
@@ -123,8 +122,8 @@ class WorldSpider(CrawlSpider):
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
-                    "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -140,12 +139,11 @@ class WorldSpider(CrawlSpider):
         if title is not None and reader_counter < 300:
             reader_counter += 1
             #get article's text
-            text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -153,7 +151,7 @@ class WorldSpider(CrawlSpider):
             #get author
             author = response.xpath('//p[@class="article-author"]/a/text()').get()
             if author is not None:
-                author = re.sub("\xa0","",author)
+                author = re.sub("\xa0"," ",author)
             else:
                 author = READER_VARS['AUTHOR']
             url = response.url
@@ -165,7 +163,7 @@ class WorldSpider(CrawlSpider):
                 "title": re.sub( r'\n|\t',"",title),
                 "article_date": final_date,
                 "author": author,
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
+                "article_body": clear_characters,
                 "url": url,              
             }
 
@@ -219,11 +217,10 @@ class WorldSpider(CrawlSpider):
             if sub == PROTAGON_VARS['CATEGORY_WORLD']:
                 #get article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -248,7 +245,7 @@ class WorldSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -299,15 +296,13 @@ class WorldSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None and in_counter < 300:
-            #get article's text
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
+        if title is not None and in_counter < 300 :
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -325,8 +320,8 @@ class WorldSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -342,11 +337,10 @@ class WorldSpider(CrawlSpider):
         if title is not None and newpost_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -365,7 +359,7 @@ class WorldSpider(CrawlSpider):
                     "title": title,
                     "article_date": date_for_sql_format, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -385,11 +379,10 @@ class WorldSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -408,7 +401,7 @@ class WorldSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -426,11 +419,10 @@ class WorldSpider(CrawlSpider):
         if title is not None and iefimerida_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -449,7 +441,7 @@ class WorldSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -615,11 +607,10 @@ class WorldSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 date = response.xpath('//div[@class="Date"]/text()').get()
                 final_date = formatdate(date)
@@ -638,7 +629,7 @@ class WorldSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date,
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     
@@ -664,11 +655,10 @@ class WorldSpider(CrawlSpider):
 
             #get article's text
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #get author
             author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
@@ -689,7 +679,7 @@ class WorldSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -716,11 +706,10 @@ class WorldSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #get author
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
@@ -744,7 +733,7 @@ class WorldSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -770,11 +759,10 @@ class WorldSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #get author
                 author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
@@ -798,7 +786,7 @@ class WorldSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": POPAGANDA_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
         

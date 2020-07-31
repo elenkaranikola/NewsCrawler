@@ -32,81 +32,79 @@ naftemporiki_counter = 0
 class PoliticsSpider(CrawlSpider):
     name = 'politics'
     allowed_domains = [
-        #'topontiki.gr',
-        #'efsyn.gr',
-        #'lifo.gr',
-        #'naftemporiki.gr',
+        'topontiki.gr',
+        'efsyn.gr',
+        'lifo.gr',
+        'naftemporiki.gr',
         'kathimerini.gr',
-        #'cnn.gr',
-        #'tovima.gr',
-        #'reader.gr',
-        #'thetoc.gr',
-        #'protagon.gr',
-        #'periodista.gr',
-        #'in.gr',
-        #'newpost.gr',
-        #'newsit.gr',
-        #'iefimerida.gr',
-        #'tanea.gr',
+        'cnn.gr',
+        'tovima.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'periodista.gr',
+        'in.gr',
+        'newpost.gr',
+        'newsit.gr',
+        'iefimerida.gr',
+        'tanea.gr',
         ]
-    #url = [
-    #    'https://www.naftemporiki.gr/politics',
-    #    'https://www.tanea.gr/category/politics/',
-    #    'https://www.cnn.gr/news/politiki',
-    #    'https://www.reader.gr/news/politiki',
-    #    'https://www.thetoc.gr/politiki',
-    #    'https://www.protagon.gr/epikairotita/politiki',
-    #    'https://www.in.gr/politics/',
-    #    'http://www.periodista.gr/politiki',
-    #    'https://newpost.gr/politiki',
-    #    'https://www.newsit.gr/category/politikh/',
-    #    'https://www.iefimerida.gr/politiki',
-    #    ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/politiki?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['POLITICS_PAGES'])]
-    #efsyn_urls = ['https://www.efsyn.gr/politiki?page={}'.format(x) for x in range(1,EFSYN_VARS['POLITICS_PAGES'])]
-    #lifo_urls = ['https://www.lifo.gr/now/politics/page:{}'.format(x) for x in range(1,LIFO_VARS['POLITICS_PAGES'])]
+    url = [
+        'https://www.naftemporiki.gr/politics',
+        'https://www.tanea.gr/category/politics/',
+        'https://www.cnn.gr/politiki',
+        'https://www.reader.gr/news/politiki',
+        'https://www.thetoc.gr/politiki',
+        'https://www.protagon.gr/epikairotita/politiki',
+        'https://www.in.gr/politics/',
+        'http://www.periodista.gr/politiki',
+        'https://newpost.gr/politiki',
+        'https://www.newsit.gr/category/politikh/',
+        'https://www.iefimerida.gr/politiki',
+        ]
+    topontiki_urls = ['http://www.topontiki.gr/category/politiki?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['POLITICS_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/politiki?page={}'.format(x) for x in range(1,EFSYN_VARS['POLITICS_PAGES'])]
+    lifo_urls = ['https://www.lifo.gr/now/politics/page:{}'.format(x) for x in range(1,LIFO_VARS['POLITICS_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b2_1885015423_1161990931&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['POLITICS_PAGES'])]
-    #periodista_urls = ['http://www.periodista.gr/politiki?start={}'.format(x) for x in range(1,PERIODISTA_VARS['POLITICS_PAGES'],30)]
-    #newpost_urls = ['http://newpost.gr/politiki?page={}'.format(x) for x in range(1,13147)] 
-    #tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
-    #urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
-    #start_urls = urls[:]
-    start_urls = kathimerini_urls
+    periodista_urls = ['http://www.periodista.gr/politiki?start={}'.format(x) for x in range(1,PERIODISTA_VARS['POLITICS_PAGES'],30)]
+    newpost_urls = ['http://newpost.gr/politiki?page={}'.format(x) for x in range(NEWPOST_VARS['ECONOMICS_PAGES'])] 
+    tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
+    urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
+    start_urls = urls[:]
+    start_urls = ['https://www.in.gr/politics/']
     
 
     rules = (
-    #    Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-    #    Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-    #    Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+politics/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-    #    Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True, process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+politics/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True, process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-    #    Rule(LinkExtractor(allow=(r"\.tovima\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-    #    Rule(LinkExtractor(allow=(r"\.tanea\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-    #    Rule(LinkExtractor(allow=('iefimerida.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-    #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-    #    Rule(LinkExtractor(allow=('cnn.gr/news/politiki'), deny=('cnn.gr/news/politiki/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
-    #    Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
-    #    Rule(LinkExtractor(allow=('thetoc.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True, process_request='process_thetoc'),
-    #    Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True , process_request='process_protagon'),
-    #    Rule(LinkExtractor(allow=('periodista.gr/politiki'), deny=('start=')), callback='parse_periodista', follow=True , process_request='process_periodista'),   
-    #    Rule(LinkExtractor(allow=(r"\.in\.gr.+/politics/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True , process_request='process_in'), 
-    #    Rule(LinkExtractor(allow=(r"newpost.gr/politiki/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True , process_request='process_newpost'),
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+politics"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+politikh/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=('cnn.gr/politiki'), deny=('cnn.gr/news/politiki/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('reader.gr/news/politiki'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
+        Rule(LinkExtractor(allow=('thetoc.gr/politiki'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True, process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True , process_request='process_protagon'),
+        Rule(LinkExtractor(allow=('periodista.gr/politiki'), deny=('start=')), callback='parse_periodista', follow=True , process_request='process_periodista'),   
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/politics/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True , process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/politiki/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True , process_request='process_newpost'),
     )
 
     def parse_cnn(self,response):
         global cnn_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        if title is not None and cnn_counter < 300 :
-            #get the article's text
-            text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
+        if title is not None and cnn_counter <300:
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-            date = re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get())
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
             final_date = formatdate(date)
 
             url = response.url
@@ -118,8 +116,8 @@ class PoliticsSpider(CrawlSpider):
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
-                    "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -134,12 +132,11 @@ class PoliticsSpider(CrawlSpider):
         title = response.xpath('//h1/text()').get() 
         if title is not None and reader_counter < 300 :
             #get the article's text
-            text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -159,7 +156,7 @@ class PoliticsSpider(CrawlSpider):
                 "title": re.sub( r'\n|\t',"",title),
                 "article_date": final_date,
                 "author": author,
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
+                "article_body": clear_characters,
                 "url": url,              
             }
 
@@ -212,11 +209,10 @@ class PoliticsSpider(CrawlSpider):
             if sub == PROTAGON_VARS['CATEGORY_POLITICS']:
                 #get the article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -238,7 +234,7 @@ class PoliticsSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -288,15 +284,13 @@ class PoliticsSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None and in_counter < 300:
-            #get the article's text
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
+        if title is not None and in_counter < 300 :
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -314,8 +308,8 @@ class PoliticsSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -331,11 +325,10 @@ class PoliticsSpider(CrawlSpider):
         if title is not None and newpost_counter < 300 :
             #get the article's text
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -354,7 +347,7 @@ class PoliticsSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -374,11 +367,10 @@ class PoliticsSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -397,7 +389,7 @@ class PoliticsSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -413,11 +405,10 @@ class PoliticsSpider(CrawlSpider):
         if title is not None and iefimerida_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -436,7 +427,7 @@ class PoliticsSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -602,11 +593,10 @@ class PoliticsSpider(CrawlSpider):
 
                 #get the article's text
                 text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 date = response.xpath('//div[@class="Date"]/text()').get()
                 final_date = formatdate(date)
@@ -625,7 +615,7 @@ class PoliticsSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date,
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -651,11 +641,10 @@ class PoliticsSpider(CrawlSpider):
             
             #get article's text
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
             if author == None:
@@ -675,7 +664,7 @@ class PoliticsSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_lifo(self, request):
@@ -701,11 +690,10 @@ class PoliticsSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
                 if author == None:
@@ -728,7 +716,7 @@ class PoliticsSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 

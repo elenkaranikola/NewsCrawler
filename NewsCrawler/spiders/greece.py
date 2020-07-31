@@ -45,11 +45,11 @@ class GreeceSpider(CrawlSpider):
         #'thetoc.gr',
         #'protagon.gr',
         #'periodista.gr',
-        #'in.gr',
+        'in.gr',
         #'newpost.gr',
         #'iefimerida.gr',
         #'tanea.gr',
-        'kathimerini.gr',
+        #'kathimerini.gr',
         #'naftemporiki.gr',
         ]
     #url = [
@@ -60,7 +60,7 @@ class GreeceSpider(CrawlSpider):
     #    'https://www.naftemporiki.gr/society',
     #    'https://www.iefimerida.gr/ellada',
     #    'http://www.periodista.gr/koinwnia',
-    #    'https://www.cnn.gr/news/ellada',
+    #    'https://www.cnn.gr/ellada',
     #    'https://www.reader.gr/news/koinonia',
     #    'https://www.thetoc.gr/koinwnia',
     #    'https://www.protagon.gr/epikairotita/ellada',
@@ -70,13 +70,13 @@ class GreeceSpider(CrawlSpider):
     #    ]
     #topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
     #efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
-    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
+    #kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
     #tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
     #newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
     #periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
     #urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
     #start_urls = urls[:]
-    start_urls = kathimerini_urls
+    start_urls = ['https://www.in.gr/greece/']
 
     rules = (
     #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
@@ -85,16 +85,16 @@ class GreeceSpider(CrawlSpider):
     #    Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
     #    Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
     #    Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
-        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
+    #    Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
     #    Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
     #    Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
     #    Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
     #    Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'),  
     #    Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-    #    Rule(LinkExtractor(allow=('cnn.gr/news/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
+    #    Rule(LinkExtractor(allow=('cnn.gr/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
     #    Rule(LinkExtractor(allow=('reader.gr/news/koinonia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
     #    Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-    #    Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
+        Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
     #    Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
     )
 
@@ -109,11 +109,10 @@ class GreeceSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -132,7 +131,7 @@ class GreeceSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -144,19 +143,19 @@ class GreeceSpider(CrawlSpider):
     def parse_cnn(self,response):
         global cnn_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        if title is not None and cnn_counter < 300:
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
+        if title is not None and cnn_counter <300:
             cnn_counter += 1
-            text = response.xpath('//div[@class="story-content"]//p/*/text()|//div[@class="story-content"]//p/text()|//div[@class="story-content"]//p/a/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
-            url = response.url
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-            date = re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get())
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
             final_date = formatdate(date)
+
+            url = response.url
             
             yield {
                 "topic": GENERAL_CATEGORIES['GREECE'],
@@ -164,7 +163,7 @@ class GreeceSpider(CrawlSpider):
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
                 "article_date": final_date,
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
+                "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
                 "article_body": re.sub( r'\n|\t',"",clear_characters),
                 "url": url,                
             }
@@ -180,12 +179,11 @@ class GreeceSpider(CrawlSpider):
         title = response.xpath('//h1/text()').get() 
         if title is not None and reader_counter < 300 :
             reader_counter += 1
-            text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -204,7 +202,7 @@ class GreeceSpider(CrawlSpider):
                 "title": re.sub( r'\n|\t',"",title),
                 "article_date": final_date,
                 "author": author,
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
+                "article_body": clear_characters,
                 "url": url,              
             }
 
@@ -255,11 +253,10 @@ class GreeceSpider(CrawlSpider):
             sub = response.xpath('//span[@class="s_roumpr"]/a/text()').get()
             if sub == PROTAGON_VARS['CATEGORY_GREECE']:            
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -282,7 +279,7 @@ class GreeceSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
                     
@@ -332,14 +329,13 @@ class GreeceSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
         if title is not None and in_counter < 300 :
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -357,8 +353,8 @@ class GreeceSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_in(self, request):
@@ -372,11 +368,10 @@ class GreeceSpider(CrawlSpider):
         title = response.xpath('//h1[@class="article-title"]/text()').get() 
         if title is not None and newpost_counter < 300 :
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -395,7 +390,7 @@ class GreeceSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -410,11 +405,10 @@ class GreeceSpider(CrawlSpider):
         title = response.xpath('//h1/span/text()').get() 
         if title is not None and iefimerida_counter < 300 :
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -433,7 +427,7 @@ class GreeceSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -594,11 +588,10 @@ class GreeceSpider(CrawlSpider):
                 final_date = formatdate(date)
 
                 text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -614,7 +607,7 @@ class GreeceSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date,
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     def process_naftemporiki(self, request):
@@ -637,11 +630,10 @@ class GreeceSpider(CrawlSpider):
             final_date = formatdate(date)
 
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
             if author == None:
@@ -661,7 +653,7 @@ class GreeceSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -687,11 +679,10 @@ class GreeceSpider(CrawlSpider):
                 final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
                 text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
                 if author == None:
@@ -714,7 +705,7 @@ class GreeceSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -739,11 +730,10 @@ class GreeceSpider(CrawlSpider):
                 final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
                 text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
                 if author == None:
@@ -766,7 +756,7 @@ class GreeceSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": POPAGANDA_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 

@@ -35,67 +35,66 @@ cnn_counter = 0
 class SportSpider(CrawlSpider):
     name = 'sport'
     allowed_domains = [
-        #'newsit.gr',
-        #'topontiki.gr',
-        #'popaganda.gr',
-        #'naftemporiki.gr',
+        'newsit.gr',
+        'topontiki.gr',
+        'popaganda.gr',
+        'naftemporiki.gr',
         'kathimerini.gr',
-        #'tovima.gr',
-        #'tanea.gr',
-        #'gazzetta.gr',
-        #'sport24.gr',
-        #'cnn.gr',
-        #'reader.gr',
-        #'thetoc.gr',
-        #'protagon.gr',
-        #'in.gr',
-        #'newpost.gr',
-        #'periodista.gr',
-        #'iefimerida.gr',
+        'tovima.gr',
+        'tanea.gr',
+        'gazzetta.gr',
+        'sport24.gr',
+        'cnn.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'in.gr',
+        'newpost.gr',
+        'periodista.gr',
+        'iefimerida.gr',
         ]
-    #url = [
-    #    'https://www.newsit.gr/category/athlitika/',
-    #    'https://popaganda.gr/newstrack/sports/',
-    #    'https://www.naftemporiki.gr/sports',
-    #    'https://www.tanea.gr/category/sports/',
-    #    'https://www.iefimerida.gr/spor',
-    #    'http://www.gazzetta.gr/',
-    #    'https://www.sport24.gr',
-    #    'https://www.cnn.gr/news/sports',
-    #    'https://www.reader.gr/athlitismos',
-    #    'https://www.thetoc.gr/athlitika',
-    #    'https://www.protagon.gr/epikairotita/',
-    #    'https://www.in.gr/sports/',
-    #    'https://newpost.gr/athlitika',
-    #    ]
-    #thetoc_urls = ['https://www.thetoc.gr/athlitika/?page={}'.format(x) for x in range(1,THETOC_VARS['SPORT_PAGES'])]
-    #topontiki_urls = ['http://www.topontiki.gr/category/athlitika?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['SPORT_PAGES'])]
+    url = [
+        'https://www.newsit.gr/category/athlitika/',
+        'https://popaganda.gr/newstrack/sports/',
+        'https://www.naftemporiki.gr/sports',
+        'https://www.tanea.gr/category/sports/',
+        'https://www.iefimerida.gr/spor',
+        'http://www.gazzetta.gr/',
+        'https://www.sport24.gr',
+        'https://www.cnn.gr/sports',
+        'https://www.reader.gr/athlitismos',
+        'https://www.thetoc.gr/athlitika',
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/sports/',
+        'https://newpost.gr/athlitika',
+        ]
+    thetoc_urls = ['https://www.thetoc.gr/athlitika/?page={}'.format(x) for x in range(1,THETOC_VARS['SPORT_PAGES'])]
+    topontiki_urls = ['http://www.topontiki.gr/category/athlitika?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['SPORT_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_371795634&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['SPORT_PAGES'])] 
-    #newpost_urls = ['http://newpost.gr/athlitika?page={}'.format(x) for x in range(1,NEWPOST_VARS['SPORT_PAGES'])]
-    #periodista_urls = ['http://www.periodista.gr/athlhtika-paraskhnia?start={}'.format(x) for x in range(0,PERIODISTA_VARS['SPORT_PAGES'],30)]
-    #tovima_urls = ['https://www.tovima.gr/category/sports/page/{}'.format(x) for x in range(1,TOVIMA_VARS['SPORT_PAGES'])]
-    #urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + topontiki_urls
-    #start_urls = urls[:]
-    start_urls = kathimerini_urls
+    newpost_urls = ['http://newpost.gr/athlitika?page={}'.format(x) for x in range(1,NEWPOST_VARS['SPORT_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/athlhtika-paraskhnia?start={}'.format(x) for x in range(0,PERIODISTA_VARS['SPORT_PAGES'],30)]
+    tovima_urls = ['https://www.tovima.gr/category/sports/page/{}'.format(x) for x in range(1,TOVIMA_VARS['SPORT_PAGES'])]
+    urls = url + kathimerini_urls + newpost_urls + periodista_urls + tovima_urls + topontiki_urls
+    start_urls = urls[:]
 
     rules = (
-        #Rule(LinkExtractor(allow=(r"\.newsit\.gr.+athlitika/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'),        
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','culture','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+athlitika/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'),        
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','culture','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/a8lhtismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-        #Rule(LinkExtractor(allow=('iefimerida.gr/spor'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=(r"gaz.+/football/",r"gaz.+/basketball/",r"gaz.+/other-sports/",r"gaz.+/volleyball/",r"gaz.+/tennis/",), deny=('power-rankings/')), callback='parse_gazzetta', follow=True ,process_request='process_gazzeta'),    
-        #Rule(LinkExtractor(allow=('sport24.gr/football/','sport24.gr/sports/','sport24.gr/Basket/'), deny=('vid','gallery','pic')),callback='parse_sport24', follow=True ,process_request='process_sport24'),
-        #Rule(LinkExtractor(allow=('cnn.gr/news/sports')),callback='parse_cnn', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parse_reader_crawl', follow=True ,process_request='process_reader'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/sports/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=('newpost.gr/athlitika/'), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),
-        #Rule(LinkExtractor(allow=('periodista.gr/athlhtika-paraskhnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+sports"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/spor'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=(r"gaz.+/football/",r"gaz.+/basketball/",r"gaz.+/other-sports/",r"gaz.+/volleyball/",r"gaz.+/tennis/",), deny=('power-rankings/')), callback='parse_gazzetta', follow=True ,process_request='process_gazzeta'),    
+        Rule(LinkExtractor(allow=('sport24.gr/football/','sport24.gr/sports/','sport24.gr/Basket/'), deny=('vid','gallery','pic')),callback='parse_sport24', follow=True ,process_request='process_sport24'),
+        Rule(LinkExtractor(allow=('cnn.gr/sports')),callback='parse_cnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('reader.gr/athlitismos'), deny=('vid')), callback='parse_reader_crawl', follow=True ,process_request='process_reader'),
+        Rule(LinkExtractor(allow=('thetoc.gr/athlitika'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/sports/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=('newpost.gr/athlitika/'), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'),
+        Rule(LinkExtractor(allow=('periodista.gr/athlhtika-paraskhnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'), 
         )
 
     def parse_newsit(self,response):
@@ -109,11 +108,10 @@ class SportSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -132,7 +130,7 @@ class SportSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }  
 
@@ -240,18 +238,16 @@ class SportSpider(CrawlSpider):
     def parse_cnn(self,response):
         global cnn_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
-        if title is not None and cnn_counter < 300:
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
+        if title is not None and cnn_counter <300:
             cnn_counter += 1
-            #get article's text
-            text = response.xpath('//p/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-            date = re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get())
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
             final_date = formatdate(date)
 
             url = response.url
@@ -261,8 +257,8 @@ class SportSpider(CrawlSpider):
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
                 "article_date": final_date,
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "article_body": re.sub( r'\n',"",clear_characters),
+                "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
+                "article_body": clear_characters,
                 "url": url,                
             }
 
@@ -286,12 +282,11 @@ class SportSpider(CrawlSpider):
         title = response.xpath('//h1/text()').get() 
         if title is not None and reader_counter < 300:
             #get article's text
-            text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -312,7 +307,7 @@ class SportSpider(CrawlSpider):
                     "title": re.sub( r'\n|\t',"",title),
                     "article_date": final_date,
                     "author": author,
-                    "article_body": re.sub( r'\n|\t',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,              
                 }
 
@@ -368,11 +363,10 @@ class SportSpider(CrawlSpider):
             if sub == GENERAL_CATEGORIES['SPORT']:
                 #get article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -395,7 +389,7 @@ class SportSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",final_text),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -407,15 +401,13 @@ class SportSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None and in_counter < 300:
-            #get article's text
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
+        if title is not None and in_counter < 300 :
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -433,8 +425,8 @@ class SportSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -450,11 +442,10 @@ class SportSpider(CrawlSpider):
         if title is not None and newpost_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
             url = response.url
@@ -472,7 +463,7 @@ class SportSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -526,11 +517,10 @@ class SportSpider(CrawlSpider):
         if title is not None and iefimerida_counter < 300:
             #get article's text
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -549,7 +539,7 @@ class SportSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -719,11 +709,10 @@ class SportSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                text = re.findall(r'[<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 date = response.xpath('//div[@class="Date"]/text()').get()
                 final_date = formatdate(date)
@@ -742,7 +731,7 @@ class SportSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date,
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -768,11 +757,10 @@ class SportSpider(CrawlSpider):
 
                 #get article's text
                 text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
                 if author == None:
@@ -795,7 +783,7 @@ class SportSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": POPAGANDA_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 

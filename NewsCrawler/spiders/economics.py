@@ -31,77 +31,74 @@ newpost_counter = 0
 class EconomicSpider(CrawlSpider):
     name = 'economics'
     allowed_domains = [
-#        'topontiki.gr',
-#        'efsyn.gr',
-#        'naftemporiki.gr',
-#        'tovima.gr',
+        'topontiki.gr',
+        'efsyn.gr',
+        'naftemporiki.gr',
+        'tovima.gr',
         'tanea.gr',
-#        'cnn.gr',
-#        'reader.gr',
-#    'thetoc.gr',
-#        'protagon.gr',
-#        'periodista.gr',
-#        'in.gr',
-#        'newpost.gr',
-#        'newsit.gr',
-#        'iefimerida.gr',
+        'cnn.gr',
+        'reader.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'periodista.gr',
+        'in.gr',
+        'newpost.gr',
+        'newsit.gr',
+        'iefimerida.gr',
     ]
-#    url = [
-#        'https://www.naftemporiki.gr/finance/economy',
-#        'https://www.tanea.gr/category/economy/',
-#        'https://www.cnn.gr/',
-#        'https://www.reader.gr/news/oikonomia',
-#        'https://www.thetoc.gr/',
-#        'https://www.protagon.gr/epikairotita/',
-#        'https://www.in.gr/economy/',
-#        'http://newpost.gr/',
-#        'https://www.newsit.gr/category/oikonomia/',
-#        'https://www.iefimerida.gr',
-#       ]
+    url = [
+        'https://www.naftemporiki.gr/finance/economy',
+        'https://www.tanea.gr/category/economy/',
+        'https://www.cnn.gr/',
+        'https://www.reader.gr/news/oikonomia',
+        'https://www.thetoc.gr/',
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/economy/',
+        'http://newpost.gr/',
+        'https://www.newsit.gr/category/oikonomia/',
+        'https://www.iefimerida.gr',
+       ]
     tanea_urls = ['https://www.tanea.gr/category/economy/economy-greece/page/{}'.format(x) for x in range(1,TANEA_VARS['ECONOMICS_PAGES'])]
-#    topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
-#    efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
-#    to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
-#    newpost_urls = ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,NEWPOST_VARS['ECONOMICS_PAGES'])]
-#    periodista_urls = ['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
-#    thetoc_urls = ['https://www.thetoc.gr/oikonomia/?page={}'.format(x) for x in range(0,THETOC_VARS['ECONOMICS_PAGES'])]
-#    urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls + topontiki_urls
-#    start_urls = urls[:]
-
-    start_urls = ['https://www.tanea.gr/category/economy/'] + tanea_urls
+    topontiki_urls = ['http://www.topontiki.gr/category/oikonomia?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['ECONOMICS_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/oikonomia?page={}'.format(x) for x in range(1,EFSYN_VARS['ECONOMICS_PAGES'])]
+    to_vima_urls = ['https://www.tovima.gr/category/finance/page/{}'.format(x) for x in range(1,TOVIMA_VARS['ECONOMICS_PAGES'])]
+    newpost_urls = ['http://newpost.gr/oikonomia?page={}'.format(x) for x in range(1,NEWPOST_VARS['ECONOMICS_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/oikonomia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['ECONOMY_PAGES'],30)]
+    thetoc_urls = ['https://www.thetoc.gr/oikonomia/?page={}'.format(x) for x in range(0,THETOC_VARS['ECONOMICS_PAGES'])]
+    urls = url + to_vima_urls + newpost_urls + periodista_urls + efsyn_urls + topontiki_urls
+    start_urls = urls[:]
 
 
     rules = (
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-        #Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/','efsyn.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        #Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_naftemporiki'), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr.+node/','efsyn.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r"\.naftemporiki\.gr.+finance/story"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+finance"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
         Rule(LinkExtractor(allow=(r"\.tanea\.gr.+economy"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'),
-        #Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-        #Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
-        #Rule(LinkExtractor(allow=('cnn.gr/oikonomia/article'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
-        #Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=(r"newpost.gr/oikonomia/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+oikonomia/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=('periodista.gr/oikonomia'), deny=('start=')), callback='parse_periodista', follow=True, process_request='process_periodista'),
+        Rule(LinkExtractor(allow=('cnn.gr/oikonomia/'), deny=('cnn.gr/oikonomia/gallery/')), callback='parse_cnn', follow=True ,process_request='process_cnn'), 
+        Rule(LinkExtractor(allow=('reader.gr/news/oikonomia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'),
+        Rule(LinkExtractor(allow=('thetoc.gr/oikonomia'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/economy/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/oikonomia/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
         )
 
     def parse_cnn(self,response):
         global cnn_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="story-title"]/text()').get() 
+        title = response.xpath('//h1[@class="main-title"]/text()').get() 
         if title is not None and cnn_counter <300:
 
-            text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="main-content story-content"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
-            date = re.sub(r'\n|\t',"",response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get())
+            date = re.sub(r'\n|\t',"",response.xpath('//time/text()').get())
             final_date = formatdate(date)
 
             url = response.url
@@ -113,7 +110,7 @@ class EconomicSpider(CrawlSpider):
                     "website": CNN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date,
-                    "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
+                    "author": re.sub(r'\n|\t',"",response.xpath('//a[@class="author-name"]/text()|//span[@class="author-name"]/text()').get()),
                     "article_body": re.sub( r'\n|\t',"",clear_characters),
                     "url": url,                
                 }
@@ -130,12 +127,11 @@ class EconomicSpider(CrawlSpider):
         if title is not None and reader_counter<300:
             reader_counter += 1
 
-            text = response.xpath('//div[@class="article-summary"]//p/text()|//div[@class="article-body"]//p/text()|//div[@class="article-body"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/text()|//div[@class="article-body ads-in"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -154,7 +150,7 @@ class EconomicSpider(CrawlSpider):
                 "title": re.sub( r'\n|\t',"",title),
                 "article_date": final_date,
                 "author": author,
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
+                "article_body": clear_characters,
                 "url": url,              
             }
     def process_reader(self, request):
@@ -204,11 +200,10 @@ class EconomicSpider(CrawlSpider):
             if sub == PROTAGON_VARS['CATEGORY_ECONOMICS']:
  
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -231,7 +226,7 @@ class EconomicSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     def process_protagon(self, request):
@@ -279,15 +274,13 @@ class EconomicSpider(CrawlSpider):
     def parse_in(self,response):
         global in_counter
         #check if we are in an articles url
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
-        if title is not None and in_counter < 300:
-
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
+        if title is not None and in_counter < 300 :
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -305,8 +298,8 @@ class EconomicSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_in(self, request):
@@ -321,11 +314,10 @@ class EconomicSpider(CrawlSpider):
         if title is not None and newpost_counter < 300:
 
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -344,7 +336,7 @@ class EconomicSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -364,11 +356,10 @@ class EconomicSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="entry-content post-with-no-excerpt"]//p/text()|//div[@class="entry-content post-with-no-excerpt"]//strong/text()|//div[@class="entry-content post-with-no-excerpt"]//h3/text()|//div[@class="entry-content post-with-no-excerpt"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time[@class="entry-date published"]/text()').get()
             final_date = formatdate(date)
@@ -387,7 +378,7 @@ class EconomicSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": NEWSIT_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -403,11 +394,10 @@ class EconomicSpider(CrawlSpider):
         if title is not None and iefimerida_counter < 300:
 
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -426,7 +416,7 @@ class EconomicSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -534,11 +524,10 @@ class EconomicSpider(CrawlSpider):
             final_date = formatdate(date)
 
             text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -554,7 +543,7 @@ class EconomicSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date,
                     "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 } 
     def process_naftemporiki(self, request):
@@ -578,11 +567,10 @@ class EconomicSpider(CrawlSpider):
                 final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
                 text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
                 if author == None:
@@ -607,7 +595,7 @@ class EconomicSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 

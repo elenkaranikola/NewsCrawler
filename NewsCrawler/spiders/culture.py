@@ -25,99 +25,81 @@ cnn_counter = 0
 efsyn_counter = 0
 class CultureSpider(CrawlSpider):
     name = 'culture'
-    #handle_httpstatus_list = [301, 302]
+
     allowed_domains = [
-        #'topontiki.gr',
-        #'popaganda.gr',
-        #'efsyn.gr',
-        #'lifo.gr',
-        #'naftemporiki.gr',
-        #'in.gr',
-        #'cnn.gr',
-        #'tanea.gr',
-        #'thetoc.gr',
-        #'newpost.gr',
-        #'protagon.gr',
-        #'iefimerida.gr',
-        #'tovima.gr',
+        'topontiki.gr',
+        'popaganda.gr',
+        'efsyn.gr',
+        'lifo.gr',
+        'naftemporiki.gr',
+        'in.gr',
+        'cnn.gr',
+        'tanea.gr',
+        'thetoc.gr',
+        'newpost.gr',
+        'protagon.gr',
+        'iefimerida.gr',
+        'tovima.gr',
         'kathimerini.gr',
         ]
     url = [
-    #    'https://popaganda.gr/newstrack/culture/',
-    #    'https://www.naftemporiki.gr/culture',
-    #    'https://www.tanea.gr/category/lifearts/culture/',
-    #    'https://www.tanea.gr/category/lifearts/cinema/',
-    #    'https://www.tanea.gr/category/lifearts/music/',
-    #    'https://www.cnn.gr/style/politismos',
-    #    'https://www.cnn.gr/style/psyxagogia',
-    #    'https://www.thetoc.gr/politismos/',
-    #    'https://www.protagon.gr/epikairotita/',
-    #    'https://www.in.gr/culture/',
-    #    'https://newpost.gr/entertainment',
-    #    'https://www.iefimerida.gr',
+        'https://popaganda.gr/newstrack/culture/',
+        'https://www.naftemporiki.gr/culture',
+        'https://www.tanea.gr/category/lifearts/culture/',
+        'https://www.tanea.gr/category/lifearts/cinema/',
+        'https://www.tanea.gr/category/lifearts/music/',
+        'https://www.cnn.gr/style/politismos',
+        'https://www.thetoc.gr/politismos/',
+        'https://www.protagon.gr/epikairotita/',
+        'https://www.in.gr/culture/',
+        'https://newpost.gr/entertainment',
+        'https://www.iefimerida.gr',
         ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
-    #efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
-    #lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
+    topontiki_urls = ['http://www.topontiki.gr/category/p-art?page={}'.format(x) for x in range(0,TOPONTIKI_VARS['CULTURE_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/tehnes?page={}'.format(x) for x in range(1,EFSYN_VARS['ART_PAGES'])]
+    lifo_urls = ['https://www.lifo.gr/now/culture/page:{}'.format(x) for x in range(1,LIFO_VARS['CULTURE_PAGES'])]
     kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b5_1885015423_108233952&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['CULTURE_PAGES'])] 
-    #tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
-    #tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
-    #thetoc_urls = ['https://www.thetoc.gr/politismos/?page={}'.format(x) for x in range(0,THETOC_VARS['CULTURE_PAGES'])]
-    #urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + topontiki_urls + efsyn_urls
-    #start_urls = urls[:]
-    start_urls = kathimerini_urls
+    tanea_urls = ['https://www.tanea.gr/category/lifearts/music/page/{}'.format(x) for x in range(1,TANEA_VARS['MUSIC_PAGES'])]+['https://www.tanea.gr/category/lifearts/cinema/page/{}'.format(x) for x in range(1,TANEA_VARS['CINEMA_PAGES'])]+['https://www.tanea.gr/category/lifearts/culture/page/{}'.format(x) for x in range(1,TANEA_VARS['CULTURE_PAGES'])]    
+    tovima_urls=['https://www.tovima.gr/category/culture/page/{}'.format(x) for x in range(1,TOVIMA_VARS['CULTURE_PAGES'])]
+    newpost_urls = ['http://newpost.gr/entertainment?page={}'.format(x) for x in range(1,NEWPOST_VARS['CULTURE_PAGES'])]
+    thetoc_urls = ['https://www.thetoc.gr/politismos/?page={}'.format(x) for x in range(0,THETOC_VARS['CULTURE_PAGES'])]
+    cnn_urls = ['https://www.cnn.gr/style/politismos?page={}'.format(x) for x in range(1,CNN_VARS['CNN_CULTURE_PAGES'])]
+    urls = url + newpost_urls + tanea_urls + tovima_urls + kathimerini_urls + lifo_urls + topontiki_urls + efsyn_urls + cnn_urls
+    start_urls = urls[:]
 
     
     
-
-
     rules = (
-        #Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
-        #Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-        #Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-        #Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
-        #Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True), 
+        Rule(LinkExtractor(allow=("efsyn.gr/node","efsyn.gr/tehnes"), deny=('binteo','videos','gallery','eikones','twit','comment','page=','i-omada-tis-efsyn','contact')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/',r'popaganda\.gr.+culture'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','greece','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'www\.lifo\.gr.+culture/'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True, process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True,process_request='process_request'), 
         Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+politismos/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
-        #Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
-        #Rule(LinkExtractor(allow=('cnn.gr/style/politismos/'),deny=('gallery')), callback='parseInfiniteCnn', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('cnn.gr/style/psyxagogia'),deny=('gallery')), callback='parseInfiniteCnnPS', follow=True ,process_request='process_cnn'),
-        #Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-        #Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
-        #Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
-        #Rule(LinkExtractor(allow=(r'newpost.gr/books|newpost.gr/cinema/|newpost.gr/moysikh/|newpost.gr/art/|newpost.gr/theatre/|newpost.gr/entertainment'), deny=('page')), callback='parse_newpost', follow=True),
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+culture"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+music"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+cinema"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True, process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('cnn.gr/style/politismos'),deny=('gallery')), callback='parseCnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('thetoc.gr/politismos'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True, process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.in\.gr.+/culture/|\.in\.gr.+/entertainment/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'), 
+        Rule(LinkExtractor(allow=(r'newpost.gr/books|newpost.gr/cinema/|newpost.gr/moysikh/|newpost.gr/art/|newpost.gr/theatre/|newpost.gr/entertainment'), deny=('page')), callback='parse_newpost', follow=True),
     )
 
-#next three functions for cnn infinite scroll for culture
-    def parseInfiniteCnn(self,response):
-        pages =  CNN_VARS['CNN_CULTURE_PAGES']
-        for page in range(0, pages ,9):
-            url = 'https://www.cnn.gr/style/politismos?start={}'.format(page)
-            yield Request(url, callback = self.parseItemCnn) 
-
-    def parseItemCnn(self,response):
-        links = response.xpath('//h3[@class="item-title"]/a/@href').getall()
-        for link in links:
-            url = response.urljoin(link)
-            yield Request(url,callback=self.parseItem) 
-
-            
-    def parseItem(self,response):
+#next functions for cnn        
+    def parseCnn(self,response):
         global cnn_counter
-        title = response.xpath('//h1[@class="story-title"]/text()').get()
+        title = response.xpath('//h1[@class="main-title"]/text()').get()
 
-        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()       
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
-        clear_characters = re.sub( "\xa0","",final_text)
+        text = response.xpath('//div[@class="main-content story-contentt"]//p/text()|//div[@class="main-content story-content"]//strong/text()|//div[@class="main-content story-content"]//a/text()').getall()       
+        list_to_string = " ".join(text)
+        no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+        final_text = " ".join(no_spaces_text)
+        clear_characters = re.sub( "\xa0"," ",final_text)
 
-        date = response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()
+        date = response.xpath('//time/text()').get()
         final_date = formatdate(date)
 
         #check if this an article and not an photo gallery 
@@ -132,58 +114,10 @@ class CultureSpider(CrawlSpider):
                 "website": CNN_VARS['WEBSITE'],
                 "title": title,
                 "article_date": final_date,
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
+                "author": re.sub(r'\n|\t',"",response.xpath('//span[@class="author-name"]/text()').get()),
+                "article_body": clear_characters,
                 "url": url,     
             }
-#next three functions for cnn infinite scroll for entertainment
-    def parseInfiniteCnnPS(self,response):
-        pages =  CNN_VARS['CNN_CULTURE_PAGES']
-        for page in range(0, pages ,9):
-            url = 'https://www.cnn.gr/style/psyxagogia?start={}'.format(page)
-            yield Request(url, callback = self.parseItemCnnPS) 
-
-    def parseItemCnnPS(self,response):
-        links = response.xpath('//h3[@class="item-title"]/a/@href').getall()
-        for link in links:
-            url = response.urljoin(link)
-            yield Request(url,callback=self.parseItemPS) 
-
-            
-    def parseItemPS(self,response):
-        global cnn_counter
-        title = response.xpath('//h1[@class="story-title"]/text()').get()
-
-        text = response.xpath('//div[@class="story-content"]//p/text()|//div[@class="story-content"]//strong/text()|//div[@class="story-content"]//a/text()').getall()
-        list_to_string = " ".join(" ".join(text))
-        markspaces = re.sub( "  ", "space",list_to_string)
-        uneeded_spaces = re.sub( " ", "",markspaces)
-        final_text = re.sub( "space", " ",uneeded_spaces)
-        clear_characters = re.sub( "\xa0","",final_text)
-
-        date = response.xpath('//div[@class="story-date story-credits icon icon-time"]/text()').get()
-        final_date = formatdate(date)
-
-        #check if this an article and not an photo gallery 
-        url = response.url
-        article_type = url.split('/')[5]
-        contains_photos = re.search('Photos',clear_characters)
-        if article_type == CNN_VARS['ARTICLE_TYPE'] and contains_photos is None and cnn_counter < 300:
-            cnn_counter += 1
-            yield{ 
-                "topic": GENERAL_CATEGORIES['CULTURE'],
-                "subtopic": GENERAL_CATEGORIES['CULTURE'],
-                "website": CNN_VARS['WEBSITE'],
-                "title": title,
-                "article_date": final_date,
-                "author": re.sub(r'\n|\t',"",response.xpath('//div[@class="story-author"]/text()').get()),
-                "article_body": re.sub( r'\n|\t',"",clear_characters),
-                "url": url,     
-            }
-    def process_cnn(self, request):
-        global cnn_counter
-        if cnn_counter < 300:
-            return request
 
     def parse_thetoc(self,response):
         global thetoc_counter
@@ -231,11 +165,10 @@ class CultureSpider(CrawlSpider):
             if sub == PROTAGON_VARS['CATEGORY_CULTURE']:
                 #get the article's text
                 text = response.xpath('//div[@class="left-single-column "]//p/text()|//div[@class="left-single-column "]//strong/text()|//div[@class="left-single-column "]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub( "\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -258,7 +191,7 @@ class CultureSpider(CrawlSpider):
                         "title": title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     def process_protagon(self, request):
@@ -269,14 +202,13 @@ class CultureSpider(CrawlSpider):
     def parse_in(self,response):
         #check if we are in an articles url
         global in_counter
-        title = response.xpath('//h1[@class="entry-title black-c"]/text()').get() 
+        title = response.xpath('//h1[@class="headine"]/text()').get() 
         if title is not None and in_counter < 300 :
-            text = response.xpath('//div[@class="main-content pos-rel article-wrapper"]//p/text()|//div[@class="main-content pos-rel article-wrapper"]//strong/text()|//div[@class="main-content pos-rel article-wrapper"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            text = response.xpath('//div[@class="main-content pos-rel article-wrapper prel"]//p/text()|//div[@class="main-content pos-rel article-wrapper prel"]//strong/text()|//div[@class="main-content pos-rel article-wrapper prel"]//p/*/text()').getall()
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -294,8 +226,8 @@ class CultureSpider(CrawlSpider):
                     "website": IN_VARS['WEBSITE'],
                     "title": title,
                     "article_date": final_date, 
-                    "author": response.xpath('//span[@class="vcard author"]//a/text()').get(),
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "author": response.xpath('//div[@class="author-name"]//a/text()').get(),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_in(self, request):
@@ -309,11 +241,10 @@ class CultureSpider(CrawlSpider):
         title = response.xpath('//h1[@class="article-title"]/text()').get() 
         if title is not None :
             text = response.xpath('//div[@class="article-main clearfix"]//p/text()|//div[@class="article-main clearfix"]//strong/text()|//div[@class="article-main clearfix"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub( "\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -331,7 +262,7 @@ class CultureSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": NEWPOST_VARS['WEBSITE'],
-                    "article_body": re.sub( r'\s\s\s',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
             }
 
@@ -341,11 +272,10 @@ class CultureSpider(CrawlSpider):
         title = response.xpath('//h1/span/text()').get() 
         if title is not None and iefimerida_counter < 300:
             text = response.xpath('//div[@class="field--name-body on-container"]//p/text()|//div[@class="field--name-body on-container"]/strong/text()|//div[@class="field--name-body on-container"]//p/*/text()|//div[@class="field--name-body on-container"]//p//li/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             #flag to see later on if we have tweets ect
             flag = re.search(r"@",clear_characters)
@@ -364,7 +294,7 @@ class CultureSpider(CrawlSpider):
                     "title": title,
                     "article_date": final_date, 
                     "author": IEFIMERIDA_VARS['AUTHOR'],
-                    "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
     def process_iefimerida(self, request):
@@ -506,11 +436,10 @@ class CultureSpider(CrawlSpider):
                 final_date = formatdate(date)
 
                 text = response.xpath('//div[@class="entityMain article"]//p/text()|//div[@class="entityMain article"]/p/strong/text()|//div[@class="entityMain article"]//h3/text()|//div[@class="entityMain article"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 #flag to see later on if we have tweets ect
                 flag = re.search(r"@",clear_characters)
@@ -526,7 +455,7 @@ class CultureSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": NAFTEMPORIKI_VARS['AUTHOR'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",final_text),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
 
@@ -547,11 +476,10 @@ class CultureSpider(CrawlSpider):
             final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
             text = response.xpath('//div[@class="clearfix wide bodycontent"]//p/text()|//div[@class="clearfix wide bodycontent"]/p/strong/text()|//div[@class="clearfix wide bodycontent"]//h3/text()|//div[@class="clearfix wide bodycontent"]//p/*/text()').getall()
-            list_to_string = " ".join(" ".join(text))
-            markspaces = re.sub( "  ", "space",list_to_string)
-            uneeded_spaces = re.sub( " ", "",markspaces)
-            final_text = re.sub( "space", " ",uneeded_spaces)
-            clear_characters = re.sub("\xa0","",final_text)
+            list_to_string = " ".join(text)
+            no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+            final_text = " ".join(no_spaces_text)
+            clear_characters = re.sub( "\xa0"," ",final_text)
 
             date = response.xpath('//time/text()').get()
             final_date = formatdate(date)
@@ -574,7 +502,7 @@ class CultureSpider(CrawlSpider):
                     "title": final_title,
                     "article_date": final_date, 
                     "author": author,
-                    "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                    "article_body": clear_characters,
                     "url": url,                
                 }
 
@@ -600,11 +528,10 @@ class CultureSpider(CrawlSpider):
                 final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
 
                 text = response.xpath('//div[@class="article__body js-resizable"]//p/text()|//div[@class="article__body js-resizable"]/p/strong/text()|//div[@class="article__body js-resizable"]//h3/text()|//div[@class="article__body js-resizable"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="article__author"]//a/text()').get()
                 if author == None:
@@ -627,7 +554,7 @@ class CultureSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": author,
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     def process_efsyn(self, request):
@@ -648,14 +575,13 @@ class CultureSpider(CrawlSpider):
                 markspaces = re.sub( "       ", "space",list_to_string)
                 uneeded_spaces = re.sub( " ", "",markspaces)
                 put_spaces_back = re.sub( "space", " ",uneeded_spaces)
-                final_title = re.sub(r'\n|\s\s\s',"",put_spaces_back)
+                final_title = re.sub(r'\n|\s\s\s'," ",put_spaces_back)
 
                 text = response.xpath('//div[@class="post-content newstrack-post-content"]//p/text()|//div[@class="post-content newstrack-post-content"]/p/strong/text()|//div[@class="post-content newstrack-post-content"]//h3/text()|//div[@class="post-content newstrack-post-content"]//p/*/text()').getall()
-                list_to_string = " ".join(" ".join(text))
-                markspaces = re.sub( "  ", "space",list_to_string)
-                uneeded_spaces = re.sub( " ", "",markspaces)
-                final_text = re.sub( "space", " ",uneeded_spaces)
-                clear_characters = re.sub("\xa0","",final_text)
+                list_to_string = " ".join(text)
+                no_spaces_text = re.findall(r'[/<>«»();":\\\'\-,\.0-9a-zA-Z\u0370-\u03ff\u1f00-\u1fff]+',list_to_string)
+                final_text = " ".join(no_spaces_text)
+                clear_characters = re.sub( "\xa0"," ",final_text)
 
                 author = response.xpath('//div[@class="author"]/a/text()|//div[@itemprop="author"]/*/text()').get()
                 if author == None:
@@ -678,7 +604,7 @@ class CultureSpider(CrawlSpider):
                         "title": final_title,
                         "article_date": final_date, 
                         "author": POPAGANDA_VARS['WEBSITE'],
-                        "article_body": re.sub( r'\s\s\s|\n',"",clear_characters),
+                        "article_body": clear_characters,
                         "url": url,                
                     }
     def process_popaganda(self, request):
