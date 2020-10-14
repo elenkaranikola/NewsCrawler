@@ -71,7 +71,7 @@ class PoliticsSpider(CrawlSpider):
     tovima_urls = ['https://www.tovima.gr/category/politics/page/{}'.format(x) for x in range(1,TOVIMA_VARS['POLITICS_PAGES'])]
     urls = url + periodista_urls + newpost_urls + kathimerini_urls + tovima_urls + lifo_urls + efsyn_urls + topontiki_urls
     start_urls = urls[:]
-    start_urls = ['https://www.in.gr/politics/']
+
     
 
     rules = (

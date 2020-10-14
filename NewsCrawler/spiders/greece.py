@@ -34,68 +34,68 @@ naftemporiki_counter = 0
 class GreeceSpider(CrawlSpider):
     name = 'greece'
     allowed_domains = [
-        #'newsit.gr',
-        #'topontiki.gr',
-        #'popaganda.gr',
-        #'efsyn.gr',
-        #'lifo.gr',
-        #'cnn.gr',
-        #'reader.gr',
-        #'tovima.gr',
-        #'thetoc.gr',
-        #'protagon.gr',
-        #'periodista.gr',
+        'newsit.gr',
+        'topontiki.gr',
+        'popaganda.gr',
+        'efsyn.gr',
+        'lifo.gr',
+        'cnn.gr',
+        'reader.gr',
+        'tovima.gr',
+        'thetoc.gr',
+        'protagon.gr',
+        'periodista.gr',
         'in.gr',
-        #'newpost.gr',
-        #'iefimerida.gr',
-        #'tanea.gr',
-        #'kathimerini.gr',
-        #'naftemporiki.gr',
+        'newpost.gr',
+        'iefimerida.gr',
+        'tanea.gr',
+        'kathimerini.gr',
+        'naftemporiki.gr',
         ]
-    #url = [
-    #    'https://www.newsit.gr/ellada/',
-    #    'http://www.topontiki.gr/category/ellada',
-    #    'https://popaganda.gr/newstrack/greece-newstrack/',
-    #    'https://www.lifo.gr/now/greece',
-    #    'https://www.naftemporiki.gr/society',
-    #    'https://www.iefimerida.gr/ellada',
-    #    'http://www.periodista.gr/koinwnia',
-    #    'https://www.cnn.gr/ellada',
-    #    'https://www.reader.gr/news/koinonia',
-    #    'https://www.thetoc.gr/koinwnia',
-    #    'https://www.protagon.gr/epikairotita/ellada',
-    #    'https://www.in.gr/greece/',
-    #    'https://newpost.gr/ellada/',
-    #    'https://www.tanea.gr/category/greece/',
-    #    ]
-    #topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
-    #efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
-    #kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
-    #tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
-    #newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
-    #periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
-    #urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
-    #start_urls = urls[:]
-    start_urls = ['https://www.in.gr/greece/']
+    url = [
+        'https://www.newsit.gr/ellada/',
+        'http://www.topontiki.gr/category/ellada',
+        'https://popaganda.gr/newstrack/greece-newstrack/',
+        'https://www.lifo.gr/now/greece',
+        'https://www.naftemporiki.gr/society',
+        'https://www.iefimerida.gr/ellada',
+        'http://www.periodista.gr/koinwnia',
+        'https://www.cnn.gr/ellada',
+        'https://www.reader.gr/news/koinonia',
+        'https://www.thetoc.gr/koinwnia',
+        'https://www.protagon.gr/epikairotita/ellada',
+        'https://www.in.gr/greece/',
+        'https://newpost.gr/ellada/',
+        'https://www.tanea.gr/category/greece/',
+        ]
+    topontiki_urls = ['http://www.topontiki.gr/category/ellada?page={}'.format(x) for x in range(1,TOPONTIKI_VARS['GREECE_PAGES'])]
+    efsyn_urls = ['https://www.efsyn.gr/ellada/koinonia?page={}'.format(x) for x in range(1,EFSYN_VARS['GREECE_PAGES'])]
+    kathimerini_urls = ['https://www.kathimerini.gr/box-ajax?id=b1_1885015423_50337253&page={}'.format(x) for x in range(0,KATHIMERINI_VARS['GREECE_PAGES'])]
+    tovima_urls = ['https://www.tovima.gr/category/society/page/{}'.format(x) for x in range(1,TOVIMA_VARS['GREECE_PAGES'])]
+    newpost_urls = ['http://newpost.gr/ellada?page={}'.format(x) for x in range(1,NEWPOST_VARS['GREECE_PAGES'])]
+    periodista_urls = ['http://www.periodista.gr/koinwnia?start={}'.format(x) for x in range(1,PERIODISTA_VARS['GREECE_PAGES'],30)]
+    urls = url + periodista_urls + newpost_urls + tovima_urls + kathimerini_urls + efsyn_urls + topontiki_urls
+    start_urls = urls[:]
+
 
     rules = (
-    #    Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
-    #    Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
-    #    Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','culture','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
-    #    Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
-    #    Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
-    #    Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
-    #    Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
-    #    Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
-    #    Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
-    #    Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
-    #    Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'),  
-    #    Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
-    #    Rule(LinkExtractor(allow=('cnn.gr/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
-    #    Rule(LinkExtractor(allow=('reader.gr/news/koinonia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
-    #    Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
+        Rule(LinkExtractor(allow=(r"\.newsit\.gr.+ellada/"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_newsit', follow=True ,process_request='process_newsit'), 
+        Rule(LinkExtractor(allow=('topontiki.gr/article/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_topontiki', follow=True ,process_request='process_topontiki'), 
+        Rule(LinkExtractor(allow=(r'popaganda\.gr.+newstrack/'), deny=('binteo','videos','gallery','eikones','twit','comment','environment','fagito-poto','sport','technews','psichagogia','klp','san-simera-newstrack','keros','kairos','world','estiasi','health','social-media','culture','cosmote','koronoios')), callback='parse_popaganda', follow=True ,process_request='process_popaganda'), 
+        Rule(LinkExtractor(allow=(r'www\.efsyn\.gr'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_efsyn', follow=True ,process_request='process_efsyn'), 
+        Rule(LinkExtractor(allow=(r'\.lifo\.gr.+/greece'), deny=('binteo','videos','gallery','eikones','twit','comment')), callback='parse_lifo', follow=True ,process_request='process_lifo'), 
+        Rule(LinkExtractor(allow=(r'\.naftemporiki\.gr/story|\.naftemporiki\.gr/storypn'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_naftemporiki', follow=True ,process_request='process_naftemporiki'), 
+        Rule(LinkExtractor(allow=(r"\.kathimerini\.gr.+epikairothta/ellada"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_kathimerini', follow=True ,process_request='process_kathimerini'), 
+        Rule(LinkExtractor(allow=(r"\.tovima\.gr.+society"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tovima', follow=True ,process_request='process_tovima'), 
+        Rule(LinkExtractor(allow=(r"\.tanea\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_tanea', follow=True ,process_request='process_tanea'), 
+        Rule(LinkExtractor(allow=('iefimerida.gr/ellada'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_iefimerida', follow=True ,process_request='process_iefimerida'), 
+        Rule(LinkExtractor(allow=('periodista.gr/koinwnia'), deny=('start=')), callback='parse_periodista', follow=True ,process_request='process_periodista'),  
+        Rule(LinkExtractor(allow=('thetoc.gr/koinwnia')), callback='parse_thetoc', follow=True ,process_request='process_thetoc'),
+        Rule(LinkExtractor(allow=('cnn.gr/ellada'), deny=('cnn.gr/news/ellada/gallery/','protoselida')), callback='parse_cnn', follow=True ,process_request='process_cnn'),
+        Rule(LinkExtractor(allow=('reader.gr/news/koinonia'), deny=('vid')), callback='parse_reader', follow=True ,process_request='process_reader'), 
+        Rule(LinkExtractor(allow=('protagon.gr/epikairotita/'), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_protagon', follow=True ,process_request='process_protagon'),
         Rule(LinkExtractor(allow=(r".in\.gr.+greece"), deny=('binteo','videos','gallery','eikones','twit')), callback='parse_in', follow=True ,process_request='process_in'),
-    #    Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
+        Rule(LinkExtractor(allow=(r"newpost.gr/ellada/(\w+).+"), deny=('page')), callback='parse_newpost', follow=True ,process_request='process_newpost'), 
     )
 
     def parse_newsit(self,response):
